@@ -49,6 +49,35 @@ body {
         .content {
             padding-top: 4rem; /* Same height as the navbar */
         }
+        .category-label {
+    color: hsl(var(--primary-foreground));
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px; /* Makes the labels circular */
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.category-label:nth-child(odd) {
+    background-color: hsl(308, 56%, 85%);
+}
+
+.category-label:nth-child(even) {
+    background-color: hsl(180, 60%, 85%);
+}
+
+.post-actions button {
+    margin-right: 0.5rem; /* Adds space between buttons */
+    padding: 0.25rem; /* Adds padding inside the buttons */
+}
+
+.post-actions button {
+    margin-right: 1rem; /* Adds space between buttons */
+    padding: 0.25rem; /* Adds padding inside the buttons */
+}
+
+
+
+
         
     </style>
 </head>
@@ -110,10 +139,12 @@ body {
                             <div>2 hours ago</div>
                         </div>
                         <div class="flex items-center gap-2 mt-2">
-                            <a href="#Category" class="text-primary-foreground bg-primary px-2 py-1 rounded-md text-xs font-medium">React</a>
-                            <a href="#Category" class="text-secondary-foreground bg-secondary px-2 py-1 rounded-md text-xs font-medium">Tutorial</a>
+                            <a href="#Category" class="category-label">React</a>
+                            <a href="#Category" class="category-label">Tutorial</a>
                         </div>
                     </div>
+                    
+                    
                     <div class="p-4 border-t">
                         <p>In this tutorial, we'll walk through the steps to build a React app from the ground up. We'll cover setting up a development environment, creating components, managing state, and more.</p>
                     </div>
