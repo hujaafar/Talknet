@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="SignUp.css">
+</head>
+<body>
+    <main class="flex-1 bg-muted flex items-center justify-center">
+        <div class="max-w-md w-full px-4 md:px-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-2xl">Register</h2>
+                    <p class="card-description">Enter Username, Email & Password to Create Account.</p>
+                </div>
+                <div class="card-content space-y-4">
+                    <div class="space-y-2">
+                        <label for="username">Username</label>
+                        <input id="username" type="text" placeholder="Leo Messi" required>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" placeholder="Messi@Bolga.com" required>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="••••••••" required>
+                    </div>
+                    <div class="checkbox-container">
+                        <input id="show-password" type="checkbox">
+                        <label for="show-password" class="cursor-pointer">Show Password</label>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="w-full btn-primary">Sign Up</button>
+                    <p class="text-center mt-4">
+                        <a href="Login.html" class="text-black">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer mt-8">
+        <div class="footer-container container mx-auto">
+            <p>&copy; 2024 TechTalk. All rights reserved.</p>
+            <div class="footer-right footer-links">
+                <a href="#Terms">Terms of Service</a>
+                <a href="#Policy">Privacy Policy</a>
+                <a href="#ContactUs">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const showPasswordCheckbox = document.getElementById('show-password');
+        
+        showPasswordCheckbox.addEventListener('change', () => {
+            passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+        });
+    </script>
+</body>
+</html>
