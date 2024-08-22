@@ -111,6 +111,8 @@
             <span>TalkNet</span>
           </a>
           <nav class="hidden md:flex items-center">
+            {{if .IsLoggedIn}}
+      
             <a
               href="#AddPost"
               class="text-muted-foreground hover:text-card-foreground mx-5"
@@ -126,12 +128,21 @@
               <span class="sr-only">Profile</span>
             </a>
             <a
+              href="/logout"
+              class="text-muted-foreground hover:text-card-foreground mx-5"
+            >
+              <i class="fas fa-sign-in-alt text-lg"></i>
+              <span class="sr-only">Login</span>
+            </a>
+            {{else}}
+            <a
               href="/login"
               class="text-muted-foreground hover:text-card-foreground mx-5"
             >
               <i class="fas fa-sign-in-alt text-lg"></i>
               <span class="sr-only">Login</span>
             </a>
+            {{end}}
           </nav>
           <div class="md:hidden">
             <button class="variant-ghost size-icon">
