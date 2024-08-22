@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechTalk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body class="antialiased">
+    <div class="flex flex-col min-h-screen">
+      <!-- Navbar -->
+      <header class="navbar">
+        <div
+          class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6"
+        >
+          <a
+            href="#Logo"
+            class="flex items-center gap-2 text-lg font-semibold text-card-foreground"
+          >
+            <div class="w-6 h-6 text-[#6366F1]"></div>
+            <span>TechTalk</span>
+          </a>
+          <nav class="hidden md:flex items-center">
+            <a
+              href="#AddPost"
+              class="text-muted-foreground hover:text-card-foreground mx-5"
+            >
+              <i class="fas fa-plus text-lg"></i>
+              <span class="sr-only">Add Post</span>
+            </a>
+            <a
+              href="#Profile"
+              class="text-muted-foreground hover:text-card-foreground mx-5"
+            >
+              <i class="fas fa-user text-lg"></i>
+              <span class="sr-only">Profile</span>
+            </a>
+            <a
+              href="#Login"
+              class="text-muted-foreground hover:text-card-foreground mx-5"
+            >
+              <i class="fas fa-sign-in-alt text-lg"></i>
+              <span class="sr-only">Login</span>
+            </a>
+          </nav>
+          <div class="md:hidden">
+            <button class="variant-ghost size-icon">
+              <div class="w-6 h-6 text-card-foreground"></div>
+              <span class="sr-only">Toggle menu</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <main class="flex-grow flex flex-col items-center">
+        <div class="text-center p-4">
+          <img src="Profile.png" alt="User Profile" height="100" width="100">
+          <h3 class="text-xl font-bold">Ali Hasan</h3>
+          <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Edit Profile</button>
+        </div>
+
+        <hr class="my-4">
+
+        <h1 class="text-2xl font-bold mb-4">Posts</h1>
+        <div
+          class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6"
+        >
+          <!-- Post 1 -->
+          <div
+            class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden"
+          >
+            <div class="p-4">
+              <h2 class="text-xl font-bold">
+                <a href="#Title" class="hover:underline text-card-foreground"
+                  >How to build a React app from scratch</a
+                >
+              </h2>
+              <div
+                class="flex items-center gap-2 text-sm text-muted-foreground"
+              >
+                <div>
+                  <a
+                    href="#User"
+                    class="font-medium hover:underline text-muted-foreground"
+                    >John Doe</a
+                  >
+                </div>
+                <div>·</div>
+                <div>2 hours ago</div>
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <a href="#Category" class="category-label">React</a>
+                <a href="#Category" class="category-label">Tutorial</a>
+              </div>
+            </div>
+
+            <div class="p-4 border-t">
+              <p>
+                In this tutorial, we'll walk through the steps to build a React
+                app from the ground up. We'll cover setting up a development
+                environment, creating components, managing state, and more.
+              </p>
+            </div>
+            <div class="p-4 border-t flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="variant-ghost size-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M7 10v12" />
+                    <path
+                      d="M15 5.88L14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"
+                    />
+                  </svg>
+                  <span class="sr-only">Like</span>
+                </button>
+                <span class="text-sm text-muted-foreground">123</span>
+                <button class="variant-ghost size-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M17 14V2" />
+                    <path
+                      d="M9 18.12L10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"
+                    />
+                  </svg>
+                  <span class="sr-only">Dislike</span>
+                </button>
+                <span class="text-sm text-muted-foreground">45</span>
+                <button class="variant-ghost size-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                  </svg>
+                  <span class="sr-only">Comment</span>
+                </button>
+                <span class="text-sm text-muted-foreground">12</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Repeat similar structure for other posts -->
+        </div>
+
+        <h1 class="text-2xl font-bold mb-4">Likes</h1>
+        <div
+          class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6"
+        >
+          <!-- Comment 1 -->
+          <div
+            class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden"
+          >
+            <div class="p-4">
+              <h2 class="text-xl font-bold">
+                <a href="#Title" class="hover:underline text-card-foreground"
+                  >How to build a React app from scratch</a
+                >
+              </h2>
+              <div
+                class="flex items-center gap-2 text-sm text-muted-foreground"
+              >
+                <div>
+                  <a
+                    href="#User"
+                    class="font-medium hover:underline text-muted-foreground"
+                    >John Doe</a
+                  >
+                </div>
+                <div>·</div>
+                <div>2 hours ago</div>
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <a href="#Category" class="category-label">React</a>
+                <a href="#Category" class="category-label">Tutorial</a>
+              </div>
+            </div>
+
+            <div class="p-4 border-t">
+              <p>
+                In this tutorial, we'll walk through the steps to build a React
+                app from the ground up. We'll cover setting up a development
+                environment, creating components, managing state, and more.
+              </p>
+            </div>
+            <div class="p-4 border-t flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="variant-ghost size-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M7 10v12" />
+                    <path
+                      d="M15 5.88L14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"
+                    />
+                  </svg>
+                  <span class="sr-only">Like</span>
+                </button>
+                <span class="text-sm text-muted-foreground">123</span>
+                <button class="variant-ghost size-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M17 14V2" />
+                    <path
+                      d="M9 18.12L10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"
+                    />
+                  </svg>
+                  <span class="sr-only">Dislike</span>
+                </button>
+                <span class="text-sm text-muted-foreground">45</span>
+                <button class="variant-ghost size-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                  </svg>
+                  <span class="sr-only">Comment</span>
+                </button>
+                <span class="text-sm text-muted-foreground">12</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Repeat similar structure for other comments -->
+        </div>
+      </main>
+      <!-- Footer -->
+      <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+          <p class="text-sm">&copy; 2024 TechTalk. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
