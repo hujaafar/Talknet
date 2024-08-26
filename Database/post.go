@@ -22,7 +22,7 @@ func GetPostByID(db *sql.DB, id int) (structs.Post, error) {
 }
 
 func GetAllPosts(db *sql.DB) ([]structs.Post, error) {
-	rows, err := db.Query("SELECT id, user_id, title, content, created_at, updated_at FROM posts")
+	rows, err := db.Query("SELECT id, user_id, title, content, created_at FROM posts")
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func GetAllPosts(db *sql.DB) ([]structs.Post, error) {
 	var posts []structs.Post
 	for rows.Next() {
 		var post structs.Post
-		err := rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt, &post.UpdatedAt)
+		err := rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
 		if err != nil {
 			return nil, err
 		}

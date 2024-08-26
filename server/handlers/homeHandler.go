@@ -11,13 +11,27 @@ import (
 	"time"
 )
 
-type TemplateData struct {
-	IsLoggedIn bool
+type StaticPageData struct {
+	IsLoggedIn    bool
+	AllCategories []structs.Category
 }
+
+type PostData struct {
+	ID             int
+	Username       string
+	Title          string
+	Content        string
+	CreatedAt      string
+	PostCategories []structs.Category
+	LikeCount      int
+	DislikeCount   int
+	CommentCount   int
+}
+
 
 var templates = template.Must(template.ParseGlob("static/*.html"))
 
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
+func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
@@ -25,30 +39,20 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, isLoggedIn := sessions.GetSessionUserID(r)
 
-	data := TemplateData{
-		IsLoggedIn: isLoggedIn,
-	}
-
-	err := templates.ExecuteTemplate(w, "index.html", data)
+	// Fetch static data
+	allCategories, err := Database.GetAllGategories(db)
 	if err != nil {
-		log.Printf("Failed to render template: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Printf("Failed to get all categories: %v", err)
+		http.Error(w, "Failed to load categories", http.StatusInternalServerError)
+		return
 	}
-}
 
-type PostData struct {
-	ID           int
-	Username     string
-	Title        string
-	Content      string
-	CreatedAt    string
-	Categories   []structs.Category
-	LikeCount    int
-	DislikeCount int
-	CommentCount int
-}
+	staticData := StaticPageData{
+		IsLoggedIn:    isLoggedIn,
+		AllCategories: allCategories,
+	}
 
-func IndexHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
+	// Fetch dynamic post data
 	posts, err := Database.GetAllPosts(db)
 	if err != nil {
 		log.Printf("Failed to get posts: %v", err)
@@ -56,16 +60,16 @@ func IndexHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var postData []PostData
+	var postDataList []PostData
 
 	for _, post := range posts {
-		user, err := Database.GetUserByUsername(db, string(post.UserID))
+		user, err := Database.GetUserByID(db, post.UserID)
 		if err != nil {
 			log.Printf("Failed to get user: %v", err)
 			continue
 		}
 
-		categories, err := Database.GetCategoriesByPostID(db, post.ID)
+		postCategories, err := Database.GetCategoryNamesByPostID(db, post.ID)
 		if err != nil {
 			log.Printf("Failed to get categories: %v", err)
 			continue
@@ -78,25 +82,32 @@ func IndexHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		}
 		likeCount := len(likes)
 
-		comments, err := Database.GetCommentByID(db, post.ID) 
+		comments, err := Database.GetCommentByID(db, post.ID)
 		if err != nil {
 			log.Printf("Failed to get comments: %v", err)
 			continue
 		}
 
-		postData = append(postData, PostData{
-			ID:           post.ID,
-			Username:     user.Username,
-			Title:        post.Title,
-			Content:      post.Content,
-			CreatedAt:    post.CreatedAt.Format(time.RFC822),
-			Categories:   categories,
-			LikeCount:    likeCount,
-			CommentCount: len(comments), 
+		postDataList = append(postDataList, PostData{
+			ID:             post.ID,
+			Username:       user.Username,
+			Title:          post.Title,
+			Content:        post.Content,
+			CreatedAt:      post.CreatedAt.Format(time.RFC822),
+			PostCategories: postCategories,
+			LikeCount:      likeCount,
+			CommentCount:   len(comments),
 		})
 	}
 
-	err = templates.ExecuteTemplate(w, "index.html", postData)
+	// Render the template with both static and dynamic data
+	err = templates.ExecuteTemplate(w, "index.html", struct {
+		StaticData StaticPageData
+		Posts      []PostData
+	}{
+		StaticData: staticData,
+		Posts:      postDataList,
+	})
 	if err != nil {
 		log.Printf("Failed to render template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
