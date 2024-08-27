@@ -36,6 +36,9 @@ func main() {
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		handlers.RegisterHandler(database, w, r)
 	})
+	http.HandleFunc("/post", func(w http.ResponseWriter, r *http.Request) {
+		handlers.NewPostHandler(database, w, r)
+	})
 	http.HandleFunc("/logout", handlers.LogoutHandler)
 	fmt.Println("Server running at http://localhost:8080")
 	err = http.ListenAndServe(":8080", nil)
