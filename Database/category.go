@@ -21,14 +21,14 @@ func GetCategoryByID(db *sql.DB, id int) (structs.Category, error) {
 }
 
 func GetAllGategories(db *sql.DB) ([]structs.Category, error) {
-	rows, err := db.Query("SELECT name FROM categories")
+	rows, err := db.Query("SELECT id,name FROM categories")
 	if err != nil {
 		return nil, err
 	}
 	var categories []structs.Category
 	for rows.Next() {
 		var category structs.Category
-		if err := rows.Scan(&category.Name); err != nil {
+		if err := rows.Scan(category.ID,&category.Name); err != nil {
 			return nil, err
 		}
 		categories = append(categories, category)

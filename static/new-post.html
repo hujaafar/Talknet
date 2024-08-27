@@ -22,7 +22,7 @@
                 <label>Categories:</label>
                 <div class="checkbox-group">
                     {{ range .AllCategories }}
-                     <label><input type="checkbox" name="category[]" value="general"> {{.Name}}</label>
+                     <label><input type="checkbox" name="category[]" value="{{.ID}}"> {{.ID}}</label>
                     {{ end }}
                 </div>
             </div>

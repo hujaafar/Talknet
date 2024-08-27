@@ -41,8 +41,9 @@ func NewPostHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		}
 		title:= r.Form.Get("title")
 		content := r.Form.Get("content")
-		if id==""||title==""||content==""{
+		if id==-1||title==""||content==""{
 			http.Error(w, "error", http.StatusBadRequest)
 		}
+		
 	}
 }

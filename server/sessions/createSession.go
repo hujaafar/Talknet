@@ -6,11 +6,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var sessionStore = map[string]string{}
+var sessionStore = map[string]int{}
 
 func CreateSession(w http.ResponseWriter, userID int) {
     sessionID := uuid.New().String()
-    sessionStore[sessionID] = string(userID)
+    sessionStore[sessionID] = userID
 
     http.SetCookie(w, &http.Cookie{
         Name:    "session_id",
