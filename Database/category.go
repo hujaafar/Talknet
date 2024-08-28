@@ -28,7 +28,7 @@ func GetAllGategories(db *sql.DB) ([]structs.Category, error) {
 	var categories []structs.Category
 	for rows.Next() {
 		var category structs.Category
-		if err := rows.Scan(category.ID,&category.Name); err != nil {
+		if err := rows.Scan(&category.ID,&category.Name); err != nil {
 			return nil, err
 		}
 		categories = append(categories, category)

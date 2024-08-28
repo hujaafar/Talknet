@@ -7,9 +7,8 @@ import (
 func GetSessionUserID(r *http.Request) (int, bool) {
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
-		return -2, false
+		return -1, false
 	}
-
 	userID, ok := sessionStore[cookie.Value]
 	if !ok {
 		return -1, false

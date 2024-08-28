@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Create a New Post</h1>
-        <form action="/submit_post" method="POST">
+        <form action="/post" method="POST">
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title" required>
@@ -22,7 +22,7 @@
                 <label>Categories:</label>
                 <div class="checkbox-group">
                     {{ range .AllCategories }}
-                     <label><input type="checkbox" name="category[]" value="{{.ID}}"> {{.ID}}</label>
+                    <label><input type="checkbox" name="category[]" value="{{.ID}}"> {{.Name}}</label>
                     {{ end }}
                 </div>
             </div>
