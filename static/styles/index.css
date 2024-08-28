@@ -81,3 +81,22 @@ transition: background-color 0.2s ease, color 0.2s ease;
 background-color: hsl(var(--secondary));
 color: hsl(var(--secondary-foreground));
 }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* Make the card take full height */
+}
+
+.card-content {
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Show ellipsis */
+  display: -webkit-box; /* For webkit browsers */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+}
+
+.card-footer {
+  margin-top: auto; /* Push footer to the bottom */
+}
