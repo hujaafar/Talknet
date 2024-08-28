@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -93,7 +94,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			Username:       user.Username,
 			Title:          post.Title,
 			Content:        post.Content,
-			CreatedAt:      post.CreatedAt.Format(time.RFC822),
+			CreatedAt:      timeAgo(post.CreatedAt), // Use the relative time format
 			PostCategories: postCategories,
 			LikeCount:      likeCount,
 			CommentCount:   len(comments),
@@ -112,4 +113,33 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed to render template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
+}
+
+// timeAgo function to format time
+func timeAgo(t time.Time) string {
+	now := time.Now()
+	diff := now.Sub(t)
+
+	switch {
+	case diff < time.Minute:
+		return "just now"
+	case diff < time.Hour:
+		minutes := int(diff.Minutes())
+		return fmt.Sprintf("%d minute%s ago", minutes, pluralize(minutes))
+	case diff < 24*time.Hour:
+		hours := int(diff.Hours())
+		return fmt.Sprintf("%d hour%s ago", hours, pluralize(hours))
+	case diff < 30*24*time.Hour:
+		days := int(diff.Hours() / 24)
+		return fmt.Sprintf("%d day%s ago", days, pluralize(days))
+	default:
+		return t.Format("2006-01-02") // Fallback to a specific date format
+	}
+}
+
+func pluralize(n int) string {
+	if n == 1 {
+		return ""
+	}
+	return "s"
 }
