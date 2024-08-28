@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="SignUp.css">
+    <link rel="stylesheet" href="/static/styles/SignUp.css">
 </head>
 <body>
+    <form action="/register" method="post">
     <main class="flex-1 bg-muted flex items-center justify-center">
         <div class="max-w-md w-full px-4 md:px-6">
             <div class="card">
@@ -33,14 +34,15 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="w-full btn-primary">Sign Up</button>
+                    <button class="w-full btn-primary" type="submit">Sign Up</button>
                     <p class="text-center mt-4">
-                        <a href="Login.html" class="text-black">Sign in</a>
+                        <a href="/login" class="text-black">Sign in</a>
                     </p>
                 </div>
             </div>
         </div>
     </main>
+</form>
 
     <!-- Footer -->
     <footer class="footer mt-8">
