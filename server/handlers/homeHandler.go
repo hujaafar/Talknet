@@ -5,10 +5,11 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
+
 	"talknet/Database"
 	"talknet/server/sessions"
 	"talknet/structs"
-	"time"
 )
 
 type StaticPageData struct {
@@ -28,8 +29,7 @@ type PostData struct {
 	CommentCount   int
 }
 
-
-var templates = template.Must(template.ParseGlob("static/*.html"))
+var templates = template.Must(template.ParseGlob("static/pages/*.html"))
 
 func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {

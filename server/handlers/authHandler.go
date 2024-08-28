@@ -34,7 +34,7 @@ func LoginHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 // Register Handler
 func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		err := templates.ExecuteTemplate(w, "register.html", nil)
+		err := templates.ExecuteTemplate(w, "SignUp.html", nil)
 		if err != nil {
 			log.Printf("Failed to render template: %v", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
