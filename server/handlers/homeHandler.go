@@ -101,6 +101,9 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
+	// Reverse the postDataList
+	postDataList = reversePosts(postDataList)
+
 	// Render the template with both static and dynamic data
 	err = templates.ExecuteTemplate(w, "index.html", struct {
 		StaticData StaticPageData
@@ -142,4 +145,11 @@ func pluralize(n int) string {
 		return ""
 	}
 	return "s"
+}
+
+func reversePosts(posts []PostData) []PostData {
+	for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
+		posts[i], posts[j] = posts[j], posts[i]
+	}
+	return posts
 }
