@@ -28,6 +28,7 @@ type PostData struct {
 	LikeCount      int
 	DislikeCount   int
 	CommentCount   int
+	Comments       []structs.Comment // Added field
 }
 
 var templates = template.Must(template.ParseGlob("static/pages/*.html"))
@@ -98,6 +99,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			PostCategories: postCategories,
 			LikeCount:      likeCount,
 			CommentCount:   len(comments),
+			Comments:       comments, // Add this line
 		})
 	}
 
@@ -115,6 +117,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Failed to render template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return // Ensure only one response.WriteHeader call
 	}
 }
 
