@@ -72,7 +72,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 	staticData := StaticPageData{
 		IsLoggedIn:    isLoggedIn,
-		AllCategories: allCategories, // This now correctly stores the list of categories
+		AllCategories: allCategories,
 	}
 
 	// Prepare the dynamic post data for rendering
@@ -116,6 +116,9 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
+	// Reverse the order of posts
+	postDataList = reversePosts(postDataList)
+
 	// Render the template with both static (categories, isLoggedIn) and dynamic (posts) data
 	err = templates.ExecuteTemplate(w, "index.html", struct {
 		StaticData StaticPageData
@@ -158,4 +161,11 @@ func pluralize(n int) string {
 		return ""
 	}
 	return "s"
+}
+
+func reversePosts(posts []PostData) []PostData {
+	for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
+		posts[i], posts[j] = posts[j], posts[i]
+	}
+	return posts
 }
