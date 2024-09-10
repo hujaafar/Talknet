@@ -107,3 +107,16 @@ color: hsl(var(--secondary-foreground));
   border-color: hsl(var(--border)); /* Optional: Change border color if needed */
   font-weight: 700; /* Optional: Make font bold for the active button */
 }
+
+
+.flex {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap onto new lines */
+}
+
+.category-label {
+  /* Add any additional styles for your category labels here */
+  text-decoration: none;
+  color: #000;
+  /* Adjust padding, margin, etc., as needed */
+}
