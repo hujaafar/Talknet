@@ -16,7 +16,7 @@
       <!-- Navbar -->
       <header class="navbar">
         <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-          <a href="#Logo" class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
+          <a class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
             <div class="w-6 h-6 text-[#6366F1]"></div>
             <span>Talknet</span>
           </a>
@@ -91,11 +91,11 @@
   <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
     <div class="p-4">
       <h2 class="text-xl font-bold">
-        <a href="#Title" class="hover:underline text-card-foreground">{{ .Title }}</a>
+        <a class="hover:underline text-card-foreground">{{ .Title }}</a>
       </h2>
       <div class="flex items-center gap-2 text-sm text-muted-foreground">
         <div>
-          <a href="#User" class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+          <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
         </div> 
         <div>·</div>
         <div>{{ .CreatedAt }}</div>
