@@ -100,3 +100,10 @@ color: hsl(var(--secondary-foreground));
 .card-footer {
   margin-top: auto; /* Push footer to the bottom */
 }
+
+.category-button.active {
+  background-color: hsl(var(--secondary)); /* Change background color */
+  color: hsl(var(--secondary-foreground)); /* Change text color */
+  border-color: hsl(var(--border)); /* Optional: Change border color if needed */
+  font-weight: 700; /* Optional: Make font bold for the active button */
+}

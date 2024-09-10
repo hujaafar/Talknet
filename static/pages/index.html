@@ -158,19 +158,37 @@
     newUrl.searchParams.set('category', category);
     window.history.pushState({ path: newUrl.href }, '', newUrl.href);
 
-    // Now, if you want to load data based on this category (optional):
-    // You can use fetch() or XMLHttpRequest to make an AJAX call to load new data
-    // Example (if you're using a server that responds to AJAX requests):
-    /*
-    fetch(newUrl.href)
-      .then(response => response.text()) // Assume you're loading some HTML or JSON
-      .then(data => {
-        // Use the response data to update the page without refreshing
-        document.getElementById('content').innerHTML = data; // Just an example
-      })
-      .catch(error => console.error('Error fetching data:', error));
-    */
+    // Update button active states
+    document.querySelectorAll('.category-button').forEach(button => {
+        button.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+
+    // Optionally, fetch new data and update content here if needed
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all category buttons
+    const categoryButtons = document.querySelectorAll('.category-button');
+
+    // Loop through each button and attach the click event listener
+    categoryButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            const category = button.textContent.trim(); // Get the text inside the button
+            handleCategoryClick(event, category); // Pass category to the handler
+        });
+    });
+
+    // Set initial active state based on URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeCategory = urlParams.get('category') || 'All';
+    categoryButtons.forEach(button => {
+        if (button.textContent.trim() === activeCategory) {
+            button.classList.add('active');
+        }
+    });
+});
+
 
 document.addEventListener('DOMContentLoaded', function () {
     // Select all category buttons
