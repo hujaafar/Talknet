@@ -28,7 +28,6 @@ type PostData struct {
 	LikeCount      int
 	DislikeCount   int
 	CommentCount   int
-	Comments       []structs.Comment // Added field
 }
 
 var templates = template.Must(template.ParseGlob("static/pages/*.html"))
@@ -41,7 +40,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 	_, isLoggedIn := sessions.GetSessionUserID(r)
 
-	// Fetch static data
+	// Fetch categories (this is used in the sidebar or category filters)
 	allCategories, err := Database.GetAllGategories(db)
 	if err != nil {
 		log.Printf("Failed to get all categories: %v", err)
@@ -49,19 +48,34 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Fetch posts based on selected category
+	category := r.URL.Query().Get("category")
+	var posts []structs.Post
+
+	if category != "" && category != "All" {
+		// If a category is selected, fetch the posts for that category
+		posts, err = Database.GetPostsByCategory(db, category)
+		if err != nil {
+			log.Printf("Failed to get posts by category: %v", err)
+			http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+			return
+		}
+	} else {
+		// Otherwise, fetch all posts
+		posts, err = Database.GetAllPosts(db)
+		if err != nil {
+			log.Printf("Failed to get all posts: %v", err)
+			http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+			return
+		}
+	}
+
 	staticData := StaticPageData{
 		IsLoggedIn:    isLoggedIn,
-		AllCategories: allCategories,
+		AllCategories: allCategories, // This now correctly stores the list of categories
 	}
 
-	// Fetch dynamic post data
-	posts, err := Database.GetAllPosts(db)
-	if err != nil {
-		log.Printf("Failed to get posts: %v", err)
-		http.Error(w, "Failed to load posts", http.StatusInternalServerError)
-		return
-	}
-
+	// Prepare the dynamic post data for rendering
 	var postDataList []PostData
 
 	for _, post := range posts {
@@ -95,18 +109,14 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			Username:       user.Username,
 			Title:          post.Title,
 			Content:        post.Content,
-			CreatedAt:      timeAgo(post.CreatedAt), // Use the relative time format
+			CreatedAt:      timeAgo(post.CreatedAt), // Use relative time format
 			PostCategories: postCategories,
 			LikeCount:      likeCount,
 			CommentCount:   len(comments),
-			Comments:       comments, // Add this line
 		})
 	}
 
-	// Reverse the postDataList
-	postDataList = reversePosts(postDataList)
-
-	// Render the template with both static and dynamic data
+	// Render the template with both static (categories, isLoggedIn) and dynamic (posts) data
 	err = templates.ExecuteTemplate(w, "index.html", struct {
 		StaticData StaticPageData
 		Posts      []PostData
@@ -117,9 +127,9 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Failed to render template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return // Ensure only one response.WriteHeader call
 	}
 }
+
 
 // timeAgo function to format time
 func timeAgo(t time.Time) string {
@@ -148,11 +158,4 @@ func pluralize(n int) string {
 		return ""
 	}
 	return "s"
-}
-
-func reversePosts(posts []PostData) []PostData {
-	for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
-		posts[i], posts[j] = posts[j], posts[i]
-	}
-	return posts
 }

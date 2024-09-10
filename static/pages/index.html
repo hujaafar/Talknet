@@ -1,190 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Talknet</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link rel="stylesheet" href="/static/styles/index.css" />
-</head>
-<body class="antialiased">
-  <div class="flex flex-col min-h-screen">
-    <!-- Navbar -->
-    <header class="navbar">
-      <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-        <a href="#Logo" class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
-          <div class="w-6 h-6 text-[#6366F1]"></div>
-          <span>Talknet</span>
-        </a>
-        <nav class="hidden md:flex items-center">
-          {{if .StaticData.IsLoggedIn}}
-          <a href="/post" class="text-muted-foreground hover:text-card-foreground mx-5">
-            <i class="fas fa-plus text-lg"></i>
-            <span class="sr-only">Add Post</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talknet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/static/styles/index.css" />
+  </head>
+  <body class="antialiased">
+    <div class="flex flex-col min-h-screen">
+      <!-- Navbar -->
+      <header class="navbar">
+        <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
+          <a href="#Logo" class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
+            <div class="w-6 h-6 text-[#6366F1]"></div>
+            <span>Talknet</span>
           </a>
-          <a href="/static/pages/Profile.html" class="text-muted-foreground hover:text-card-foreground mx-5">
-            <i class="fas fa-user text-lg"></i>
-            <span class="sr-only">Profile</span>
-          </a>
-          <a href="/logout" class="text-muted-foreground hover:text-card-foreground mx-5">
-            <i class="fas fa-sign-in-alt text-lg"></i>
-            <span class="sr-only">Logout</span>
-          </a>
-          {{else}}
-          <a href="/login" class="text-muted-foreground hover:text-card-foreground mx-5">
-            <i class="fas fa-sign-in-alt text-lg"></i>
-            <span class="sr-only">Login</span>
-          </a>
-          {{end}}
-        </nav>
-        <div class="md:hidden">
-          <button class="variant-ghost size-icon">
-            <div class="w-6 h-6 text-card-foreground"></div>
-            <span class="sr-only">Toggle menu</span>
-          </button>
+          <nav class="hidden md:flex items-center">
+            {{if .StaticData.IsLoggedIn}}
+            <a href="/post" class="text-muted-foreground hover:text-card-foreground mx-5">
+              <i class="fas fa-plus text-lg"></i>
+              <span class="sr-only">Add Post</span>
+            </a>
+            <a href="/static/pages/Profile.html" class="text-muted-foreground hover:text-card-foreground mx-5">
+              <i class="fas fa-user text-lg"></i>
+              <span class="sr-only">Profile</span>
+            </a>
+            <a href="/logout" class="text-muted-foreground hover:text-card-foreground mx-5">
+              <i class="fas fa-sign-in-alt text-lg"></i>
+              <span class="sr-only">Login</span>
+            </a>
+            {{else}}
+            <a href="/login" class="text-muted-foreground hover:text-card-foreground mx-5">
+              <i class="fas fa-sign-in-alt text-lg"></i>
+              <span class="sr-only">Login</span>
+            </a>
+            {{end}}
+          </nav>
+          <div class="md:hidden">
+            <button class="variant-ghost size-icon">
+              <div class="w-6 h-6 text-card-foreground"></div>
+              <span class="sr-only">Toggle menu</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <!-- Content -->
-    <main class="content">
-      <!-- Hero Section -->
-      <section class="bg-card shadow-sm p-6 mb-8 rounded-lg flex flex-col items-center text-center">
-        <h2 class="text-7xl font-bold mb-6">Welcome to Talknet</h2>
-        <p class="text-2xl text-muted-foreground mb-10">
-          Engage in discussions, share knowledge, and connect with like-minded
-          <br />
-          individuals on our vibrant Talknet platform.
-        </p>
-        <div class="bg-muted p-8 rounded-lg w-full max-w-xl">
-          <img src="/static/images/Image.png" alt="Talknet Image" class="rounded-lg shadow-lg mx-auto" style="width: 100%; height: auto; object-fit: cover; border-radius: 1rem;" />
-        </div>
-      </section>
+      <!-- Content -->
+      <main class="content">
+        <!-- Hero Section -->
+        <section class="bg-card shadow-sm p-6 mb-8 rounded-lg flex flex-col items-center text-center">
+          <h2 class="text-7xl font-bold mb-6">Welcome to Talknet</h2>
+          <p class="text-2xl text-muted-foreground mb-10">
+            Engage in discussions, share knowledge, and connect with like-minded
+            <br />
+            individuals on our vibrant Talknet platform.
+          </p>
+          <div class="bg-muted p-8 rounded-lg w-full max-w-xl">
+            <img
+              src="/static/images/Image.png"
+              alt="Talknet Image"
+              class="rounded-lg shadow-lg mx-auto"
+              style="width: 100%; height: auto; object-fit: cover; border-radius: 1rem;"
+            />
+          </div>
+        </section>
 
-      <div class="container mx-auto p-4 md:p-6">
-        <div class="flex flex-wrap gap-3">
-          <button class="category-button">All</button>
-          {{ range .StaticData.AllCategories }}
-          <button class="category-button">{{ .Name }}</button>
-          {{ end }}
-        </div>
-      </div>
-
-      <!-- Posts Grid -->
-      <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
-        {{ range .Posts }}
-        <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
-          <div class="p-4">
-            <h2 class="text-xl font-bold">
-              <a href="#Title" class="hover:underline text-card-foreground">{{ .Title }}</a>
-            </h2>
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-              <div>
-                <a href="#User" class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
-              </div>
-              <div>·</div>
-              <div>{{ .CreatedAt }}</div>
-            </div>
-            <div class="flex items-center gap-2 mt-2">
-              {{ range .PostCategories }}
-              <a href="#Category" class="category-label">{{ .Name }}</a>
+        <div class="container mx-auto p-4 md:p-6">
+          <div class="flex flex-wrap gap-3">
+            <form id="categoryForm" method="GET" action="/" novalidate>
+              <input type="hidden" name="category" id="selectedCategory" value="All">
+              <button class="category-button" type="button">All</button>
+              {{ range .StaticData.AllCategories }}
+              <button class="category-button" type="button">{{ .Name }}</button>
               {{ end }}
-            </div>
-            <div class="card-content">
-              <p>{{ .Content }}</p>
-            </div>
-          </div>
-
-          <div class="p-4 border-t card-footer">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <button id="like-btn-{{ .ID }}" class="variant-ghost size-icon" data-post-id="{{ .ID }}">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 10v12" />
-                    <path d="M15 5.88L14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z" />
-                  </svg>
-                  <span class="sr-only">Like</span>
-                </button>
-                <span id="like-count-{{ .ID }}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
-
-                <button class="variant-ghost size-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                  </svg>
-                  <span class="sr-only">Comment</span>
-                </button>
-                <span class="text-sm text-muted-foreground">{{ .CommentCount }} comments</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Comments Section -->
-          <div class="p-4 border-t comments-section">
-            <h3 class="text-lg font-semibold mb-4">Comments</h3>
-            {{ if .Comments }}
-              <ul class="space-y-4">
-                {{ range .Comments }}
-                <li class="flex flex-col border-b pb-2">
-                  <div class="flex justify-between items-center text-sm">
-                    <span class="font-medium text-muted-foreground">{{ .Username }}</span>
-                    <span class="text-xs text-muted">{{ .CreatedAt }}</span>
-                  </div>
-                  <p class="text-muted-foreground">{{ .Content }}</p>
-                </li>
-                {{ end }}
-              </ul>
-            {{ else }}
-              <p class="text-muted-foreground">No comments yet. Be the first to comment!</p>
-            {{ end }}
-          </div>
-
-          <!-- Add Comment Form -->
-          {{ if .StaticData.IsLoggedIn }}
-          <div class="p-4 border-t add-comment-section">
-            <form action="/comment" method="POST">
-              <input type="hidden" name="post_id" value="{{ .ID }}" />
-              <textarea name="content" rows="3" class="w-full p-2 border border-muted rounded-md mb-4" placeholder="Write a comment..."></textarea>
-              <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg">Post Comment</button>
             </form>
           </div>
-          {{ else }}
-          <p class="p-4 border-t text-muted-foreground">Log in to add a comment.</p>
-          {{ end }}
         </div>
+        
+        
+
+       <!-- Posts Grid -->
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
+  <!-- Post Loop -->
+  {{ range .Posts }}
+  <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
+    <div class="p-4">
+      <h2 class="text-xl font-bold">
+        <a href="#Title" class="hover:underline text-card-foreground">{{ .Title }}</a>
+      </h2>
+      <div class="flex items-center gap-2 text-sm text-muted-foreground">
+        <div>
+          <a href="#User" class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+        </div> 
+        <div>·</div>
+        <div>{{ .CreatedAt }}</div>
+      </div>
+      <div class="flex items-center gap-2 mt-2">
+        {{ range .PostCategories }}
+        <a href="#Category" class="category-label">{{ .Name }}</a>
         {{ end }}
       </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-card border-t shadow-sm">
-      <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-muted-foreground">
-        <p>&copy; 2024 Talknet. All rights reserved.</p>
-        <div class="flex gap-4">
-          <a href="#Terms" class="hover:text-card-foreground hover:underline">Terms of Service</a>
-          <a href="#Policy" class="hover:text-card-foreground hover:underline">Privacy Policy</a>
-          <a href="#Support" class="hover:text-card-foreground hover:underline">Support</a>
+      <div class="card-content">
+        <p>{{ .Content }}</p>
+      </div>
+    </div>
+    <div class="p-4 border-t card-footer">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <button class="variant-ghost size-icon">
+            <!-- Like Icon -->
+          </button>
+          <span class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
+          <button class="variant-ghost size-icon">
+            <!-- Dislike Icon -->
+          </button>
+          <span class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
+          <button class="variant-ghost size-icon">
+            <!-- Comment Icon -->
+          </button>
+          <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
         </div>
       </div>
-    </footer>
+    </div>
   </div>
+  {{ end }}
+</div>
 
-  <!-- JavaScript -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('[id^="like-btn-"]').forEach(button => {
-        button.addEventListener('click', async function () {
-          const postId = this.dataset.postId;
-          try {
-            const response = await fetch(`/like/${postId}`, { method: 'POST' });
-            const data = await response.json();
-            document.getElementById(`like-count-${postId}`).textContent = data.likeCount;
-          } catch (error) {
-            console.error('Error:', error);
-          }
+      </main>
+
+      <!-- Footer -->
+      <footer class="bg-card border-t shadow-sm">
+        <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-muted-foreground">
+          <p>&copy; 2024 Talknet. All rights reserved.</p>
+          <div class="flex gap-4">
+            <a href="#Terms" class="hover:text-card-foreground hover:underline">Terms of Service</a>
+            <a href="#Policy" class="hover:text-card-foreground hover:underline">Privacy Policy</a>
+            <a href="#ContactUs" class="hover:text-card-foreground hover:underline">Contact Us</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script>
+    function handleCategoryClick(event, category) {
+    event.preventDefault(); // Prevent the form's default action
+    console.log("Category clicked:", category); // Debug log
+    
+    // Update the hidden input value
+    document.getElementById('selectedCategory').value = category;
+
+    // Manually update the URL without reloading the page
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set('category', category);
+    window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+
+    // Now, if you want to load data based on this category (optional):
+    // You can use fetch() or XMLHttpRequest to make an AJAX call to load new data
+    // Example (if you're using a server that responds to AJAX requests):
+    /*
+    fetch(newUrl.href)
+      .then(response => response.text()) // Assume you're loading some HTML or JSON
+      .then(data => {
+        // Use the response data to update the page without refreshing
+        document.getElementById('content').innerHTML = data; // Just an example
+      })
+      .catch(error => console.error('Error fetching data:', error));
+    */
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all category buttons
+    const categoryButtons = document.querySelectorAll('.category-button');
+
+    // Loop through each button and attach the click event listener
+    categoryButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            const category = button.textContent.trim(); // Get the text inside the button
+            handleCategoryClick(event, category); // Pass category to the handler
         });
-      });
     });
-  </script>
-</body>
+});
+
+    
+      
+    </script>
+    
+    
+  </body>
 </html>
