@@ -120,3 +120,27 @@ color: hsl(var(--secondary-foreground));
   color: #000;
   /* Adjust padding, margin, etc., as needed */
 }
+
+.icon-container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--primary-foreground));
+  transition: color 0.2s ease;
+}
+
+.icon-button:hover {
+  color: hsl(var(--secondary-foreground));
+}
+
+.card {
+  position: relative; /* Ensure the card is positioned relative to contain the icon container */
+}

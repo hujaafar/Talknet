@@ -65,3 +65,36 @@ func GetPostsByCategory(db *sql.DB, category string) ([]structs.Post, error) {
     }
     return posts, nil
 }
+
+
+// DeletePost removes a post from the database.
+func DeletePost(db *sql.DB, postID int) error {
+	// Delete associated comments
+	_, err := db.Exec("DELETE FROM Comments WHERE post_id = ?", postID)
+	if err != nil {
+		return err
+	}
+
+	// Delete likes/dislikes related to the post
+	_, err = db.Exec("DELETE FROM Likes_Dislikes WHERE post_id = ?", postID)
+	if err != nil {
+		return err
+	}
+
+	// Delete the post itself
+	_, err = db.Exec("DELETE FROM Posts WHERE id = ?", postID)
+	return err
+}
+
+// DeleteComment removes a comment from the database.
+func DeleteComment(db *sql.DB, commentID int) error {
+	// Delete likes/dislikes related to the comment
+	_, err := db.Exec("DELETE FROM Likes_Dislikes WHERE comment_id = ?", commentID)
+	if err != nil {
+		return err
+	}
+
+	// Delete the comment itself
+	_, err = db.Exec("DELETE FROM Comments WHERE id = ?", commentID)
+	return err
+}
