@@ -34,17 +34,9 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
-	
-
-
-
-
-	// Remove any existing like/dislike by this user on this post
-	err = Database.RemoveLikeDislike(db, userID, requestData.PostID)
-	if err != nil {
-		log.Println("Error removing existing like/dislike:", err)
-		http.Error(w, "Database Error", http.StatusInternalServerError)
+	val, err := Database.CheckReactionExists(db, requestData.PostID, userID)
+	if (val == 1 && requestData.Action == "like") || (val == 0 && requestData.Action == "dislike") {
+		Database.RemoveLikeDislike(db, userID, requestData.PostID)
 		return
 	}
 
