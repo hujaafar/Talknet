@@ -2,6 +2,7 @@ package Database
 
 import (
 	"database/sql"
+	"log"
 	"talknet/structs" // Adjust import path as needed
 	"time"
 )
@@ -84,15 +85,20 @@ func GetLikeDislikeCounts(db *sql.DB, postID int) (int, int, error) {
 
 func CheckReactionExists(db *sql.DB, postID int, userID int) (int, error) {
 	var value bool
+	log.Println("Checking reaction for post ID:", postID, "and user ID:", userID)
 	err := db.QueryRow("SELECT like_dislike FROM Likes_Dislikes WHERE post_id = ? AND user_id = ?", postID, userID).Scan(&value)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			log.Println("No reaction found for the user and post.\n\n\n\n")
 			return -1, nil // No reaction found
 		}
+		log.Println("Error checking reaction:", err, "\n\n\n\n")
 		return -1, err
 	}
 	if value {
+		log.Println("User has liked the post.\n\n\n\n")
 		return 1, nil // User has liked
 	}
+	log.Println("User has disliked the post.\n\n\n\n")
 	return 0, nil // User has disliked
 }

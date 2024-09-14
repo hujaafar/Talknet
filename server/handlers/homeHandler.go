@@ -28,7 +28,7 @@ type PostData struct {
 	LikeCount      int
 	DislikeCount   int
 	CommentCount   int
-	Reaction int
+	Reaction       int
 }
 
 var templates = template.Must(template.ParseGlob("static/pages/*.html"))
@@ -39,7 +39,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, isLoggedIn := sessions.GetSessionUserID(r)
+	userSessionID, isLoggedIn := sessions.GetSessionUserID(r)
 
 	// Fetch categories (this is used in the sidebar or category filters)
 	allCategories, err := Database.GetAllGategories(db)
@@ -92,7 +92,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		likes,dislikes ,err := Database.GetReactionsByPostID(db, post.ID)
+		likes, dislikes, err := Database.GetReactionsByPostID(db, post.ID)
 		if err != nil {
 			log.Printf("Failed to get likes: %v", err)
 			continue
@@ -104,10 +104,13 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			log.Printf("Failed to get comments: %v", err)
 			continue
 		}
-		reaction, err := Database.CheckReactionExists(db, post.ID, user.ID)
-		if err != nil {
-			log.Printf("Failed to check reaction: %v", err)
-			continue
+		reaction := -1
+		if isLoggedIn {
+			reaction, err = Database.CheckReactionExists(db, post.ID, userSessionID)
+			if err != nil {
+				log.Printf("Failed to check reaction: %v", err)
+				continue
+			}
 		}
 
 		postDataList = append(postDataList, PostData{
@@ -120,7 +123,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			LikeCount:      likeCount,
 			DislikeCount:   dislikeCount,
 			CommentCount:   len(comments),
-			Reaction: reaction,
+			Reaction:       reaction,
 		})
 	}
 
@@ -140,7 +143,6 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
-
 
 // timeAgo function to format time
 func timeAgo(t time.Time) string {
