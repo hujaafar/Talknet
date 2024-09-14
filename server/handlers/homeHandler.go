@@ -28,6 +28,7 @@ type PostData struct {
 	LikeCount      int
 	DislikeCount   int
 	CommentCount   int
+	Reaction int
 }
 
 var templates = template.Must(template.ParseGlob("static/pages/*.html"))
@@ -91,16 +92,21 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		likes, err := Database.GetLikesByPostID(db, post.ID)
+		likes,dislikes ,err := Database.GetReactionsByPostID(db, post.ID)
 		if err != nil {
 			log.Printf("Failed to get likes: %v", err)
 			continue
 		}
 		likeCount := len(likes)
-
+		dislikeCount := len(dislikes)
 		comments, err := Database.GetCommentByID(db, post.ID)
 		if err != nil {
 			log.Printf("Failed to get comments: %v", err)
+			continue
+		}
+		reaction, err := Database.CheckReactionExists(db, post.ID, user.ID)
+		if err != nil {
+			log.Printf("Failed to check reaction: %v", err)
 			continue
 		}
 
@@ -112,7 +118,9 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			CreatedAt:      timeAgo(post.CreatedAt), // Use relative time format
 			PostCategories: postCategories,
 			LikeCount:      likeCount,
+			DislikeCount:   dislikeCount,
 			CommentCount:   len(comments),
+			Reaction: reaction,
 		})
 	}
 

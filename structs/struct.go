@@ -39,6 +39,14 @@ type Like struct {
 	CommentID *int      `json:"comment_id,omitempty"` // Nullable for likes on posts
 	CreatedAt time.Time `json:"created_at"`
 }
+type Dislike struct {
+	ID        int       `json:"id"`
+	UserID    int       `json:"user_id"`
+	PostID    *int      `json:"post_id,omitempty"`    // Nullable for likes on comments
+	CommentID *int      `json:"comment_id,omitempty"` // Nullable for likes on posts
+	CreatedAt time.Time `json:"created_at"`
+}
+
 
 // Category represents a category for posts.
 type Category struct {
