@@ -1,282 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Talknet</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="/static/styles/index.css" />
-  </head>
-  <body class="antialiased">
+</head>
+<body class="antialiased">
     <div class="flex flex-col min-h-screen">
-      <!-- Navbar -->
-      <header class="navbar">
-        <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-          <a class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
-            <div class="w-6 h-6 text-[#6366F1]"></div>
-            <span>Talknet</span>
-          </a>
-          <nav class="hidden md:flex items-center">
-            {{if .StaticData.IsLoggedIn}}
-            <a href="/post" class="text-muted-foreground hover:text-card-foreground mx-5">
-              <i class="fas fa-plus text-lg"></i>
-              <span class="sr-only">Add Post</span>
-            </a>
-            <a href="/static/pages/Profile.html" class="text-muted-foreground hover:text-card-foreground mx-5">
-              <i class="fas fa-user text-lg"></i>
-              <span class="sr-only">Profile</span>
-            </a>
-            <a href="/logout" class="text-muted-foreground hover:text-card-foreground mx-5">
-              <i class="fas fa-sign-in-alt text-lg"></i>
-              <span class="sr-only">Login</span>
-            </a>
-            {{else}}
-            <a href="/login" class="text-muted-foreground hover:text-card-foreground mx-5">
-              <i class="fas fa-sign-in-alt text-lg"></i>
-              <span class="sr-only">Login</span>
-            </a>
-            {{end}}
-          </nav>
-          <div class="md:hidden">
-            <button class="variant-ghost size-icon">
-              <div class="w-6 h-6 text-card-foreground"></div>
-              <span class="sr-only">Toggle menu</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <!-- Content -->
-      <main class="content">
-        <!-- Hero Section -->
-        <section class="bg-card shadow-sm p-6 mb-8 rounded-lg flex flex-col items-center text-center">
-          <h2 class="text-7xl font-bold mb-6">Welcome to Talknet</h2>
-          <p class="text-2xl text-muted-foreground mb-10">
-            Engage in discussions, share knowledge, and connect with like-minded
-            <br />
-            individuals on our vibrant Talknet platform.
-          </p>
-          <div class="bg-muted p-8 rounded-lg w-full max-w-xl">
-            <img
-              src="/static/images/Image.png"
-              alt="Talknet Image"
-              class="rounded-lg shadow-lg mx-auto"
-              style="width: 100%; height: auto; object-fit: cover; border-radius: 1rem;"
-            />
-          </div>
-        </section>
-
-        <div class="container mx-auto p-4 md:p-6">
-          <div class="flex flex-wrap gap-3">
-            <form id="categoryForm" method="GET" action="/" novalidate>
-              <input type="hidden" name="category" id="selectedCategory" value="All">
-              <button class="category-button" type="button">All</button>
-              {{ range .StaticData.AllCategories }}
-              <button class="category-button" type="button">{{ .Name }}</button>
-              {{ end }}
-            </form>
-          </div>
-        </div>
-
-        <!-- Posts Grid -->
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
-          <!-- Post Loop -->
-          {{ range .Posts }}
-          <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card" data-post-id="{{.ID}}">
-            <div class="relative">
-              <!-- Card Content -->
-              <div class="p-4">
-                <h2 class="text-xl font-bold">
-                  <span class="hover:underline text-card-foreground">{{ .Title }}</span>
-                </h2>
-                <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                  <div>
-                    <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
-                  </div> 
-                  <div>·</div>
-                  <div>{{ .CreatedAt }}</div>
-                </div>
-                <div class="flex items-center gap-2 mt-2">
-                  {{ range .PostCategories }}
-                  <a class="category-label">{{ .Name }}</a>
-                  {{ end }}
-                </div>
-                <div class="card-content">
-                  <p>{{ .Content }}</p>
-                </div>
-              </div>
-              <div class="p-4 border-t card-footer">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                      <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
-                        <input type="radio" name="like_dislike" value="like" class="sr-only">
-                        <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
-                        <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
-                      </label>
-                      
-                      <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
-                        <input type="radio" name="like_dislike" value="dislike" class="sr-only">
-                        <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
-                        <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
-                      </label>
-                      
-                    <!-- Comment Icon -->
+        <!-- Navbar -->
+        <header class="navbar">
+            <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
+                <a class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
+                    <div class="w-6 h-6 text-[#6366F1]"></div>
+                    <span>Talknet</span>
+                </a>
+                <nav class="hidden md:flex items-center">
+                    {{if .StaticData.IsLoggedIn}}
+                    <a href="/post" class="text-muted-foreground hover:text-card-foreground mx-5">
+                        <i class="fas fa-plus text-lg"></i>
+                        <span class="sr-only">Add Post</span>
+                    </a>
+                    <a href="/static/pages/Profile.html" class="text-muted-foreground hover:text-card-foreground mx-5">
+                        <i class="fas fa-user text-lg"></i>
+                        <span class="sr-only">Profile</span>
+                    </a>
+                    <a href="/logout" class="text-muted-foreground hover:text-card-foreground mx-5">
+                        <i class="fas fa-sign-in-alt text-lg"></i>
+                        <span class="sr-only">Login</span>
+                    </a>
+                    {{else}}
+                    <a href="/login" class="text-muted-foreground hover:text-card-foreground mx-5">
+                        <i class="fas fa-sign-in-alt text-lg"></i>
+                        <span class="sr-only">Login</span>
+                    </a>
+                    {{end}}
+                </nav>
+                <div class="md:hidden">
                     <button class="variant-ghost size-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                      </svg>
-                      <span class="sr-only">Comment</span>
+                        <div class="w-6 h-6 text-card-foreground"></div>
+                        <span class="sr-only">Toggle menu</span>
                     </button>
-                    <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
-          {{ end }}
-        </div>
-      </main>
+        </header>
 
-      <!-- Footer -->
-      <footer class="bg-card border-t shadow-sm">
-        <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-muted-foreground">
-          <p>&copy; 2024 Talknet. All rights reserved.</p>
-          <div class="flex gap-4">
-            <a href="#Terms" class="hover:text-card-foreground hover:underline">Terms of Service</a>
-            <a href="#Policy" class="hover:text-card-foreground hover:underline">Privacy Policy</a>
-            <a href="#ContactUs" class="hover:text-card-foreground hover:underline">Contact Us</a>
-          </div>
-        </div>
-      </footer>
-      
+        <!-- Content -->
+        <main class="content">
+            <!-- Hero Section -->
+            <section class="bg-card shadow-sm p-6 mb-8 rounded-lg flex flex-col items-center text-center">
+                <h2 class="text-7xl font-bold mb-6">Welcome to Talknet</h2>
+                <p class="text-2xl text-muted-foreground mb-10">
+                    Engage in discussions, share knowledge, and connect with like-minded
+                    <br />
+                    individuals on our vibrant Talknet platform.
+                </p>
+                <div class="bg-muted p-8 rounded-lg w-full max-w-xl">
+                    <img
+                        src="/static/images/Image.png"
+                        alt="Talknet Image"
+                        class="rounded-lg shadow-lg mx-auto"
+                        style="width: 100%; height: auto; object-fit: cover; border-radius: 1rem;"
+                    />
+                </div>
+            </section>
+
+            <div class="container mx-auto p-4 md:p-6">
+                <div class="flex flex-wrap gap-3">
+                    <form id="categoryForm" method="GET" action="/" novalidate>
+                        <input type="hidden" name="category" id="selectedCategory" value="All">
+                        <button class="category-button" type="button">All</button>
+                        {{ range .StaticData.AllCategories }}
+                        <button class="category-button" type="button">{{ .Name }}</button>
+                        {{ end }}
+                    </form>
+                </div>
+            </div>
+
+            <!-- Posts Grid -->
+            <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
+                <!-- Post Loop -->
+                {{ range .Posts }}
+                <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card" data-post-id="{{.ID}}" data-categories="{{range .PostCategories}}{{.Name}},{{end}}">
+                    <div class="relative">
+                        <!-- Card Content -->
+                        <div class="p-4">
+                            <h2 class="text-xl font-bold">
+                                <span class="hover:underline text-card-foreground">{{ .Title }}</span>
+                            </h2>
+                            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                <div>
+                                    <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+                                </div> 
+                                <div>·</div>
+                                <div>{{ .CreatedAt }}</div>
+                            </div>
+                            <div class="flex items-center gap-2 mt-2">
+                                {{ range .PostCategories }}
+                                <a class="category-label">{{ .Name }}</a>
+                                {{ end }}
+                            </div>
+                            <div class="card-content">
+                                <p>{{ .Content }}</p>
+                            </div>
+                        </div>
+                        <div class="p-4 border-t card-footer">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
+                                        <input type="radio" name="like_dislike" value="like" class="sr-only">
+                                        <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
+                                        <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
+                                    </label>
+                                    
+                                    <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
+                                        <input type="radio" name="like_dislike" value="dislike" class="sr-only">
+                                        <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
+                                        <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
+                                    </label>
+                                    
+                                    <!-- Comment Icon -->
+                                    <button class="variant-ghost size-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                        </svg>
+                                        <span class="sr-only">Comment</span>
+                                    </button>
+                                    <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-card border-t shadow-sm">
+            <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-muted-foreground">
+                <p>&copy; 2024 Talknet. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#Terms" class="hover:text-card-foreground hover:underline">Terms of Service</a>
+                    <a href="#Policy" class="hover:text-card-foreground hover:underline">Privacy Policy</a>
+                    <a href="#ContactUs" class="hover:text-card-foreground hover:underline">Contact Us</a>
+                </div>
+            </div>
+        </footer>
     </div>
     <script>
-    function handleCategoryClick(event, category) {
-      event.preventDefault(); // Prevent the form's default action
-      //console.log("Category clicked:", category); // Debug log
-      
-      // Update the hidden input value
-      document.getElementById('selectedCategory').value = category;
-
-      // Manually update the URL without reloading the page
-      const newUrl = new URL(window.location);
-      newUrl.searchParams.set('category', category);
-      window.history.pushState({ path: newUrl.href }, '', newUrl.href);
-
-      // Update button active states
-      document.querySelectorAll('.category-button').forEach(button => {
-          button.classList.remove('active');
-      });
-      event.currentTarget.classList.add('active');
-
-      // Optionally, fetch new data and update content here if needed
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Add event listeners to each post card to make them clickable
-        document.querySelectorAll('.card').forEach(function (card) {
-            card.addEventListener('click', function () {
-                const postId = card.getAttribute('data-post-id');
-                window.location.href = `/post?post_id=${postId}`;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add event listeners to each category button
+            document.querySelectorAll('.category-button').forEach(function (button) {
+                button.addEventListener('click', function (event) {
+                    handleCategoryClick(event, button.textContent.trim());
+                });
             });
-        });
 
-        // Remove existing listeners if any by cloning nodes
-        document.querySelectorAll('.like-button').forEach(function (likeLabel) {
-            likeLabel.replaceWith(likeLabel.cloneNode(true));
-        });
-
-        document.querySelectorAll('.dislike-button').forEach(function (dislikeLabel) {
-            dislikeLabel.replaceWith(dislikeLabel.cloneNode(true));
-        });
-
-        // Attach event listeners to like and dislike buttons
-        document.querySelectorAll('.like-button').forEach(function (likeLabel) {
-            likeLabel.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent any default action
-                event.stopPropagation(); // Prevents the event from bubbling up
-                const postId = likeLabel.id.split('-')[2];
-                handleLikeDislike(postId, 'like');
+            // Add event listeners to each post card to make them clickable
+            document.querySelectorAll('.card').forEach(function (card) {
+                card.addEventListener('click', function () {
+                    const postId = card.getAttribute('data-post-id');
+                    window.location.href = `/post?post_id=${postId}`;
+                });
             });
-        });
 
-        document.querySelectorAll('.dislike-button').forEach(function (dislikeLabel) {
-            dislikeLabel.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent any default action
-                event.stopPropagation(); // Prevents the event from bubbling up
-                const postId = dislikeLabel.id.split('-')[2];
-                handleLikeDislike(postId, 'dislike');
-            });
-        });
+            function handleCategoryClick(event, category) {
+                event.preventDefault(); // Prevent the form's default action
 
-        // Set initial active state based on URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const activeCategory = urlParams.get('category') || 'All';
-        document.querySelectorAll('.category-button').forEach(button => {
-            if (button.textContent.trim() === activeCategory) {
-                button.classList.add('active');
+                // Show only posts that match the selected category
+                document.querySelectorAll('.card').forEach(function (card) {
+                    const postCategories = card.getAttribute('data-categories').split(',');
+                    if (category === 'All' || postCategories.includes(category)) {
+                        card.style.display = 'block'; // Show the post
+                    } else {
+                        card.style.display = 'none'; // Hide the post
+                    }
+                });
+
+                // Update button active states
+                document.querySelectorAll('.category-button').forEach(button => {
+                    button.classList.remove('active');
+                });
+                event.currentTarget.classList.add('active');
             }
         });
-    });
-
-    function handleLikeDislike(postId, action) {
-        const likeButton = document.getElementById(`like-button-${postId}`);
-        const dislikeButton = document.getElementById(`dislike-button-${postId}`);
-        const likeCount = document.getElementById(`like-count-${postId}`);
-        const dislikeCount = document.getElementById(`dislike-count-${postId}`);
-        const likeLabel = document.getElementById(`like-label-${postId}`);
-        const dislikeLabel = document.getElementById(`dislike-label-${postId}`);
-        // Disable both buttons temporarily
-        likeButton.disabled = true;
-        dislikeButton.disabled = true;
-        
-        // Make the request to the server
-        fetch(`/like_dislike`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postId: parseInt(postId), action: action }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          // Re-enable buttons after response
-          likeButton.disabled = false;
-          dislikeButton.disabled = false;
-          
-          // Update counts based on the response
-          likeCount.textContent = data.likeCount;
-          dislikeCount.textContent = data.dislikeCount;
-      
-          // Reset styles for both buttons first
-          likeButton.classList.remove('text-blue-500');
-          dislikeButton.classList.remove('text-red-500');
-          likeLabel.classList.remove('text-blue-500');
-          dislikeLabel.classList.remove('text-red-500');
-          
-          // Apply new styles based on the reaction
-          if (data.action === 'like') {
-            likeButton.classList.add('text-blue-500'); // Highlight like button
-            likeLabel.classList.add('text-blue-500'); // Highlight like label
-          } else if (data.action === 'dislike') {
-            dislikeButton.classList.add('text-red-500'); // Highlight dislike button
-            dislikeLabel.classList.add('text-red-500'); // Highlight dislike label
-          } else {
-            likeButton.classList.remove('text-blue-500');
-            dislikeButton.classList.remove('text-red-500');
-            likeLabel.classList.remove('text-blue-500');
-            dislikeLabel.classList.remove('text-red-500');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          // Re-enable buttons if an error occurs
-          likeButton.disabled = false;
-          dislikeButton.disabled = false;
-        });
-    }
     </script>
-  </body>
+</body>
 </html>
