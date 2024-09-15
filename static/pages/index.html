@@ -86,7 +86,7 @@
         <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
           <!-- Post Loop -->
           {{ range .Posts }}
-          <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
+          <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card" data-post-id="{{.ID}}">
             <div class="relative">
               <!-- Icon Container -->
               <div class="icon-container">
@@ -102,7 +102,7 @@
               <!-- Card Content -->
               <div class="p-4">
                 <h2 class="text-xl font-bold">
-                  <a class="hover:underline text-card-foreground">{{ .Title }}</a>
+                  <span class="hover:underline text-card-foreground">{{ .Title }}</span>
                 </h2>
                 <div class="flex items-center gap-2 text-sm text-muted-foreground">
                   <div>
@@ -168,7 +168,7 @@
     <script>
     function handleCategoryClick(event, category) {
       event.preventDefault(); // Prevent the form's default action
-      console.log("Category clicked:", category); // Debug log
+      //console.log("Category clicked:", category); // Debug log
       
       // Update the hidden input value
       document.getElementById('selectedCategory').value = category;
@@ -188,6 +188,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        // Add event listeners to each post card to make them clickable
+        document.querySelectorAll('.card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                const postId = card.getAttribute('data-post-id');
+                window.location.href = `/post?post_id=${postId}`;
+            });
+        });
+
         // Remove existing listeners if any by cloning nodes
         document.querySelectorAll('.like-button').forEach(function (likeLabel) {
             likeLabel.replaceWith(likeLabel.cloneNode(true));
@@ -266,11 +274,11 @@
           } else if (data.action === 'dislike') {
             dislikeButton.classList.add('text-red-500'); // Highlight dislike button
             dislikeLabel.classList.add('text-red-500'); // Highlight dislike label
-          }else{
-            ikeButton.classList.remove('text-blue-500');
-          dislikeButton.classList.remove('text-red-500');
-          likeLabel.classList.remove('text-blue-500');
-          dislikeLabel.classList.remove('text-red-500');
+          } else {
+            likeButton.classList.remove('text-blue-500');
+            dislikeButton.classList.remove('text-red-500');
+            likeLabel.classList.remove('text-blue-500');
+            dislikeLabel.classList.remove('text-red-500');
           }
         })
         .catch((error) => {

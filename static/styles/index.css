@@ -87,6 +87,7 @@ color: hsl(var(--secondary-foreground));
   flex-direction: column;
   justify-content: space-between;
   height: 100%; /* Make the card take full height */
+  cursor: pointer;
 }
 
 .card-content {
