@@ -266,6 +266,11 @@
           } else if (data.action === 'dislike') {
             dislikeButton.classList.add('text-red-500'); // Highlight dislike button
             dislikeLabel.classList.add('text-red-500'); // Highlight dislike label
+          }else{
+            ikeButton.classList.remove('text-blue-500');
+          dislikeButton.classList.remove('text-red-500');
+          likeLabel.classList.remove('text-blue-500');
+          dislikeLabel.classList.remove('text-red-500');
           }
         })
         .catch((error) => {

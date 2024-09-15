@@ -34,32 +34,32 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	val, err := Database.CheckReactionExists(db, requestData.PostID, userID)
+	if (val == 1 && requestData.Action == "like") || (val == 0 && requestData.Action == "dislike") {
+		Database.RemoveLikeDislike(db, userID, requestData.PostID)
+		requestData.Action = "Delete"
+	} else {
 
-	
+		// Remove any existing like/dislike by this user on this post
+		err = Database.RemoveLikeDislike(db, userID, requestData.PostID)
+		if err != nil {
+			log.Println("Error removing existing like/dislike:", err)
+			http.Error(w, "Database Error", http.StatusInternalServerError)
+			return
+		}
 
+		// Add new like/dislike
+		if requestData.Action == "like" {
+			err = Database.CreateLike(db, userID, &requestData.PostID, nil)
+		} else if requestData.Action == "dislike" {
+			err = Database.CreateDislike(db, userID, &requestData.PostID, nil)
+		}
 
-
-
-	// Remove any existing like/dislike by this user on this post
-	err = Database.RemoveLikeDislike(db, userID, requestData.PostID)
-	if err != nil {
-		log.Println("Error removing existing like/dislike:", err)
-		http.Error(w, "Database Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Add new like/dislike
-	log.Println("Action:", requestData.Action)
-	if requestData.Action == "like" {
-		err = Database.CreateLike(db, userID, &requestData.PostID, nil)
-	} else if requestData.Action == "dislike" {
-		err = Database.CreateDislike(db, userID, &requestData.PostID, nil)
-	}
-
-	if err != nil {
-		log.Println("Error creating like/dislike:", err)
-		http.Error(w, "Database Error", http.StatusInternalServerError)
-		return
+		if err != nil {
+			log.Println("Error creating like/dislike:", err)
+			http.Error(w, "Database Error", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	// Get updated like/dislike counts
