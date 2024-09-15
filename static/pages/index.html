@@ -123,20 +123,18 @@
               <div class="p-4 border-t card-footer">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
-                    <form id="likeDislikeForm" method="POST" action="/like_dislike" onsubmit="return false;">
-                      <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}" onclick="handleLikeDislike({{.ID}}, 'like')">
+                      <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
                         <input type="radio" name="like_dislike" value="like" class="sr-only">
                         <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
                         <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
                       </label>
                       
-                      <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}" onclick="handleLikeDislike({{.ID}}, 'dislike')">
+                      <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
                         <input type="radio" name="like_dislike" value="dislike" class="sr-only">
                         <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
                         <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
                       </label>
                       
-                    </form>
                     <!-- Comment Icon -->
                     <button class="variant-ghost size-icon">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -169,122 +167,114 @@
     </div>
     <script>
     function handleCategoryClick(event, category) {
-    event.preventDefault(); // Prevent the form's default action
-    console.log("Category clicked:", category); // Debug log
-    
-    // Update the hidden input value
-    document.getElementById('selectedCategory').value = category;
-
-    // Manually update the URL without reloading the page
-    const newUrl = new URL(window.location);
-    newUrl.searchParams.set('category', category);
-    window.history.pushState({ path: newUrl.href }, '', newUrl.href);
-
-    // Update button active states
-    document.querySelectorAll('.category-button').forEach(button => {
-        button.classList.remove('active');
-    });
-    event.currentTarget.classList.add('active');
-
-    // Optionally, fetch new data and update content here if needed
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Select all category buttons
-    const categoryButtons = document.querySelectorAll('.category-button');
-
-    // Loop through each button and attach the click event listener
-    categoryButtons.forEach(function (button) {
-        button.addEventListener('click', function (event) {
-            const category = button.textContent.trim(); // Get the text inside the button
-            handleCategoryClick(event, category); // Pass category to the handler
-        });
-    });
-
-    // Set initial active state based on URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const activeCategory = urlParams.get('category') || 'All';
-    categoryButtons.forEach(button => {
-        if (button.textContent.trim() === activeCategory) {
-            button.classList.add('active');
-        }
-    });
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Select all category buttons
-    const categoryButtons = document.querySelectorAll('.category-button');
-
-    // Loop through each button and attach the click event listener
-    categoryButtons.forEach(function (button) {
-        button.addEventListener('click', function (event) {
-            const category = button.textContent.trim(); // Get the text inside the button
-            handleCategoryClick(event, category); // Pass category to the handler
-        });
-    });
-});
-
-
-
-
-//code for like dislike
-
-
-
-function handleLikeDislike(postId, action) {
-  const likeButton = document.getElementById(`like-button-${postId}`);
-  const dislikeButton = document.getElementById(`dislike-button-${postId}`);
-  const likeCount = document.getElementById(`like-count-${postId}`);
-  const dislikeCount = document.getElementById(`dislike-count-${postId}`);
-  const likeLabel = document.getElementById(`like-label-${postId}`);
-  const dislikeLabel = document.getElementById(`dislike-label-${postId}`);
-  // Disable both buttons temporarily
-  likeButton.disabled = true;
-  dislikeButton.disabled = true;
-  
-  // Make the request to the server
-  fetch(`/like_dislike`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ postId: postId, action: action }),
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    // Re-enable buttons after response
-    likeButton.disabled = false;
-    dislikeButton.disabled = false;
-    
-    // Update counts based on the response
-    likeCount.textContent = data.likeCount;
-    dislikeCount.textContent = data.dislikeCount;
-
-    // Reset styles for both buttons first
-    likeButton.classList.remove('text-blue-500');
-    dislikeButton.classList.remove('text-red-500');
-    likeLabel.classList.remove('text-blue-500');
-    dislikeLabel.classList.remove('text-red-500');
-    
-    // Apply new styles based on the reaction
-    if (data.action === 'like') {
-      likeButton.classList.add('text-blue-500'); // Highlight like button
-      likeLabel.classList.add('text-blue-500'); // Highlight like label
-    } else if (data.action === 'dislike') {
-      dislikeButton.classList.add('text-red-500'); // Highlight dislike button
-      dislikeLabel.classList.add('text-red-500'); // Highlight dislike label
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-    // Re-enable buttons if an error occurs
-    likeButton.disabled = false;
-    dislikeButton.disabled = false;
-  });
-}
-    
+      event.preventDefault(); // Prevent the form's default action
+      console.log("Category clicked:", category); // Debug log
       
+      // Update the hidden input value
+      document.getElementById('selectedCategory').value = category;
+
+      // Manually update the URL without reloading the page
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set('category', category);
+      window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+
+      // Update button active states
+      document.querySelectorAll('.category-button').forEach(button => {
+          button.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+
+      // Optionally, fetch new data and update content here if needed
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Remove existing listeners if any by cloning nodes
+        document.querySelectorAll('.like-button').forEach(function (likeLabel) {
+            likeLabel.replaceWith(likeLabel.cloneNode(true));
+        });
+
+        document.querySelectorAll('.dislike-button').forEach(function (dislikeLabel) {
+            dislikeLabel.replaceWith(dislikeLabel.cloneNode(true));
+        });
+
+        // Attach event listeners to like and dislike buttons
+        document.querySelectorAll('.like-button').forEach(function (likeLabel) {
+            likeLabel.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent any default action
+                event.stopPropagation(); // Prevents the event from bubbling up
+                const postId = likeLabel.id.split('-')[2];
+                handleLikeDislike(postId, 'like');
+            });
+        });
+
+        document.querySelectorAll('.dislike-button').forEach(function (dislikeLabel) {
+            dislikeLabel.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent any default action
+                event.stopPropagation(); // Prevents the event from bubbling up
+                const postId = dislikeLabel.id.split('-')[2];
+                handleLikeDislike(postId, 'dislike');
+            });
+        });
+
+        // Set initial active state based on URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeCategory = urlParams.get('category') || 'All';
+        document.querySelectorAll('.category-button').forEach(button => {
+            if (button.textContent.trim() === activeCategory) {
+                button.classList.add('active');
+            }
+        });
+    });
+
+    function handleLikeDislike(postId, action) {
+        const likeButton = document.getElementById(`like-button-${postId}`);
+        const dislikeButton = document.getElementById(`dislike-button-${postId}`);
+        const likeCount = document.getElementById(`like-count-${postId}`);
+        const dislikeCount = document.getElementById(`dislike-count-${postId}`);
+        const likeLabel = document.getElementById(`like-label-${postId}`);
+        const dislikeLabel = document.getElementById(`dislike-label-${postId}`);
+        // Disable both buttons temporarily
+        likeButton.disabled = true;
+        dislikeButton.disabled = true;
+        
+        // Make the request to the server
+        fetch(`/like_dislike`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ postId: parseInt(postId), action: action }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          // Re-enable buttons after response
+          likeButton.disabled = false;
+          dislikeButton.disabled = false;
+          
+          // Update counts based on the response
+          likeCount.textContent = data.likeCount;
+          dislikeCount.textContent = data.dislikeCount;
+      
+          // Reset styles for both buttons first
+          likeButton.classList.remove('text-blue-500');
+          dislikeButton.classList.remove('text-red-500');
+          likeLabel.classList.remove('text-blue-500');
+          dislikeLabel.classList.remove('text-red-500');
+          
+          // Apply new styles based on the reaction
+          if (data.action === 'like') {
+            likeButton.classList.add('text-blue-500'); // Highlight like button
+            likeLabel.classList.add('text-blue-500'); // Highlight like label
+          } else if (data.action === 'dislike') {
+            dislikeButton.classList.add('text-red-500'); // Highlight dislike button
+            dislikeLabel.classList.add('text-red-500'); // Highlight dislike label
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          // Re-enable buttons if an error occurs
+          likeButton.disabled = false;
+          dislikeButton.disabled = false;
+        });
+    }
     </script>
-    
-    
   </body>
 </html>
