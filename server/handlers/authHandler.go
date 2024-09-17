@@ -41,15 +41,18 @@ func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.Method == http.MethodPost {
 		// Process the registration form
+		r.ParseForm()
 		username := r.FormValue("username")
 		email := r.FormValue("email")
 		password := r.FormValue("password")
-
-		if err := server.RegisterUser(db, username, email, password); err != nil {
+		err := server.RegisterUser(db, username, email, password)
+		if err != nil {
+			log.Print(err)
 			http.Error(w, "Failed to register user", http.StatusInternalServerError)
 			return
+		} else {
+			http.ResponseWriter.Write(w, []byte("Registration successful!"))
 		}
-		http.ResponseWriter.Write(w, []byte("Registration successful!"))
 		//http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 }

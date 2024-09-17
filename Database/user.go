@@ -23,13 +23,15 @@ func GetUserByUsername(db *sql.DB, username string) (structs.User, error) {
 	return user, err
 }
 
-// Other user-related functions (e.g., UpdateUser, DeleteUser) go here.
-
 // function to validate username
 func IsValidUsername(db *sql.DB, username string) bool {
-	row := db.QueryRow("SELECT * FROM users WHERE username = ?", username)
-	if row.Scan() == sql.ErrNoRows {
+	row := db.QueryRow("SELECT username FROM users WHERE username = ?", username)
+	var user structs.User
+	err := row.Scan(&user.Username)
+	if err == sql.ErrNoRows {
 		return true
+	} else if err != nil {
+		return false
 	}
 	return false
 }
