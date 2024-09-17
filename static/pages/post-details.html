@@ -2,38 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Post.Title }}</title>
-    <link rel="stylesheet" href="/static/styles/postdetail.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            background-color: hsl(210, 100%, 97%);
+        }
+        .main-bg {
+            background-color: hsla(209, 100%, 95%, 0.75); /* Lighter background for the main content area */
+        }
+        .navbar, .footer-bg {
+            background-color: hsl(210, 100%, 97%);
+        }
+    </style>
 </head>
-<body>
-    <!-- Post Content -->
-    <h2>{{ .Post.Title }}</h2>
-    <p>Posted by <strong>{{ .Username }}</strong> on {{ .Post.CreatedAt }}</p>
-    <p>{{ .Post.Content }}</p>
+<body class="antialiased flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <header class="navbar shadow">
+        <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
+            <a class="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                <span>Talknet</span>
+            </a>
+            <nav class="flex items-center">
+                <a href="/post" class="text-gray-600 hover:text-blue-600 mx-5">
+                    <i class="fas fa-plus"></i>
+                    <span class="sr-only">Add Post</span>
+                </a>
+                <a href="/static/pages/Profile.html" class="text-gray-600 hover:text-blue-600 mx-5">
+                    <i class="fas fa-user"></i>
+                    <span class="sr-only">Profile</span>
+                </a>
+                <a href="/logout" class="text-gray-600 hover:text-blue-600 mx-5">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="sr-only">Logout</span>
+                </a>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Comments Section -->
-    <h3>Comments</h3>
-    <div id="comments">
-        {{ if .Comments }}
-            {{ range .Comments }}
-                <div class="comment">
-                    <p><strong>{{ .Username }}:</strong> {{ .Content }}</p>
-                    <p>{{ .CreatedAt }}</p>
-                </div>
+    <!-- Content -->
+    <main class="container mx-auto p-6 main-bg shadow-md rounded-lg mt-8 mb-auto">
+        <h2 class="text-4xl font-bold mb-4">{{ .Post.Title }}</h2>
+        <p class="text-gray-600 mb-2">Posted by <strong>{{ .Username }}</strong> on {{ .Post.CreatedAt }}</p>
+        <p class="text-lg mb-6">{{ .Post.Content }}</p>
+
+        <!-- Comments Section -->
+        <h3 class="text-2xl font-semibold mb-4">Comments</h3>
+        <div id="comments" class="mb-4">
+            {{ if .Comments }}
+                {{ range .Comments }}
+                    <div class="comment bg-white p-4 rounded mb-2">
+                        <p><strong>{{ .Username }}:</strong> {{ .Content }}</p>
+                        <p class="text-sm text-gray-500">{{ .CreatedAt }}</p>
+                    </div>
+                {{ end }}
+            {{ else }}
+                <p class="text-gray-500">No comments yet.</p>
             {{ end }}
-        {{ else }}
-            <p>No comments yet.</p>
-        {{ end }}
-    </div>
+        </div>
 
-    <!-- Add Comment Form -->
-    <h3>Add a Comment</h3>
-    <form action="/add_comment" method="POST">
-        <textarea name="content" rows="4" required></textarea>
-        <input type="hidden" name="post_id" value="{{ .Post.ID }}">
-        <button type="submit">Add Comment</button>
-    </form>
+        <!-- Add Comment Form -->
+        <h3 class="text-2xl font-semibold mb-4">Add a Comment</h3>
+        <form action="/add_comment" method="POST" class="mb-4">
+            <textarea name="content" rows="4" class="w-full bg-white border rounded p-2" required></textarea>
+            <input type="hidden" name="post_id" value="{{ .Post.ID }}">
+            <br><br>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Add Comment</button>
+        </form>
+    </main>
 
-    <p><a href="/">Back to Home</a></p>
+    <!-- Footer -->
+    <footer class="footer-bg border-t shadow-sm">
+        <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-gray-600">
+            <p>&copy; 2024 Talknet. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="#Terms" class="hover:text-blue-600 hover:underline">Terms of Service</a>
+                <a href="#Policy" class="hover:text-blue-600 hover:underline">Privacy Policy</a>
+                <a href="#ContactUs" class="hover:text-blue-600 hover:underline">Contact Us</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
