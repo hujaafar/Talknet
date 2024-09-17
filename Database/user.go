@@ -38,8 +38,10 @@ func IsValidUsername(db *sql.DB, username string) bool {
 
 func GetUserByID(db *sql.DB, id int) (structs.User, error) {
 	row := db.QueryRow("SELECT id, username, email, password, created_at FROM users WHERE id = ?", id)
-
 	var user structs.User
 	err := row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.CreatedAt)
-	return user, err
+	if err != nil {
+		return structs.User{}, err
+	}
+	return user, nil
 }
