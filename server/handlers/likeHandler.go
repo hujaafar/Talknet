@@ -29,7 +29,6 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 	userID, isLoggedIn := sessions.GetSessionUserID(r)
 	if !isLoggedIn {
-		log.Println("User not logged in")
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
