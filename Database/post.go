@@ -100,3 +100,24 @@ func DeleteComment(db *sql.DB, commentID int) error {
 	_, err = db.Exec("DELETE FROM Comments WHERE id = ?", commentID)
 	return err
 }
+
+
+func GetPostByUserID(db *sql.DB,user_id int) ([]structs.Post, error) {
+	rows, err := db.Query("SELECT id, user_id, title, content, created_at FROM posts WHERE user_id = ?",user_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []structs.Post
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
