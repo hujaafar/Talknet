@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.card').forEach(function (card) {
         card.addEventListener('click', function () {
             const postId = card.getAttribute('data-post-id');
-            window.location.href = `/post?post_id=${postId}`;
+            window.location.href = `/post-details?post_id=${postId}`;
         });
     });
 

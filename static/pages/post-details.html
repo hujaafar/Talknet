@@ -2,29 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Title</title>
+    <title>{{ .Post.Title }}</title>
+    <link rel="stylesheet" href="/static/styles/postdetail.css">
 </head>
 <body>
-    <h2>Post Title</h2>
-    <p>Posted by <strong>Username</strong> on Date</p>
-    <p>Post content goes here...</p>
+    <!-- Post Content -->
+    <h2>{{ .Post.Title }}</h2>
+    <p>Posted by <strong>{{ .Username }}</strong> on {{ .Post.CreatedAt }}</p>
+    <p>{{ .Post.Content }}</p>
 
+    <!-- Comments Section -->
     <h3>Comments</h3>
-    <!-- Dynamically filled with comments -->
     <div id="comments">
-        <!-- Example comment -->
-        <div class="comment">
-            <p><strong>Commenter:</strong> Comment content...</p>
-        </div>
+        {{ if .Comments }}
+            {{ range .Comments }}
+                <div class="comment">
+                    <p><strong>{{ .Username }}:</strong> {{ .Content }}</p>
+                    <p>{{ .CreatedAt }}</p>
+                </div>
+            {{ end }}
+        {{ else }}
+            <p>No comments yet.</p>
+        {{ end }}
     </div>
 
+    <!-- Add Comment Form -->
     <h3>Add a Comment</h3>
-    <form action="/post/1/comment" method="POST">
-        <textarea id="comment" name="comment" required></textarea>
-        <br>
+    <form action="/add_comment" method="POST">
+        <textarea name="content" rows="4" required></textarea>
+        <input type="hidden" name="post_id" value="{{ .Post.ID }}">
         <button type="submit">Add Comment</button>
     </form>
+
     <p><a href="/">Back to Home</a></p>
 </body>
 </html>

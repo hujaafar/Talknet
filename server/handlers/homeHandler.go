@@ -99,7 +99,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		}
 		likeCount := len(likes)
 		dislikeCount := len(dislikes)
-		comments, err := Database.GetCommentByID(db, post.ID)
+		comments, err := Database.GetCommentsByPostID(db, post.ID)
 		if err != nil {
 			log.Printf("Failed to get comments: %v", err)
 			continue

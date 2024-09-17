@@ -42,6 +42,12 @@ func main() {
 	http.HandleFunc("/like_dislike", func(w http.ResponseWriter, r *http.Request) {
 		handlers.LikeDislikeHandler(database, w, r)
 	})
+	http.HandleFunc("/post-details", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostDetailsHandler(database, w, r)
+	})
+	http.HandleFunc("/add_comment", func(w http.ResponseWriter, r *http.Request) {
+		handlers.AddCommentHandler(database, w, r)
+	})
 	http.HandleFunc("/logout", handlers.LogoutHandler)
 	fmt.Println("Server running at http://localhost:8080")
 	err = http.ListenAndServe(":8080", nil)
