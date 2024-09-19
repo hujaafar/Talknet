@@ -28,12 +28,9 @@
         </header>
         
         <main class="flex-grow flex flex-col items-center">
-         
-        
             <div class="text-center p-4">
                 <img src="/static/images/Profile.png" alt="User Profile" height="100" width="100">
                 <h3 class="text-xl font-bold">{{.Username}}</h3>
-                <!-- <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Edit Profile</button> -->
             </div>
 
             <hr class="my-4">
@@ -54,11 +51,11 @@
                         <div class="relative">
                             <div class="p-4">
                                 <h2 class="text-xl font-bold">
-                                    <span class="hover:underline text-card-foreground">{{ .Title }}</span>
+                                    <a href="/post-details?post_id={{.ID}}" class="hover:underline text-card-foreground">{{ .Title }}</a>
                                 </h2>
                                 <div class="flex items-center gap-2 text-sm text-muted-foreground">
                                     <div>
-                                        <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+                                        <a href="/user-profile?id={{.ID}}" class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
                                     </div> 
                                     <div>·</div>
                                     <div>{{ .CreatedAt }}</div>
@@ -87,12 +84,13 @@
                                             <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
                                         </label>
                                         
-                                        <button class="variant-ghost size-icon">
+                                        <!-- Updated Comment Icon with Link -->
+                                        <a href="/post-details?post_id={{.ID}}" class="variant-ghost size-icon">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
                                             </svg>
                                             <span class="sr-only">Comment</span>
-                                        </button>
+                                        </a>
                                         <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
                                     </div>
                                 </div>
@@ -113,11 +111,11 @@
                         <div class="relative">
                             <div class="p-4">
                                 <h2 class="text-xl font-bold">
-                                    <span class="hover:underline text-card-foreground">{{ .Title }}</span>
+                                    <a href="/post-details?post_id={{.ID}}" class="hover:underline text-card-foreground">{{ .Title }}</a>
                                 </h2>
                                 <div class="flex items-center gap-2 text-sm text-muted-foreground">
                                     <div>
-                                        <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+                                        <a href="/user-profile?id={{.ID}}" class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
                                     </div> 
                                     <div>·</div>
                                     <div>{{ .CreatedAt }}</div>
@@ -146,12 +144,13 @@
                                             <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
                                         </label>
                                         
-                                        <button class="variant-ghost size-icon">
+                                        <!-- Updated Comment Icon with Link -->
+                                        <a href="/post-details?post_id={{.ID}}" class="variant-ghost size-icon">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
                                             </svg>
                                             <span class="sr-only">Comment</span>
-                                        </button>
+                                        </a>
                                         <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
                                     </div>
                                 </div>
