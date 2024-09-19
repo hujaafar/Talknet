@@ -14,6 +14,7 @@ import (
 )
 
 type StaticPageData struct {
+	
 	IsLoggedIn    bool
 	AllCategories []structs.Category
 }

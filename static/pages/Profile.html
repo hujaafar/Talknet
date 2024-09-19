@@ -1,137 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Talknet</title>
+    <title>Talknet - Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="/static/styles/index.css" />
-  </head>
-  <body class="antialiased">
+</head>
+<body class="antialiased">
     <div class="flex flex-col min-h-screen">
-      <!-- Navbar -->
-      <header class="navbar">
-        <div
-          class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6"
-        >
-          <a
-            href="#Logo"
-            class="flex items-center gap-2 text-lg font-semibold text-card-foreground"
-          >
-            <div class="w-6 h-6 text-[#6366F1]"></div>
-            <span>Talknet</span>
-          </a>
-          <nav class="hidden md:flex items-center">
-            <a
-              href="/post"
-              class="text-muted-foreground hover:text-card-foreground mx-5"
-            >
-              <i class="fas fa-plus text-lg"></i>
-              <span class="sr-only">Add Post</span>
-            </a>
-            <a
-              href="/static/pages/Profile.html"
-              class="text-muted-foreground hover:text-card-foreground mx-5"
-            >
-              <i class="fas fa-user text-lg"></i>
-              <span class="sr-only">Profile</span>
-            </a>
-            <a
-              href="/Login"
-              class="text-muted-foreground hover:text-card-foreground mx-5"
-            >
-              <i class="fas fa-sign-in-alt text-lg"></i>
-              <span class="sr-only">Login</span>
-            </a>
-          </nav>
-          <div class="md:hidden">
-            <button class="variant-ghost size-icon">
-              <div class="w-6 h-6 text-card-foreground"></div>
-              <span class="sr-only">Toggle menu</span>
-            </button>
-          </div>
-        </div>
-      </header>
-      <main class="flex-grow flex flex-col items-center">
-        <div class="text-center p-4">
-          <img src="/static/images/Profile.png" alt="User Profile" height="100" width="100">
-          <h3 class="text-xl font-bold">Ali Hasan</h3>
-          <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Edit Profile</button>
-        </div>
-
-        <hr class="my-4">
-
-        <h1 class="text-2xl font-bold mb-4">Posts</h1>
-        <div
-          class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6"
-        >
-        {{ range . }}
-        <div class="bg-card rounded-lg shadow-lg border border-muted overflow-hidden card" data-post-id="{{.ID}}" data-categories="{{range .PostCategories}}{{.Name}},{{end}}">
-            <div class="relative">
-                <!-- Card Content -->
-                <div class="p-4">
-                    <h2 class="text-xl font-bold">
-                        <span class="hover:underline text-card-foreground">{{ .Title }}</span>
-                    </h2>
-                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                        <div>
-                            <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
-                        </div> 
-                        <div>·</div>
-                        <div>{{ .CreatedAt }}</div>
-                    </div>
-                    <div class="flex items-center gap-2 mt-2">
-                        {{ range .PostCategories }}
-                        <a class="category-label">{{ .Name }}</a>
-                        {{ end }}
-                    </div>
-                    <div class="card-content">
-                        <p>{{ .Content }}</p>
-                    </div>
-                </div>
-                <div class="p-4 border-t card-footer">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
-                                <input type="radio" name="like_dislike" value="like" class="sr-only">
-                                <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
-                                <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
-                            </label>
-                            
-                            <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
-                                <input type="radio" name="like_dislike" value="dislike" class="sr-only">
-                                <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
-                                <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
-                            </label>
-                            
-                            <!-- Comment Icon -->
-                            <button class="variant-ghost size-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                                </svg>
-                                <span class="sr-only">Comment</span>
-                            </button>
-                            <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
-                        </div>
-                    </div>
+        <!-- Navbar -->
+        <header class="navbar">
+            <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
+                <a href="/" class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
+                    <div class="w-6 h-6 text-[#6366F1]"></div>
+                    <span>Talknet</span>
+                </a>
+                
+                <div class="md:hidden">
+                    <button class="variant-ghost size-icon">
+                        <div class="w-6 h-6 text-card-foreground"></div>
+                        <span class="sr-only">Toggle menu</span>
+                    </button>
                 </div>
             </div>
-        </div>
-        {{ end }}
-        </div>
-      </main>
-      <!-- Footer -->
-      <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto text-center">
-          <p class="text-sm">&copy; 2024 Talknet. All rights reserved.</p>
-        </div>
-      </footer>
+        </header>
+        
+        <main class="flex-grow flex flex-col items-center">
+         
+        
+            <div class="text-center p-4">
+                <img src="/static/images/Profile.png" alt="User Profile" height="100" width="100">
+                <h3 class="text-xl font-bold">{{.Username}}</h3>
+                <!-- <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Edit Profile</button> -->
+            </div>
+
+            <hr class="my-4">
+            
+            <!-- Pagination Buttons -->
+            <div class="flex justify-center mb-4">
+                <button id="my-posts-btn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded">Posts</button>
+                <button id="liked-posts-btn" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded">Likes</button>
+            </div>
+
+            <!-- My Posts Section -->
+            <div id="my-posts" class="posts-section">
+                <h1 class="text-2xl font-bold mb-4">Posts</h1>
+                <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
+                    {{ range .MyPosts }}
+                    <div class="post bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
+                        <!-- Post Content Here -->
+                        <div class="relative">
+                            <div class="p-4">
+                                <h2 class="text-xl font-bold">
+                                    <span class="hover:underline text-card-foreground">{{ .Title }}</span>
+                                </h2>
+                                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <div>
+                                        <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+                                    </div> 
+                                    <div>·</div>
+                                    <div>{{ .CreatedAt }}</div>
+                                </div>
+                                <div class="flex items-center gap-2 mt-2">
+                                    {{ range .PostCategories }}
+                                    <a class="category-label">{{ .Name }}</a>
+                                    {{ end }}
+                                </div>
+                                <div class="card-content">
+                                    <p>{{ .Content }}</p>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t card-footer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
+                                            <input type="radio" name="like_dislike" value="like" class="sr-only">
+                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
+                                            <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
+                                        </label>
+                                        
+                                        <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
+                                            <input type="radio" name="like_dislike" value="dislike" class="sr-only">
+                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
+                                            <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
+                                        </label>
+                                        
+                                        <button class="variant-ghost size-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                            </svg>
+                                            <span class="sr-only">Comment</span>
+                                        </button>
+                                        <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+
+            <!-- Liked Posts Section -->
+            <div id="liked-posts" class="posts-section" style="display: none;">
+                <h1 class="text-2xl font-bold mb-4">Liked Posts</h1>
+                <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
+                    {{ range .LikedPosts }}
+                    <div class="post bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
+                        <!-- Post Content Here -->
+                        <div class="relative">
+                            <div class="p-4">
+                                <h2 class="text-xl font-bold">
+                                    <span class="hover:underline text-card-foreground">{{ .Title }}</span>
+                                </h2>
+                                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <div>
+                                        <a class="font-medium hover:underline text-muted-foreground">{{ .Username }}</a>
+                                    </div> 
+                                    <div>·</div>
+                                    <div>{{ .CreatedAt }}</div>
+                                </div>
+                                <div class="flex items-center gap-2 mt-2">
+                                    {{ range .PostCategories }}
+                                    <a class="category-label">{{ .Name }}</a>
+                                    {{ end }}
+                                </div>
+                                <div class="card-content">
+                                    <p>{{ .Content }}</p>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t card-footer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
+                                            <input type="radio" name="like_dislike" value="like" class="sr-only">
+                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
+                                            <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
+                                        </label>
+                                        
+                                        <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
+                                            <input type="radio" name="like_dislike" value="dislike" class="sr-only">
+                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
+                                            <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
+                                        </label>
+                                        
+                                        <button class="variant-ghost size-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                            </svg>
+                                            <span class="sr-only">Comment</span>
+                                        </button>
+                                        <span class="text-sm text-muted-foreground">{{ .CommentCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+
+        </main>
+        
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-4">
+            <div class="container mx-auto text-center">
+                <p class="text-sm">&copy; 2024 Talknet. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
+    
+    <!-- JavaScript for Toggling Posts -->
     <script src="/static/js/filter.js"></script>
     <script src="/static/js/like-dislike.js"></script>
-  </body>
+    <script>
+        document.getElementById('my-posts-btn').addEventListener('click', function() {
+            document.getElementById('my-posts').style.display = 'block';
+            document.getElementById('liked-posts').style.display = 'none';
+        });
+
+        document.getElementById('liked-posts-btn').addEventListener('click', function() {
+            document.getElementById('my-posts').style.display = 'none';
+            document.getElementById('liked-posts').style.display = 'block';
+        });
+    </script>
+</body>
 </html>

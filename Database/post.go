@@ -121,3 +121,28 @@ func GetPostByUserID(db *sql.DB,user_id int) ([]structs.Post, error) {
 
 	return posts, nil
 }
+
+
+
+
+
+
+func GetLikedPosts(db *sql.DB,user_id int) ([]structs.Post, error) {
+	rows, err := db.Query("SELECT Posts.* FROM Posts INNER JOIN Likes_Dislikes ON Posts.id = Likes_Dislikes.post_id WHERE Likes_Dislikes.user_id = ?  AND Likes_Dislikes.like_dislike = 1 AND Likes_Dislikes.post_id IS NOT NULL;",user_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []structs.Post
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}

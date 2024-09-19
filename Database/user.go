@@ -45,3 +45,23 @@ func GetUserByID(db *sql.DB, id int) (structs.User, error) {
 	}
 	return user, nil
 }
+
+
+func GetUserIdByPostID(db *sql.DB, id int) (int, error) {
+	var userID int
+	err := db.QueryRow("SELECT user_id FROM Posts WHERE id = ?", id).Scan(&userID)
+	if err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
+
+func GetUsername(db *sql.DB, id int) (string, error) {
+	var username string
+	err := db.QueryRow("SELECT username FROM Users WHERE id = ?", id).Scan(&username)
+	if err != nil {
+		return "", err
+	}
+	return username, nil
+}
