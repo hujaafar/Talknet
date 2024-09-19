@@ -49,7 +49,7 @@
                 <h1 class="text-2xl font-bold mb-4">Posts</h1>
                 <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
                     {{ range .MyPosts }}
-                    <div class="post bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
+                    <div class="post bg-card rounded-lg shadow-lg border border-muted overflow-hidden card" data-post-id="{{.ID}}" data-categories="{{range .PostCategories}}{{.Name}},{{end}}">
                         <!-- Post Content Here -->
                         <div class="relative">
                             <div class="p-4">
@@ -108,7 +108,7 @@
                 <h1 class="text-2xl font-bold mb-4">Liked Posts</h1>
                 <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-6">
                     {{ range .LikedPosts }}
-                    <div class="post bg-card rounded-lg shadow-lg border border-muted overflow-hidden card">
+                    <div class="post bg-card rounded-lg shadow-lg border border-muted overflow-hidden card" data-post-id="{{.ID}}" data-categories="{{range .PostCategories}}{{.Name}},{{end}}">
                         <!-- Post Content Here -->
                         <div class="relative">
                             <div class="p-4">
@@ -136,13 +136,13 @@
                                     <div class="flex items-center gap-2">
                                         <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
                                             <input type="radio" name="like_dislike" value="like" class="sr-only">
-                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
-                                            <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
+                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}" onclick="handleLikeDislike('{{.ID}}', 'like')"></i>
+                                             <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
                                         </label>
                                         
                                         <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
                                             <input type="radio" name="like_dislike" value="dislike" class="sr-only">
-                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
+                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}" onclick="handleLikeDislike('{{.ID}}', 'dislike')"></i>
                                             <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
                                         </label>
                                         

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
 	"talknet/Database"
 	"talknet/server/sessions"
 )
@@ -14,15 +15,14 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	var likedPostDataList []PostData
 
 	if r.URL.Path != "/profile" {
-		http.NotFound(w, r)
+		RenderErrorPage(w, "Not Found", http.StatusNotFound)
 		return
 	}
 	if r.Method != "GET" {
-		http.NotFound(w, r)
+		RenderErrorPage(w, "Not Found", http.StatusNotFound)
 		return
 	}
 
-	// Get the current user ID
 	userID, isLoggedIn := sessions.GetSessionUserID(r)
 
 	// Check if he requests his profile or someone else's profile
@@ -33,13 +33,13 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		postID, err := strconv.Atoi(r.URL.Query().Get("id"))
 		if err != nil {
 			log.Printf("Failed to parse profile ID: %v", err)
-			http.Error(w, "Invalid profile ID", http.StatusBadRequest)
+			RenderErrorPage(w, "Invalid profile ID", http.StatusBadRequest)
 			return
 		}
 		profileID, err = Database.GetUserIdByPostID(db, postID)
 		if err != nil {
 			log.Printf("Failed to get user: %v", err)
-			http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+			RenderErrorPage(w, "You are not logged in", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -47,7 +47,7 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	username, err := Database.GetUsername(db, profileID)
 	if err != nil {
 		log.Printf("Failed to get username: %v", err)
-		http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+		RenderErrorPage(w, "Failed to load posts", http.StatusInternalServerError)
 		return
 	}
 
@@ -57,7 +57,7 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	posts, err := Database.GetPostByUserID(db, profileID)
 	if err != nil {
 		log.Printf("Failed to get posts: %v", err)
-		http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+		RenderErrorPage(w, "Failed to load posts", http.StatusInternalServerError)
 		return
 	}
 
@@ -65,7 +65,7 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	likedPosts, err := Database.GetLikedPosts(db, profileID)
 	if err != nil {
 		log.Printf("Failed to get liked posts: %v", err)
-		http.Error(w, "Failed to load liked posts", http.StatusInternalServerError)
+		RenderErrorPage(w, "Failed to load liked posts", http.StatusInternalServerError)
 		return
 	}
 
@@ -188,6 +188,6 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	err = templates.ExecuteTemplate(w, "Profile.html", data)
 	if err != nil {
 		log.Printf("Failed to render template: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }

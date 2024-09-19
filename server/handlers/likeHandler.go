@@ -12,7 +12,7 @@ import (
 func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		log.Println("Invalid request method")
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		RenderErrorPage(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -23,13 +23,13 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
 		log.Println("Error decoding request body:", err)
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		RenderErrorPage(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
 
 	userID, isLoggedIn := sessions.GetSessionUserID(r)
 	if !isLoggedIn {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		RenderErrorPage(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -43,7 +43,7 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		err = Database.RemoveLikeDislike(db, userID, requestData.PostID)
 		if err != nil {
 			log.Println("Error removing existing like/dislike:", err)
-			http.Error(w, "Database Error", http.StatusInternalServerError)
+			RenderErrorPage(w, "Database Error", http.StatusInternalServerError)
 			return
 		}
 
@@ -56,7 +56,7 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Println("Error creating like/dislike:", err)
-			http.Error(w, "Database Error", http.StatusInternalServerError)
+			RenderErrorPage(w, "Database Error", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -65,7 +65,7 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	likeCount, dislikeCount, err := Database.GetLikeDislikeCounts(db, requestData.PostID)
 	if err != nil {
 		log.Println("Error getting like/dislike counts:", err)
-		http.Error(w, "Database Error", http.StatusInternalServerError)
+		RenderErrorPage(w, "Database Error", http.StatusInternalServerError)
 		return
 	}
 

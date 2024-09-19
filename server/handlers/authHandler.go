@@ -8,13 +8,14 @@ import (
 	"talknet/server/sessions"
 )
 
+
 // Login Handler
 func LoginHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		err := templates.ExecuteTemplate(w, "login.html", nil)
 		if err != nil {
 			log.Printf("Failed to render template: %v", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
 		}
 	} else if r.Method == http.MethodPost {
 		// Process the login form
@@ -23,7 +24,7 @@ func LoginHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 		user, err := server.LoginUser(db, username, password)
 		if err != nil {
-			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+			RenderErrorPage(w, "Invalid credentials", http.StatusUnauthorized)
 			return
 		}
 		sessions.CreateSession(w, user.ID)
@@ -37,7 +38,7 @@ func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		err := templates.ExecuteTemplate(w, "SignUp.html", nil)
 		if err != nil {
 			log.Printf("Failed to render template: %v", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
 		}
 	} else if r.Method == http.MethodPost {
 		// Process the registration form
@@ -47,7 +48,7 @@ func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		password := r.FormValue("password")
 		err := server.RegisterUser(db, username, email, password)
 		if err != nil {
-			http.Error(w, "Failed to register user", http.StatusInternalServerError)
+			RenderErrorPage(w, "Failed to register user", http.StatusInternalServerError)
 			return
 		}
 		http.Redirect(w, r, "/login", http.StatusSeeOther)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
 	"talknet/server/handlers"
 
 	_ "github.com/mattn/go-sqlite3" // SQLite driver
@@ -51,11 +52,14 @@ func main() {
 	http.HandleFunc("/profile", func(w http.ResponseWriter, r *http.Request) {
 		handlers.ProfileHandler(database, w, r)
 	})
+	http.HandleFunc("/error", func(w http.ResponseWriter, r *http.Request) {
+		handlers.RenderErrorPage(w, "Error Message", http.StatusInternalServerError)
+	})
+
 	http.HandleFunc("/logout", handlers.LogoutHandler)
 	fmt.Println("Server running at http://localhost:8080")
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

@@ -24,21 +24,21 @@ func PostDetailsHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	postIDStr := r.URL.Query().Get("post_id")
 	postID, err := strconv.Atoi(postIDStr)
 	if err != nil {
-		http.Error(w, "Invalid post ID", http.StatusBadRequest)
+		RenderErrorPage(w, "Invalid post ID", http.StatusBadRequest)
 		return
 	}
 
 	// Fetch the post by ID
 	post, err := Database.GetPostByID(db, postID)
 	if err != nil {
-		http.Error(w, "Post not found", http.StatusNotFound)
+		RenderErrorPage(w, "Post not found", http.StatusNotFound)
 		return
 	}
 
 	// Fetch the user who created the post
 	user, err := Database.GetUserByID(db, post.UserID)
 	if err != nil {
-		http.Error(w, "User not found", http.StatusInternalServerError)
+		RenderErrorPage(w, "User not found", http.StatusInternalServerError)
 		return
 	}
 
@@ -46,7 +46,7 @@ func PostDetailsHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	comments, err := Database.GetCommentsByPostID(db, postID)
 	if err != nil {
 		log.Printf("Failed to get comments: %v", err)
-		http.Error(w, "Failed to load comments", http.StatusInternalServerError)
+		RenderErrorPage(w, "Failed to load comments", http.StatusInternalServerError)
 		return
 	}
 
@@ -77,7 +77,7 @@ func PostDetailsHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		log.Printf("Failed to render template: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 

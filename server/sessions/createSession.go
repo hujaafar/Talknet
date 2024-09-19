@@ -10,6 +10,7 @@ import (
 var sessionStore = map[string]int{}
 
 func CreateSession(w http.ResponseWriter, userID int) {
+	
 	sessionID := uuid.New().String()
 	sessionStore[sessionID] = userID
 

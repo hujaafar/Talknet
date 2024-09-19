@@ -14,7 +14,6 @@ import (
 )
 
 type StaticPageData struct {
-	
 	IsLoggedIn    bool
 	AllCategories []structs.Category
 }
@@ -36,7 +35,7 @@ var templates = template.Must(template.ParseGlob("static/pages/*.html"))
 
 func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.NotFound(w, r)
+		RenderErrorPage(w, "Not Found", http.StatusNotFound)
 		return
 	}
 
@@ -46,7 +45,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	allCategories, err := Database.GetAllGategories(db)
 	if err != nil {
 		log.Printf("Failed to get all categories: %v", err)
-		http.Error(w, "Failed to load categories", http.StatusInternalServerError)
+		RenderErrorPage(w, "Failed to load categories", http.StatusInternalServerError)
 		return
 	}
 
@@ -59,7 +58,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		posts, err = Database.GetPostsByCategory(db, category)
 		if err != nil {
 			log.Printf("Failed to get posts by category: %v", err)
-			http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+			RenderErrorPage(w, "Failed to load posts", http.StatusInternalServerError)
 			return
 		}
 	} else {
@@ -67,7 +66,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		posts, err = Database.GetAllPosts(db)
 		if err != nil {
 			log.Printf("Failed to get all posts: %v", err)
-			http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+			RenderErrorPage(w, "Failed to load posts", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -141,7 +140,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		log.Printf("Failed to render template: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 

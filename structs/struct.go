@@ -2,6 +2,11 @@ package structs
 
 import "time"
 
+type ErrorData struct {
+	ErrorMessage string
+	Code         string
+}
+
 // User represents a user in the forum.
 type User struct {
 	ID        int       `json:"id"`
