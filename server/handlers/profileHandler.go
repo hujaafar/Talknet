@@ -47,7 +47,7 @@ func ProfileHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	username, err := Database.GetUsername(db, profileID)
 	if err != nil {
 		log.Printf("Failed to get username: %v", err)
-		RenderErrorPage(w, "Failed to load posts", http.StatusInternalServerError)
+		RenderErrorPage(w, "You are not logged in", http.StatusUnauthorized)
 		return
 	}
 
