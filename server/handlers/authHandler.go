@@ -4,10 +4,14 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+
 	"talknet/server"
 	"talknet/server/sessions"
 )
 
+type Data struct {
+	ErrorMsg string
+}
 
 // Login Handler
 func LoginHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
@@ -24,7 +28,12 @@ func LoginHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 		user, err := server.LoginUser(db, username, password)
 		if err != nil {
-			RenderErrorPage(w, "Invalid credentials", http.StatusUnauthorized)
+			loginData := Data{ErrorMsg: "Invalid Username or Password"}
+			err := templates.ExecuteTemplate(w, "login.html", loginData)
+			if err != nil {
+				log.Printf("Failed to render template: %v", err)
+				RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
+			}
 			return
 		}
 		sessions.CreateSession(w, user.ID)
@@ -48,7 +57,14 @@ func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		password := r.FormValue("password")
 		err := server.RegisterUser(db, username, email, password)
 		if err != nil {
-			RenderErrorPage(w, "Failed to register user", http.StatusInternalServerError)
+
+			data := Data{ErrorMsg: "Email is already taken"}
+
+			err := templates.ExecuteTemplate(w, "SignUp.html", data)
+			if err != nil {
+				log.Printf("Failed to render template: %v", err)
+				RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
+			}
 			return
 		}
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
