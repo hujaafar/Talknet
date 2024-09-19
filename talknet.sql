@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Posts (
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
 
 -- Create Comments table
@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS Comments (
     user_id INTEGER NOT NULL,
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES Posts(id),
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
 
 -- Create Categories table
@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS Post_Categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     post_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES Posts(id),
-    FOREIGN KEY (category_id) REFERENCES Categories(id)
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
 );
 
 -- Create Likes_Dislikes table
@@ -51,9 +51,9 @@ CREATE TABLE IF NOT EXISTS Likes_Dislikes (
     comment_id INTEGER,
     like_dislike BOOLEAN NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id),
-    FOREIGN KEY (post_id) REFERENCES Posts(id),
-    FOREIGN KEY (comment_id) REFERENCES Comments(id)
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (comment_id) REFERENCES Comments(id) ON DELETE CASCADE
 );
 
 -- Create Sessions table
@@ -62,5 +62,5 @@ CREATE TABLE IF NOT EXISTS Sessions (
     user_id INTEGER NOT NULL,
     session_token TEXT UNIQUE NOT NULL,
     expires_at DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
