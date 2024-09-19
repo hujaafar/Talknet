@@ -72,14 +72,13 @@
                     </div>
                     <div class="form-group mb-4">
                         <label class="block text-lg font-semibold text-muted-foreground">Categories:</label>
-
-                        <div class="flex flex-wrap gap-3 mt-2">
-                            <input type="hidden" name="selectedCategories" id="selectedCategories">
+                        <div class="flex flex-wrap gap-3 mt-2" id="categories-container">
                             {{ range .AllCategories }}
                             <button type="button" class="category-button" onclick="toggleCategory(this, '{{.ID}}')">{{ .Name }}</button>
                             {{ end }}
                         </div>
                     </div>
+                    
                     <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-200">Submit Post</button>
                 </form>
             </div>
@@ -101,18 +100,25 @@
     <script>
         function toggleCategory(button, categoryId) {
             button.classList.toggle('selected');
-
-            const selectedCategoriesInput = document.getElementById('selectedCategories');
-            let selectedCategories = selectedCategoriesInput.value.split(',').filter(Boolean);
-
-            if (selectedCategories.includes(categoryId)) {
-                selectedCategories = selectedCategories.filter(id => id !== categoryId);
+    
+            const categoriesContainer = document.getElementById('categories-container');
+    
+            // Check if the category is already selected
+            let existingInput = document.querySelector(`input[name='category[]'][value='${categoryId}']`);
+    
+            if (existingInput) {
+                // If selected, remove it
+                existingInput.remove();
             } else {
-                selectedCategories.push(categoryId);
+                // If not selected, add a hidden input
+                const newInput = document.createElement('input');
+                newInput.type = 'hidden';
+                newInput.name = 'category[]';
+                newInput.value = categoryId;
+                categoriesContainer.appendChild(newInput);
             }
-
-            selectedCategoriesInput.value = selectedCategories.join(',');
         }
     </script>
+    
 </body>
 </html>
