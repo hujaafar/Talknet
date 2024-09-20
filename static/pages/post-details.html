@@ -43,6 +43,23 @@
                     <div class="comment bg-white p-4 rounded mb-2">
                         <p><strong>{{ .Username }}:</strong> {{ .Content }}</p>
                         <p class="text-sm text-gray-500">{{ .CreatedAt }}</p>
+                        <div class="p-4 border-t card-footer"></div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
+                                        <input type="radio" name="like_dislike" value="like" class="sr-only">
+                                        <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
+                                        <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
+                                    </label>
+                                    
+                                    <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
+                                        <input type="radio" name="like_dislike" value="dislike" class="sr-only">
+                                        <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
+                                        <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 {{ end }}
             {{ else }}

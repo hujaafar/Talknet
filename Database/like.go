@@ -96,3 +96,47 @@ func CheckReactionExists(db *sql.DB, postID int, userID int) (int, error) {
 	}
 	return 0, nil // User has disliked
 }
+
+
+
+
+func GetReactionsByCommentID(db *sql.DB, commentID int) ([]structs.Like, []structs.Dislike, error) {
+	// Query for likes (like_dislike = 1)
+	likeRows, err := db.Query("SELECT id, user_id, post_id, comment_id, created_at FROM Likes_Dislikes WHERE comment_id = ? AND like_dislike = 1", commentID)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer likeRows.Close()
+
+	// Query for dislikes (like_dislike = 0)
+	dislikeRows, err := db.Query("SELECT id, user_id, post_id, comment_id, created_at FROM Likes_Dislikes WHERE comment_id = ? AND like_dislike = 0", commentID)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer dislikeRows.Close()
+
+	var likes []structs.Like
+	var dislikes []structs.Dislike
+
+	// Scan likes data
+	for likeRows.Next() {
+		var like structs.Like
+		err := likeRows.Scan(&like.ID, &like.UserID, &like.PostID, &like.CommentID, &like.CreatedAt)
+		if err != nil {
+			return nil, nil, err
+		}
+		likes = append(likes, like)
+	}
+
+	// Scan dislikes data
+	for dislikeRows.Next() {
+		var dislike structs.Dislike
+		err := dislikeRows.Scan(&dislike.ID, &dislike.UserID, &dislike.PostID, &dislike.CommentID, &dislike.CreatedAt)
+		if err != nil {
+			return nil, nil, err
+		}
+		dislikes = append(dislikes, dislike)
+	}
+
+	return likes, dislikes, nil
+}

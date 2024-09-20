@@ -7,20 +7,26 @@ import (
 	"net/http"
 	"strconv"
 	"talknet/Database"
+	"talknet/server/sessions"
 	"talknet/structs"
-
 )
 
 var postDetailTemplate = template.Must(template.ParseFiles("static/pages/post-details.html"))
 
 type CommentWithUser struct {
 	structs.Comment
-	Username  string
-	CreatedAt string
+	Username     string
+	CreatedAt    string
+	LikeCount    int
+	DislikeCount int
+	CommentCount int
+	Reaction     int
 }
 
 func PostDetailsHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	// Get the post ID from the URL query
+	userSessionID, isLoggedIn := sessions.GetSessionUserID(r)
+
 	postIDStr := r.URL.Query().Get("post_id")
 	postID, err := strconv.Atoi(postIDStr)
 	if err != nil {
@@ -58,10 +64,31 @@ func PostDetailsHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 			log.Printf("Failed to get user for comment: %v", err)
 			continue
 		}
+
+		likes, dislikes, err := Database.GetReactionsByCommentID(db, comment.ID)
+		if err != nil {
+			log.Printf("Failed to get likes: %v", err)
+			continue
+		}
+		likeCount := len(likes)
+		dislikeCount := len(dislikes)
+
+		reaction := -1
+		if isLoggedIn {
+			reaction, err = Database.CheckReactionExists(db, post.ID, userSessionID)
+			if err != nil {
+				log.Printf("Failed to check reaction: %v", err)
+				continue
+			}
+		}
+
 		commentsWithUser = append(commentsWithUser, CommentWithUser{
-			Comment:   comment,
-			Username:  commentUser.Username,
-			CreatedAt: timeAgo(comment.CreatedAt),
+			Comment:      comment,
+			Username:     commentUser.Username,
+			CreatedAt:    timeAgo(comment.CreatedAt),
+			LikeCount:    likeCount,
+			DislikeCount: dislikeCount,
+			Reaction:     reaction,
 		})
 	}
 
@@ -80,4 +107,3 @@ func PostDetailsHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		RenderErrorPage(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
-
