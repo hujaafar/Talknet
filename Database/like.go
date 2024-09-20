@@ -82,7 +82,7 @@ func GetLikeDislikeCounts(db *sql.DB, postID int) (int, int, error) {
 	return likeCount, dislikeCount, nil
 }
 
-func CheckReactionExists(db *sql.DB, postID int, userID int) (int, error) {
+func CheckPostReactionExists(db *sql.DB, postID int, userID int) (int, error) {
 	var value bool
 	err := db.QueryRow("SELECT like_dislike FROM Likes_Dislikes WHERE post_id = ? AND user_id = ?", postID, userID).Scan(&value)
 	if err != nil {
@@ -96,7 +96,20 @@ func CheckReactionExists(db *sql.DB, postID int, userID int) (int, error) {
 	}
 	return 0, nil // User has disliked
 }
-
+func CheckCommentReactionExists(db *sql.DB, commentID int, userID int) (int, error) {
+	var value bool
+	err := db.QueryRow("SELECT like_dislike FROM Likes_Dislikes WHERE comment_id = ? AND user_id = ?", commentID, userID).Scan(&value)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return -1, nil // No reaction found
+		}
+		return -1, err
+	}
+	if value {
+		return 1, nil // User has liked
+	}
+	return 0, nil // User has disliked
+}
 
 
 

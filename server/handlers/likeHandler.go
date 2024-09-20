@@ -33,7 +33,7 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	val, err := Database.CheckReactionExists(db, requestData.PostID, userID)
+	val, err := Database.CheckPostReactionExists(db, requestData.PostID, userID)
 	if (val == 1 && requestData.Action == "like") || (val == 0 && requestData.Action == "dislike") {
 		Database.RemoveLikeDislike(db, userID, requestData.PostID)
 		requestData.Action = "Delete"
