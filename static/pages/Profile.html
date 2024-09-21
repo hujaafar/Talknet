@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/static/styles/index.css" />
 </head>
 <body class="antialiased">
+    <div id="hiddenDiv" style="display:none;">post</div>
+
     <div class="flex flex-col min-h-screen">
         <!-- Navbar -->
         <header class="navbar">
@@ -74,13 +76,13 @@
                                     <div class="flex items-center gap-2">
                                         <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
                                             <input type="radio" name="like_dislike" value="like" class="sr-only">
-                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
+                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}" onclick="handleLikeDislike('{{.ID}}', 'like')"></i>
                                             <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
                                         </label>
                                         
                                         <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
                                             <input type="radio" name="like_dislike" value="dislike" class="sr-only">
-                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
+                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}" onclick="handleLikeDislike('{{.ID}}', 'dislike')"></i>
                                             <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
                                         </label>
                                         
@@ -134,13 +136,13 @@
                                     <div class="flex items-center gap-2">
                                         <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
                                             <input type="radio" name="like_dislike" value="like" class="sr-only">
-                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}" onclick="handleLikeDislike('{{.ID}}', 'like')"></i>
+                                            <i class="fas fa-thumbs-up" id="like-button-{{.ID}}" ></i>
                                              <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
                                         </label>
                                         
                                         <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
                                             <input type="radio" name="like_dislike" value="dislike" class="sr-only">
-                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}" onclick="handleLikeDislike('{{.ID}}', 'dislike')"></i>
+                                            <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}" ></i>
                                             <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
                                         </label>
                                         

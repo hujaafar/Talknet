@@ -1,3 +1,4 @@
+const type = document.getElementById('hiddenDiv').innerText;
 document.addEventListener('DOMContentLoaded', function () {
     // Add event listeners to each category button
     document.querySelectorAll('.category-button').forEach(function (button) {
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault(); // Prevent any default action
             event.stopPropagation(); // Prevents the event from bubbling up
             const postId = likeLabel.id.split('-')[2];
-            handleLikeDislike(postId, 'like');
+            handleLikeDislike(postId, 'like',type);
         });
     });
 
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault(); // Prevent any default action
             event.stopPropagation(); // Prevents the event from bubbling up
             const postId = dislikeLabel.id.split('-')[2];
-            handleLikeDislike(postId, 'dislike');
+            handleLikeDislike(postId, 'dislike',type);
         });
     });
 

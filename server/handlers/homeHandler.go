@@ -106,7 +106,7 @@ func HomeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		}
 		reaction := -1
 		if isLoggedIn {
-			reaction, err = Database.CheckPostReactionExists(db, post.ID, userSessionID)
+			reaction, err = Database.CheckReactionExists(db, post.ID, userSessionID,"post")
 			if err != nil {
 				log.Printf("Failed to check reaction: %v", err)
 				continue

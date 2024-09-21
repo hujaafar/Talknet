@@ -1,4 +1,5 @@
-function handleLikeDislike(postId, action) {
+function handleLikeDislike(postId, action,type) {
+  console.log(postId,"  ",action,"  ",type);
     const likeButton = document.getElementById(`like-button-${postId}`);
     const dislikeButton = document.getElementById(`dislike-button-${postId}`);
     const likeCount = document.getElementById(`like-count-${postId}`);
@@ -13,7 +14,7 @@ function handleLikeDislike(postId, action) {
     fetch(`/like_dislike`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ postId: parseInt(postId), action: action }),
+      body: JSON.stringify({ postId: parseInt(postId), action: action , type:type}),
     })
     .then((response) => response.json())
     .then((data) => {
@@ -39,7 +40,7 @@ function handleLikeDislike(postId, action) {
         dislikeButton.classList.add('text-red-500'); // Highlight dislike button
         dislikeLabel.classList.add('text-red-500'); // Highlight dislike label
       }else{
-        ikeButton.classList.remove('text-blue-500');
+        likeButton.classList.remove('text-blue-500');
       dislikeButton.classList.remove('text-red-500');
       likeLabel.classList.remove('text-blue-500');
       dislikeLabel.classList.remove('text-red-500');

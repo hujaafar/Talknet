@@ -57,9 +57,15 @@ func GetReactionsByPostID(db *sql.DB, postID int) ([]structs.Like, []structs.Dis
 }
 
 // Other like-related functions (e.g., DeleteLike) go here.
-func RemoveLikeDislike(db *sql.DB, userID int, postID int) error {
-	_, err := db.Exec("DELETE FROM Likes_Dislikes WHERE user_id = ? AND post_id = ?", userID, postID)
-	return err
+func RemoveLikeDislike(db *sql.DB, userID int, postID int, Type string) (sql.Result, error) {
+	var err error
+	var res sql.Result
+	if Type == "post" {
+		res, err = db.Exec("DELETE FROM likes_dislikes WHERE user_id = ? AND post_id = ? ", userID, postID)
+	} else if Type == "comment" {
+		res, err = db.Exec("DELETE FROM likes_dislikes WHERE user_id = ? AND comment_id = ? ", userID, postID)
+	}
+	return res, err
 }
 
 func CreateDislike(db *sql.DB, userID int, postID *int, commentID *int) error {
@@ -69,22 +75,41 @@ func CreateDislike(db *sql.DB, userID int, postID *int, commentID *int) error {
 	return err
 }
 
-func GetLikeDislikeCounts(db *sql.DB, postID int) (int, int, error) {
+func GetLikeDislikeCounts(db *sql.DB, postID int, Type string) (int, int, error) {
 	var likeCount, dislikeCount int
-	err := db.QueryRow("SELECT COUNT(*) FROM Likes_Dislikes WHERE post_id = ? AND like_dislike = 1 ", postID).Scan(&likeCount)
-	if err != nil {
-		return 0, 0, err
-	}
-	err = db.QueryRow("SELECT COUNT(*) FROM Likes_Dislikes WHERE post_id = ? AND like_dislike = 0 ", postID).Scan(&dislikeCount)
-	if err != nil {
-		return 0, 0, err
+	var err error
+	if Type == "post" {
+		err = db.QueryRow("SELECT COUNT(*) FROM Likes_Dislikes WHERE post_id = ? AND like_dislike = 1 ", postID).Scan(&likeCount)
+		if err != nil {
+			return 0, 0, err
+		}
+		err = db.QueryRow("SELECT COUNT(*) FROM Likes_Dislikes WHERE post_id = ? AND like_dislike = 0 ", postID).Scan(&dislikeCount)
+		if err != nil {
+			return 0, 0, err
+		}
+	} else if Type == "comment" {
+		err = db.QueryRow("SELECT COUNT(*) FROM Likes_Dislikes WHERE comment_id = ? AND like_dislike = 1 ", postID).Scan(&likeCount)
+		if err != nil {
+			return 0, 0, err
+		}
+		err = db.QueryRow("SELECT COUNT(*) FROM Likes_Dislikes WHERE comment_id = ? AND like_dislike = 0 ", postID).Scan(&dislikeCount)
+		if err != nil {
+			return 0, 0, err
+		}
 	}
 	return likeCount, dislikeCount, nil
 }
 
-func CheckPostReactionExists(db *sql.DB, postID int, userID int) (int, error) {
+func CheckReactionExists(db *sql.DB, ID int, userID int, Type string) (int, error) {
 	var value bool
-	err := db.QueryRow("SELECT like_dislike FROM Likes_Dislikes WHERE post_id = ? AND user_id = ?", postID, userID).Scan(&value)
+	var err error
+	if Type == "post" {
+		err = db.QueryRow("SELECT like_dislike FROM Likes_Dislikes WHERE post_id = ? AND user_id = ?", ID, userID).Scan(&value)
+	} else if Type == "comment" {
+		err = db.QueryRow("SELECT like_dislike FROM Likes_Dislikes WHERE comment_id = ? AND user_id = ?", ID, userID).Scan(&value)
+	} else {
+		return -1, err
+	}
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return -1, nil // No reaction found
@@ -110,8 +135,6 @@ func CheckCommentReactionExists(db *sql.DB, commentID int, userID int) (int, err
 	}
 	return 0, nil // User has disliked
 }
-
-
 
 func GetReactionsByCommentID(db *sql.DB, commentID int) ([]structs.Like, []structs.Dislike, error) {
 	// Query for likes (like_dislike = 1)

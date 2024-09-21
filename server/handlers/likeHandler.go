@@ -19,6 +19,7 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	var requestData struct {
 		PostID int    `json:"postId"`
 		Action string `json:"action"` // "like" or "dislike"
+		Type   string `json:"type"`   // "post" or "comment"
 	}
 	err := json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
@@ -33,14 +34,14 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	val, err := Database.CheckPostReactionExists(db, requestData.PostID, userID)
+	val, err := Database.CheckReactionExists(db, requestData.PostID, userID, requestData.Type)
 	if (val == 1 && requestData.Action == "like") || (val == 0 && requestData.Action == "dislike") {
-		Database.RemoveLikeDislike(db, userID, requestData.PostID)
+		Database.RemoveLikeDislike(db, userID, requestData.PostID, requestData.Type)
 		requestData.Action = "Delete"
 	} else {
 
 		// Remove any existing like/dislike by this user on this post
-		err = Database.RemoveLikeDislike(db, userID, requestData.PostID)
+		_, err = Database.RemoveLikeDislike(db, userID, requestData.PostID, requestData.Type)
 		if err != nil {
 			log.Println("Error removing existing like/dislike:", err)
 			RenderErrorPage(w, "Database Error", http.StatusInternalServerError)
@@ -48,10 +49,18 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Add new like/dislike
-		if requestData.Action == "like" {
-			err = Database.CreateLike(db, userID, &requestData.PostID, nil)
-		} else if requestData.Action == "dislike" {
-			err = Database.CreateDislike(db, userID, &requestData.PostID, nil)
+		if requestData.Type == "post" {
+			if requestData.Action == "like" {
+				err = Database.CreateLike(db, userID, &requestData.PostID, nil)
+			} else if requestData.Action == "dislike" {
+				err = Database.CreateDislike(db, userID, &requestData.PostID, nil)
+			}
+		} else if requestData.Type == "comment" {
+			if requestData.Action == "like" {
+				err = Database.CreateLike(db, userID, nil, &requestData.PostID)
+			} else if requestData.Action == "dislike" {
+				err = Database.CreateDislike(db, userID, nil, &requestData.PostID)
+			}
 		}
 
 		if err != nil {
@@ -62,7 +71,7 @@ func LikeDislikeHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get updated like/dislike counts
-	likeCount, dislikeCount, err := Database.GetLikeDislikeCounts(db, requestData.PostID)
+	likeCount, dislikeCount, err := Database.GetLikeDislikeCounts(db, requestData.PostID, requestData.Type)
 	if err != nil {
 		log.Println("Error getting like/dislike counts:", err)
 		RenderErrorPage(w, "Database Error", http.StatusInternalServerError)
