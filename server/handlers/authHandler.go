@@ -58,7 +58,7 @@ func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		err := server.RegisterUser(db, username, email, password)
 		if err != nil {
 
-			data := Data{ErrorMsg: "Email is already taken"}
+			data := Data{ErrorMsg: err.Error()}
 
 			err := templates.ExecuteTemplate(w, "SignUp.html", data)
 			if err != nil {
