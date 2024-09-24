@@ -19,7 +19,7 @@ func NewPostHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	_, isLoggedIn := sessions.GetSessionUserID(r)
 	if !isLoggedIn {
 		http.Redirect(w, r, "/login", 302)
-	}	
+	}
 	if r.URL.Path != "/post" {
 		http.NotFound(w, r)
 		return
@@ -60,6 +60,17 @@ func NewPostHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		// Check for errors
 		if id == -1 || title == "" || content == "" || len(categories) == 0 {
 			RenderErrorPage(w, "Error: All fields must be filled and at least one category selected", http.StatusBadRequest)
+			return
+		}
+
+		// Check title and content length
+		if len(title) > 50 {
+			RenderErrorPage(w, "Error: Title cannot be more than 50 characters", http.StatusBadRequest)
+			return
+		}
+
+		if len(content) > 500 {
+			RenderErrorPage(w, "Error: Content cannot be more than 500 characters", http.StatusBadRequest)
 			return
 		}
 

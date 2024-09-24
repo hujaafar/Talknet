@@ -56,9 +56,13 @@ func RegisterHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 		err := server.RegisterUser(db, username, email, password)
+		var data Data
 		if err != nil {
-
-			data := Data{ErrorMsg: err.Error()}
+			if err.Error() == "UNIQUE constraint failed: Users.email" {
+				data = Data{ErrorMsg: "Email is already used"}
+			} else {
+				data = Data{ErrorMsg: err.Error()}
+			}
 
 			err := templates.ExecuteTemplate(w, "SignUp.html", data)
 			if err != nil {

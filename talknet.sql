@@ -64,3 +64,16 @@ CREATE TABLE IF NOT EXISTS Sessions (
     expires_at DATETIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
+
+INSERT INTO Categories (name) VALUES ('Technology');
+INSERT INTO Categories (name) VALUES ('Sport');
+INSERT INTO Categories (name) VALUES ('Science');
+INSERT INTO Categories (name) VALUES ('Education');
+INSERT INTO Categories (name) VALUES ('Gaming');
+INSERT INTO Categories (name) VALUES ('TV');
+INSERT INTO Categories (name) VALUES ('Comedy');
+INSERT INTO Categories (name) VALUES ('History');
+INSERT INTO Categories (name) VALUES ('Social');
+INSERT INTO Categories (name) VALUES ('Finance');
+INSERT INTO Categories (name) VALUES ('News');
+INSERT INTO Categories (name) VALUES ('Others');

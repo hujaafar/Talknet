@@ -3,8 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"talknet/server/handlers"
 
@@ -13,21 +15,50 @@ import (
 
 func main() {
 	// Open a connection to the database
-	database, err := sql.Open("sqlite3", "./talknet.db")
-	if err != nil {
-		log.Fatal(err)
+	dbPath := "./talknet.db"       // Path to your SQLite database file
+	sqlFilePath := "./talknet.sql" // Path to your SQL file
+
+	var database *sql.DB
+
+	// Check if the database file exists
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
+
+		// Create a new database
+		db, err := sql.Open("sqlite3", dbPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		database = db
+
+		// Read the SQL file
+		sqlData, err := ioutil.ReadFile(sqlFilePath)
+		if err != nil {
+			log.Fatalf("Error reading SQL file: %v", err)
+		}
+
+		// Execute the SQL commands from the file
+		_, err = database.Exec(string(sqlData))
+		if err != nil {
+			log.Fatalf("Error executing SQL commands: %v", err)
+		}
+
+	} else if err != nil {
+		log.Fatalf("Error checking database file: %v", err)
+	} else {
+		db, err := sql.Open("sqlite3", dbPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		database = db
 	}
+
+	// Ensure database is closed when main function exits
 	defer database.Close()
 
-	// Test the connection
-	err = database.Ping()
-	if err != nil {
-		log.Fatal("Failed to connect to the database:", err)
-	} else {
-		log.Println("Connected to the database successfully!")
-	}
+	// Setup static file server
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
+	// Setup handlers and pass the database connection
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HomeHandler(database, w, r)
 	})
@@ -56,9 +87,12 @@ func main() {
 		handlers.RenderErrorPage(w, "Error Message", http.StatusInternalServerError)
 	})
 
+	// Logout handler
 	http.HandleFunc("/logout", handlers.LogoutHandler)
+
+	// Start the server
 	fmt.Println("Server running at http://localhost:8080")
-	err = http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

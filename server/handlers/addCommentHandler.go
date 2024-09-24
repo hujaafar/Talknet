@@ -49,6 +49,12 @@ func AddCommentHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if the comment exceeds 150 characters
+	if len(content) > 150 {
+		RenderErrorPage(w, "Comment content cannot exceed 150 characters", http.StatusBadRequest)
+		return
+	}
+
 	// Save the comment to the database
 	err = Database.CreateComment(db, postID, userID, content)
 	if err != nil {

@@ -15,7 +15,18 @@
         }
         .navbar, .footer-bg {
             background-color: hsl(210, 100%, 97%);
-        }   
+        }  
+        /* Prevent text overflow */
+        .post-content {
+            white-space: pre-wrap; /* Preserve line breaks */
+            word-wrap: break-word; /* Allow long words to break */
+            word-break: break-word; /* Ensure long words break properly */
+        }
+        .comment-content {
+            white-space: pre-wrap; /* Preserve line breaks in comments */
+            word-wrap: break-word; /* Allow long words to break */
+            word-break: break-word; /* Ensure long words break properly */
+        }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
@@ -34,7 +45,7 @@
     <main class="container mx-auto p-6 main-bg shadow-md rounded-lg mt-8 mb-auto">
         <h2 class="text-4xl font-bold mb-4">{{ .Post.Title }}</h2>
         <p class="text-gray-600 mb-2">Posted by <strong>{{ .Username }}</strong> on {{ .Post.CreatedAt }}</p>
-        <p class="text-lg mb-6">{{ .Post.Content }}</p>
+        <p class="text-lg mb-6 post-content">{{ .Post.Content }}</p>
 
         <!-- Comments Section -->
         <h3 class="text-2xl font-semibold mb-4">Comments</h3>
@@ -42,7 +53,7 @@
             {{ if .Comments }}
                 {{ range .Comments }}
                     <div class="comment bg-white p-4 rounded mb-2">
-                        <p><strong>{{ .Username }}:</strong> {{ .Content }}</p>
+                        <p><strong>{{ .Username }}:</strong> <span class="comment-content">{{ .Content }}</span></p>
                         <p class="text-sm text-gray-500">{{ .CreatedAt }}</p>
                         <div class="p-4 border-t card-footer"></div>
                             <div class="flex items-center justify-between">
@@ -71,7 +82,7 @@
         <!-- Add Comment Form -->
         <h3 class="text-2xl font-semibold mb-4">Add a Comment</h3>
         <form action="/add_comment" method="POST" class="mb-4">
-            <textarea name="content" rows="4" class="w-full bg-white border rounded p-2" required></textarea>
+            <textarea maxlength="150" name="content" rows="4" class="w-full bg-white border rounded p-2" required></textarea>
             <input type="hidden" name="post_id" value="{{ .Post.ID }}">
             <br><br>
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded" >Add Comment</button>
