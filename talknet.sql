@@ -77,3 +77,4 @@ INSERT INTO Categories (name) VALUES ('Social');
 INSERT INTO Categories (name) VALUES ('Finance');
 INSERT INTO Categories (name) VALUES ('News');
 INSERT INTO Categories (name) VALUES ('Others');
+
