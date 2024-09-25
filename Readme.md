@@ -20,8 +20,8 @@ using **Golang**, **Js**, **HTML/Tailwind**, **sqlite3** we built a Forum websit
 
 ## Snapshots
 
-https://cdn.discordapp.com/attachments/1062820753029996546/1288556695102165104/Screenshot_from_2024-09-25_20-39-18.png?ex=66f59d70&is=66f44bf0&hm=a54ccbeb39da7e9d2461d9431667bce99d242eb72039cb7a116f6418053e0151&
-https://cdn.discordapp.com/attachments/1062820753029996546/1288556695575986236/Screenshot_from_2024-09-25_20-39-47.png?ex=66f59d70&is=66f44bf0&hm=ac1a66ef48fbecb2793b7235ef741521680fc708ac19cbac32a489fe76428bb1&
-https://cdn.discordapp.com/attachments/1062820753029996546/1288556696104472640/Screenshot_from_2024-09-25_20-40-07.png?ex=66f59d70&is=66f44bf0&hm=99d0dea8f6ad2aaed4266b50a7b64724c1e59d79ed09160e91b33cc506e78441&
-https://cdn.discordapp.com/attachments/1062820753029996546/1288556696561782867/Screenshot_from_2024-09-25_20-40-22.png?ex=66f59d70&is=66f44bf0&hm=0f00ab8f0569670908b298b503dafb6446cae88e91de0ed6a90491f10f8710c5&
-https://cdn.discordapp.com/attachments/1062820753029996546/1288556697069162557/Screenshot_from_2024-09-25_20-41-53.png?ex=66f59d70&is=66f44bf0&hm=eb2f2fa65b593b9f2b86b51d2aae139885a6b8ad633472356de496e2bd9038df&
+![1](https://github.com/user-attachments/assets/8ddfd5b3-e7b2-42e3-aec7-7a7f1cfc7624)
+![2](https://github.com/user-attachments/assets/3c7e597a-3ae8-441b-98d2-adc9ef19b55d)
+![3](https://github.com/user-attachments/assets/5188e998-74c9-4760-b2cf-aa41fbe259e8)
+![4](https://github.com/user-attachments/assets/f12fe19e-b65d-451a-a211-1231eb581f75)
+![5](https://github.com/user-attachments/assets/fa696b71-cd4e-4ca4-9cf7-deb9c9299513)
