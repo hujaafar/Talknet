@@ -3,6 +3,11 @@ export function readingStats(text) {
   return { words, minutes: Math.max(1, Math.ceil(words / 200)) };
 }
 
+// Topic order does not change the discussion; text changes do.
+export function editorSnapshot({ title, content, topics }) {
+  return JSON.stringify([title, content, [...topics].sort()]);
+}
+
 export function initExperience(toast, motionRunning) {
   const root = document.documentElement;
   const themeButton = document.querySelector(".theme-toggle");
@@ -228,6 +233,38 @@ export function initExperience(toast, motionRunning) {
       fields = editor.querySelector(".editor-fields");
     const stats = editor.querySelector(".editor-stats");
     stats.hidden = false;
+    const saveState = editor.querySelector(".editor-save-state");
+    saveState.hidden = false;
+    const snapshot = () =>
+      editorSnapshot({
+        title: title.value,
+        content: content.value,
+        topics: [...editor.querySelectorAll(".topic-picker input:checked")].map(
+          (input) => input.value,
+        ),
+      });
+    const initial = snapshot();
+    const retainedError = Boolean(document.querySelector(".form-error"));
+    const warnBeforeLeaving = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    const updateUnsaved = () => {
+      const dirty = retainedError || snapshot() !== initial;
+      editor.dataset.dirty = String(dirty);
+      saveState.textContent = dirty
+        ? "Unsaved changes. Publish or save before leaving."
+        : "No unsaved changes.";
+      if (dirty) addEventListener("beforeunload", warnBeforeLeaving);
+      else removeEventListener("beforeunload", warnBeforeLeaving);
+    };
+    editor.addEventListener("input", updateUnsaved);
+    editor.addEventListener("change", updateUnsaved);
+    editor.addEventListener("submit", () =>
+      removeEventListener("beforeunload", warnBeforeLeaving),
+    );
+    addEventListener("pageshow", updateUnsaved);
+    updateUnsaved();
     const updatePreview = () => {
       const metrics = readingStats(content.value);
       stats.textContent = `${metrics.words} ${metrics.words === 1 ? "word" : "words"} · ${metrics.minutes} min read`;
