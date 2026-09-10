@@ -45,7 +45,7 @@ func (a *App) allowAuth(r *http.Request) bool {
 	if v.count == 0 {
 		v.until = now.Add(time.Minute)
 	}
-	if v.count >= 10 || len(attempts.entries) >= 10000 {
+	if v.count >= 10 || (v.count == 0 && len(attempts.entries) >= 10000) {
 		return false
 	}
 	v.count++
