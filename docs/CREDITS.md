@@ -12,7 +12,7 @@ The redesign takes visual cues from Hussain’s Neo4flix and Nexora projects: st
 
 ## Conversation artwork
 
-`static/images/conversation-art.webp` is original artwork made for this redesign using the built-in image generation tool. It is a stylized illustration, not a product photograph. The generated 1536 × 1024 PNG was converted to WebP for delivery (approximately 114 KiB). The favicon is a small source SVG; interface symbols are inline SVG.
+`static/images/conversation-art.webp` is original artwork made for this redesign using the built-in image generation tool. It is a stylized illustration, not a product photograph. The generated 1536 × 1024 PNG was converted to WebP for delivery (approximately 114 KiB). The favicon is a small source SVG; interface symbols are inline SVG. The three feature-card illustrations are original CSS geometry, with citrus, blue, and copper variations; no external image collection or icon runtime is bundled.
 
 Exact generation prompt:
 

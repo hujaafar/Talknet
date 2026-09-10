@@ -1,29 +1,31 @@
 # Talknet
 
-**Independent minds. Shared curiosity. Let’s talk.**
+**Where minds meet.**
 
-A discussion community with an expressive editorial identity and a compact **Go + SQLite** foundation. An oversized opening, chrome-and-citrus sculpture, layered scroll motion, and a warm paper feed invite people to explore, ask, and reply. Complete HTML comes from the server; a small JavaScript module handles the enhancements.
+An immersive discussion community built with **Go + SQLite**. Chrome-and-citrus artwork, expressive typography, and layered motion open into a considered dark interface. Search in a keystroke, save a conversation, and shape your next idea in a focused editor. Server-rendered HTML keeps the core experience direct and dependable.
 
 [![Quality](https://github.com/hujaafar/Talknet/actions/workflows/ci.yml/badge.svg)](https://github.com/hujaafar/Talknet/actions/workflows/ci.yml)
 [![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go&logoColor=white)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-d8ef6d.svg)](LICENSE)
 
-![Talknet running locally: oversized Let’s talk typography, chrome and citrus artwork, and a live discussion preview](docs/screenshots/desktop.jpg)
+![Talknet running locally: Where minds meet typography, chrome and citrus artwork, and a live discussion preview](docs/screenshots/desktop.jpg)
 
 [Quick start](#run-with-docker) · [Features](#the-experience) · [Design](docs/DESIGN.md) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md)
 
 ## The experience
 
-| Explore                              | Participate                                 | Make it yours                                 |
-| ------------------------------------ | ------------------------------------------- | --------------------------------------------- |
-| Search titles and discussion content | Create discussions with up to three topics  | Register and sign in                          |
-| Filter by topic                      | Reply to posts                              | View your profile and authored posts          |
-| Sort by newest or most liked         | Like, dislike, switch, or remove a reaction | Revisit your liked discussions                |
-| Browse paginated feeds               | React to individual replies                 | Pause motion or follow your system preference |
+| Discover                             | Participate                                  | Make it yours                       |
+| ------------------------------------ | -------------------------------------------- | ----------------------------------- |
+| Ctrl/Cmd K search with live results  | Write and preview a discussion               | Immersive dark or warm light theme  |
+| Visual features linked to real posts | Focus mode, word count, and reading estimate | Comfortable or compact feed         |
+| Search, topic filters, and sorting   | Edit your own posts with conflict protection | Private saved and liked collections |
+| Paginated discussion feeds           | Reply and react to posts and replies         | Persistent motion preference        |
 
-The visual system pairs near-black and paper surfaces, acid citrus accents, locally served Inter and Instrument Serif, and original 3D artwork. The sculpture, headline, and live conversation note move at different depths while scrolling. Section reveals and a reading-progress line connect the experience; a persistent motion control lets each visitor choose a comfortable pace. System reduced motion is respected by default.
+The sculpture, headline, and live conversation note move at separate depths while scrolling. Pointer movement adds subtle depth on supported desktops; geometric feature artwork, section reveals, and reading progress carry the visual language through the page. System reduced motion is respected by default, with an explicit pause control. Theme and reading preferences stay on your device.
 
-Reading, search, navigation, authentication, posting, and replies work without JavaScript. Reactions, counters, copy-link feedback, and motion use progressive enhancement.
+![Three actual discussions presented with original geometric artwork](docs/screenshots/spotlight.jpg)
+
+Reading, search, navigation, authentication, writing, editing, replies, and saving from a discussion page work without JavaScript. The command palette, editor preview, card save shortcuts, reactions, and motion enhance those pages. The editor handles plain text; preview does not execute HTML or Markdown, and drafts are not automatically saved.
 
 ![The Talknet discussion feed with topic navigation, searchable conversation cards, and a community note](docs/screenshots/feed.jpg)
 
@@ -34,7 +36,17 @@ Reading, search, navigation, authentication, posting, and replies work without J
 <img src="docs/screenshots/mobile-feed.jpg" width="310" alt="Mobile discussion feed with horizontal topic navigation and readable post cards">
 </details>
 
-These are browser captures of the running Go application with the optional fictional demo dataset.
+<details>
+<summary><strong>Search, focused writing, and alternate reading mode</strong></summary>
+<br>
+
+![Keyboard search with live discussion results](docs/screenshots/palette.jpg)
+![The focused discussion editor showing a safe plain-text preview](docs/screenshots/editor.jpg)
+![The optional light theme with a compact discussion feed](docs/screenshots/light-compact.jpg)
+
+</details>
+
+These are unedited browser captures of the running Go application. Public views use the optional fictional demo dataset; the editor uses a disposable local test account.
 
 ## Run with Docker
 
@@ -89,9 +101,9 @@ Open **[localhost:8080](http://localhost:8080)**. Native runs use `data/talknet.
 - Persistent, expiring sessions with hashed bearer tokens and server-side logout.
 - Bcrypt passwords, validated forms, bounded requests, and authentication throttling.
 - CSRF tokens, cross-origin write protection, secure-cookie configuration, and a restrictive Content Security Policy.
-- Parameterized SQL, atomic post/category and reaction writes, foreign keys, WAL, and indexed queries.
+- Parameterized SQL, atomic post/category and reaction writes, idempotent bookmarks, revision checks that prevent stale edits, foreign keys, WAL, and indexed queries.
 - A multi-stage Docker image running as a non-root user, with a health check, persistent data, resource limits, and a read-only root filesystem.
-- Integration tests for real account, post, reply, reaction, search, profile, pagination, session, and validation flows—including concurrent reaction toggles under Go’s race detector.
+- Integration tests for account, post, reply, reaction, search, profile, pagination, session, and validation flows—including private bookmarks, author-only editing, stale revisions, and concurrent reactions under Go’s race detector.
 
 ```bash
 go test -race -cover ./...
@@ -106,7 +118,7 @@ Or run tests entirely in Docker:
 docker build --target test -t talknet-tests .
 ```
 
-The browser tests use Node.js 22+ and its built-in test runner; no npm install is needed. [GitHub Actions](https://github.com/hujaafar/Talknet/actions) checks formatting, race/integration tests, JavaScript syntax and motion behavior, static analysis, compilation, and container startup. See [validation notes](docs/VALIDATION.md) for the scope of the recorded checks.
+The browser-logic unit tests use Node.js 22+ and its built-in test runner; no npm install is needed. [GitHub Actions](https://github.com/hujaafar/Talknet/actions) checks formatting, race/integration tests, JavaScript syntax, motion behavior, and editor reading estimates, static analysis, compilation, and container startup. See [validation notes](docs/VALIDATION.md) for the scope of the recorded checks.
 
 ## Inside the project
 
@@ -118,9 +130,11 @@ internal/forum/         Routing, authentication, queries, writes, and tests
 static/
   assets.go             Embedded interface assets
   pages/                Shared Go templates and seven page views
-  styles/app.css        Responsive visual system
+  styles/               Base layout and immersive theme
   js/app.js             Motion, reactions, form feedback, and enhancements
   js/motion.mjs         Bounded scroll transforms and motion preferences
+  js/experience.mjs     Search palette, bookmarks, editor, and reading controls
+  js/theme.js           Early theme initialization without a bright flash
   images/               Original artwork, local typefaces, and favicon
 tests/                  Dependency-free browser-logic tests
 compose.yaml            Persistent local deployment

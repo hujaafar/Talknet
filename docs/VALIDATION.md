@@ -7,7 +7,9 @@ The application is tested against temporary, isolated SQLite databases. Tests do
 `go test -race -cover ./...` exercises:
 
 - Registration, login, posting, replies, logout, and profile navigation through HTTP.
-- Anonymous write prevention and private liked-discussion visibility.
+- Anonymous write prevention, private liked/saved collections, idempotent bookmark writes, and removal.
+- Author-only editing, topic replacement, preserved replies and reactions, revision increments, and rejected stale edits with retained form values.
+- Command search result limits, query validation, and public-metadata-only responses.
 - Topic/search filtering, sorting requests, empty states, and paginated feeds.
 - Like/dislike switching and removal, comment reactions, and concurrent toggles.
 - Session token hashing, restart persistence, expiry, and server-side invalidation.
@@ -16,7 +18,7 @@ The application is tested against temporary, isolated SQLite databases. Tests do
 - Idempotent schema initialization, non-duplicating sample setup, public assets, and the health endpoint.
 - Exact ARIA reaction states on replies before and after a saved vote, including a page reload.
 
-`go vet ./...` checks Go source. `node --check static/js/app.js` checks JavaScript syntax. `node --test tests/*.test.mjs` covers system motion preferences, explicit visitor choices, bounded overscroll, short documents, and independent layer movement. Docker builds and the Compose health check validate the packaged runtime. CI runs the core checks on pushes and pull requests.
+`go vet ./...` checks Go source. Node syntax checks cover `app.js`, `theme.js`, and `experience.mjs`. `node --test tests/*.test.mjs` covers system motion preferences, explicit visitor choices, bounded overscroll, short documents, independent layer movement, and editor word counts/reading estimates. Docker builds and the Compose health check validate the packaged runtime. CI runs the core checks on pushes and pull requests.
 
 The dependency audit uses:
 
@@ -28,17 +30,19 @@ The local audit during the redesign reported **zero reachable vulnerabilities**.
 
 ## Visual and manual checks
 
-The September 10, 2026 design pass used the real Go application at `localhost:8088` with the opt-in demo dataset. The images in `docs/screenshots/` are unedited browser captures of that application.
+The September 10, 2026 immersive design pass used the real Go application. Public views used `localhost:8088` with the opt-in demo dataset. Writing and saving checks used a disposable container, an isolated SQLite database, and a synthetic local account. The images in `docs/screenshots/` are unedited browser captures; the operator’s preview database was not used for test posts.
 
 Completed browser checks:
 
-- Opening and discussion feed at a reported desktop viewport of 1294 × 912 and a phone viewport of 390 × 844.
-- Feed at 320 × 760, including correction and recheck of a heading/action overflow. Document width stayed within the viewport at the checked widths.
-- Search for “technology,” opening its matching discussion, navigating to the author profile, and inspecting registration and sign-in layouts.
-- Loaded local fonts and artwork; no browser warning/error log entries during the check.
-- System reduced motion enabled by default, explicit motion opt-in, separate scroll transforms for artwork/title/note, a working pause control, and preference retention through navigation.
-- Visible account-page primary headings on mobile, singular reply labels, and exact reply reaction state tokens.
+- Dark opening, geometric feature cards, discussion feed, and search palette at a reported desktop viewport of 1294 × 912.
+- Phone opening and feed at 390 × 844; narrow feed and focused editor at 320 × 760. Document width stayed within the viewport at these checked widths.
+- Dark/light switching and Comfortable/Compact controls, including retained preferences after navigation.
+- Ctrl K, live search for “technology,” arrow-key result selection, Enter to open a matching discussion, and Escape to dismiss a populated search and restore focus.
+- Synthetic account sign-in, editor word counts, preview, focus mode, native publication, author editing, and the visible edited label. Submitting a preview with a missing title returned to Write and focused that field.
+- Native bookmark submission, private Saved for later navigation, and card removal updating the count and empty state.
+- Local fonts and artwork loading without third-party asset requests. The browser reported one skipped view transition during rapid navigation; the application remained usable. No application-script error was observed.
+- System reduced motion enabled by default, explicit motion opt-in, distinct scroll transforms, and a persistent pause control.
 
-The final local Docker test stage passed the Go race tests and static analysis. All four JavaScript motion tests passed. The packaged application started successfully and reported healthy through Compose.
+The final local Docker test stage passed Go race tests and static analysis. All six JavaScript unit tests passed. The packaged application built and reported healthy through Compose. HTTP integration tests cover security, ownership, privacy, concurrency, and validation independently of the browser walkthrough.
 
-For broader release checks, also exercise the signed-in composer visually, keyboard navigation, 200% zoom, browser/screen-reader combinations, reaction network failures, and navigation with JavaScript disabled. Account creation, posting, replies, and reactions are covered by HTTP integration tests; the recorded browser pass did not submit an account or publish content. These checks do not establish accessibility conformance.
+Broader release checks still include 200% zoom, browser/screen-reader combinations, reaction network failures, and navigation with JavaScript disabled. Recorded checks do not establish accessibility conformance or full production readiness. See [application scope](ARCHITECTURE.md#scope) for features that remain outside this project.

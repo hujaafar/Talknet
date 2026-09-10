@@ -28,7 +28,7 @@ TALKNET_DB=./talknet.db go run .
 
 For Docker, mount a directory containing your existing database at `/app/data`. The runtime user is UID/GID `10001`; the directory and database must be writable by that user on Linux. Keep the database name `talknet.db` or update `TALKNET_DB`. A bind mount replaces the default named volume for that deployment; stop the old app before switching. Do not run two application versions against the same file during migration.
 
-The original table names and relationships are retained. Startup creates missing tables and indexes and inserts only missing standard topics. It does not replace existing posts, comments, users, or passwords. Existing bcrypt password hashes remain valid. Historical sessions must sign in again because session tokens are now hashed and expiry is enforced by the server.
+The original table names and relationships are retained. Startup creates missing tables and indexes and inserts only missing standard topics. It does not replace existing posts, comments, users, or passwords. The additive `Bookmarks` and `Post_Revisions` tables are created automatically; existing posts begin at revision one without rewriting their content. Existing bcrypt password hashes remain valid. Historical sessions must sign in again because session tokens are now hashed and expiry is enforced by the server.
 
 ## Persistence and backups
 
@@ -54,3 +54,5 @@ Before operating a public community, provide the moderation, account-recovery, a
 - **Seeded authors cannot sign in:** these are fictional demonstration records. Register your own account.
 - **Auth attempts are throttled:** wait one minute. `429` responses include `Retry-After: 60`.
 - **A changed asset is not visible:** assets are embedded at build time. Rebuild and restart the binary or container.
+
+- **An edit changed in another tab:** the server keeps your submitted text and returns a conflict. Open the current discussion in a separate tab, compare the versions, and apply your changes through a freshly opened editor. There is no draft autosave or recoverable revision history.
