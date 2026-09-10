@@ -2,4 +2,5 @@
 *.png binary
 *.webp binary
 *.woff2 binary
+*.ttf binary
 *.db binary

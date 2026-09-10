@@ -1,59 +1,115 @@
 {{ template "head" . }}
+{{ $showHero := and (not .Query) (not .Category) (eq .PageNumber 1) }}
 <main id="main">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="eyebrow">
-        <span class="status-dot"></span> A SPACE FOR CURIOUS MINDS
-      </p>
-      <h1 id="hero-title">
-        Good ideas.<br /><span>Better</span><br class="desktop-break" />
-        conversations.
-      </h1>
-      <p class="hero-description">
-        Big questions. Small discoveries.<br />Find the people who get you.
-      </p>
-      <div class="button-row">
-        <a class="button" href="/post"
-          >Start a discussion {{ template "arrow" }}</a
-        ><a class="text-link" href="#discussions">Explore the feed ↓</a>
+  {{ if $showHero }}
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="hero-kicker">
+          <p class="eyebrow">
+            <span class="status-dot"></span> INDEPENDENT MINDS. SHARED
+            CURIOSITY.
+          </p>
+          <span class="edition-mark">OPEN MINDS / ALWAYS WELCOME</span>
+        </div>
+        <div class="hero-copy">
+          <h1 id="hero-title"><span>Let’s</span><em>talk.</em></h1>
+          <p class="hero-description">
+            For the endlessly curious.<br />And everyone with something to say.
+          </p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img
+            class="hero-art"
+            src="/static/images/conversation-art.webp"
+            width="1536"
+            height="1024"
+            alt=""
+            fetchpriority="high"
+          />
+        </div>
+        {{ if .Posts }}
+          {{ with index .Posts 0 }}
+            <a class="conversation-note" href="/post-details?post_id={{ .ID }}"
+              ><span class="note-label"
+                ><span class="status-dot"></span> FROM THE COMMUNITY
+                {{ template "arrow" }}</span
+              ><strong>{{ .Title }}</strong
+              ><span class="note-author"
+                ><span class="avatar small">{{ initial .Username }}</span
+                >{{ .Username }}
+                <span
+                  >·
+                  {{ .Comments }}
+                  {{ if eq .Comments 1 }}reply{{ else }}replies{{ end }}</span
+                ></span
+              ></a
+            >
+          {{ end }}
+        {{ end }}
+        <div class="hero-bottom">
+          <a class="button hero-cta" href="/post"
+            >Start a conversation {{ template "arrow" }}</a
+          >
+          <p>Different perspectives.<br />A shared space.</p>
+          <a
+            class="scroll-cue"
+            href="#discussions"
+            aria-label="Explore the discussions"
+            ><span>SCROLL TO EXPLORE</span
+            ><span class="round-arrow" aria-hidden="true">↓</span></a
+          >
+        </div>
+        <span class="hero-side-note" aria-hidden="true"
+          >GOOD CONVERSATIONS START HERE.</span
+        >
       </div>
-    </div>
-    <div class="hero-visual">
-      <img
-        class="hero-art"
-        src="/static/images/conversation-art.webp"
-        width="1536"
-        height="1024"
-        alt="Chrome and citrus glass conversation bubbles floating together"
-        fetchpriority="high"
-      />
-      <div class="art-caption">
-        <span>DIFFERENT PERSPECTIVES.<br />ONE SHARED SPACE.</span
-        ><span class="caption-index">01 / TALKNET</span>
+    </section>
+    <nav class="topic-ribbon" aria-label="Discover a topic">
+      <div class="ribbon-track">
+        <a href="/?category=Technology#discussions"
+          >Technology {{ template "arrow" }}</a
+        ><span aria-hidden="true">✳</span
+        ><a href="/?category=Science#discussions"
+          >Science {{ template "arrow" }}</a
+        ><span aria-hidden="true">✳</span
+        ><a href="/?category=Gaming#discussions"
+          >Gaming {{ template "arrow" }}</a
+        ><span aria-hidden="true">✳</span
+        ><a href="/?category=Social#discussions"
+          >Culture & life {{ template "arrow" }}</a
+        >
       </div>
-    </div>
-  </section>
-  <div class="community-strip">
-    <span>LESS NOISE. MORE CONNECTION.</span>
-    <div>
-      <span><strong>{{ .TotalPosts }}</strong> discussions</span
-      ><span><strong>{{ .TotalMembers }}</strong> members</span
-      ><a href="#discussions">Take a look around ↓</a>
-    </div>
-  </div>
+    </nav>
+  {{ end }}
   <section class="forum-section" id="discussions" aria-labelledby="feed-title">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">THE COMMUNITY, IN CONVERSATION</p>
-        <h2 id="feed-title">What’s on your mind?</h2>
+        <p class="eyebrow">THE COMMUNITY, UNFILTERED</p>
+        {{ if $showHero }}
+          <h2 id="feed-title">The good <em>stuff.</em></h2>
+        {{ else }}
+          <h1 id="feed-title">The good <em>stuff.</em></h1>
+        {{ end }}
       </div>
-      <a class="text-link accent" href="/post"
-        >Write something {{ template "arrow" }}</a
+      <div class="feed-intro">
+        <p>
+          Fresh questions. Unexpected discoveries.<br />A different way of
+          seeing things.
+        </p>
+        <span class="community-count"
+          ><span class="status-dot"></span>{{ .TotalPosts }} discussions ·
+          {{ .TotalMembers }} members</span
+        >
+      </div>
+      <a class="button outline-button" href="/post"
+        ><span class="action-label-full">Add your voice</span
+        ><span class="action-label-short">New post</span>
+        {{ template "arrow" }}</a
       >
     </div>
     <div class="forum-layout">
       <aside class="topic-sidebar" id="topics">
-        <h3 class="eyebrow">FIND YOUR CORNER</h3>
+        <h3 class="eyebrow">FIND YOUR CORNER <span>↓</span></h3>
         <a
           class="topic-link {{ if not .Category }}active{{ end }}"
           href="/?q={{ urlquery .Query }}&sort={{ .Sort }}#discussions"
@@ -67,6 +123,10 @@
             ><span>{{ .Name }}</span><span>{{ .Count }}</span></a
           >
         {{ end }}
+        <div class="sidebar-footnote">
+          <span aria-hidden="true">↗</span>
+          <p>Follow your curiosity.<br />See where it takes you.</p>
+        </div>
       </aside>
       <div class="feed">
         <form
@@ -81,7 +141,7 @@
             ><input
               name="q"
               type="search"
-              placeholder="Find a conversation…"
+              placeholder="Find your next rabbit hole…"
               maxlength="200"
               value="{{ .Query }}" /></label
           ><input type="hidden" name="category" value="{{ .Category }}" /><label
@@ -113,12 +173,15 @@
           <div class="filter-summary">
             <span
               >{{ len .Posts }}
-              discussions{{ if .Category }}
-                in {{ .Category }}
-              {{ end }}{{ if .Query }}matching “{{ .Query }}”{{ end }}</span
+              {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }}
+              on this
+              page{{ if .Category }}in {{ .Category }}{{ end }}{{ if .Query }}
+                matching “{{ .Query }}”
+              {{ end }}</span
             ><a href="/#discussions">Clear filters ×</a>
           </div>
-        {{ end }}{{ range .Posts }}
+        {{ end }}
+        {{ range .Posts }}
           {{ template "post-card" . }}
         {{ else }}
           {{ template "empty" }}
@@ -126,21 +189,32 @@
       </div>
       <aside class="community-aside">
         <div class="note-panel" data-reveal>
-          <p class="eyebrow">A GOOD PLACE TO BEGIN</p>
-          <h3>Stay curious.<br />Be kind.<br /><em>Speak your mind.</em></h3>
+          <p class="eyebrow">A NOTE TO EVERYONE</p>
+          <span class="note-star" aria-hidden="true">✳</span>
+          <h3>Stay curious.<br />Stay kind.<br /><em>Stay you.</em></h3>
           <p>
-            Different opinions make better conversations. Give people room to
-            share theirs.
+            You don’t need to have all the answers. A good question is a pretty
+            great start.
           </p>
           <a href="/register" class="text-link"
-            >Make yourself at home {{ template "arrow" }}</a
+            >Find your people {{ template "arrow" }}</a
           >
         </div>
         <div class="house-rules">
           <h3 class="eyebrow">THE WAY WE TALK</h3>
-          <p><span>01</span> Ask with an open mind.</p>
+          <p><span>01</span> Listen before you reply.</p>
           <p><span>02</span> Disagree with respect.</p>
-          <p><span>03</span> Share something useful.</p>
+          <p><span>03</span> Leave room for discovery.</p>
+        </div>
+        <div class="community-links">
+          <p class="eyebrow">ON THE TABLE</p>
+          {{ range $i,$p := .Posts }}
+            {{ if lt $i 3 }}
+              <a href="/post-details?post_id={{ .ID }}"
+                ><span>{{ .Title }}</span>{{ template "arrow" }}</a
+              >
+            {{ end }}
+          {{ end }}
         </div>
       </aside>
     </div>

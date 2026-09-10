@@ -1,51 +1,50 @@
 /* Progressive enhancement: navigation, forms, and content work without JavaScript. */
+import { motionEnabled, scrollFrame } from "./motion.mjs";
 (() => {
   "use strict";
   const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const motionButton = document.querySelector(".motion-toggle");
-  let paused = false;
+  let preference = "auto";
   try {
-    paused = localStorage.getItem("talknet.motion") === "paused";
+    preference = localStorage.getItem("talknet.motion") || "auto";
   } catch (_) {
     /* Storage can be disabled. */
   }
   let scheduled = false;
   const hero = document.querySelector(".hero");
   const progress = document.querySelector(".reading-progress");
+  const running = () => motionEnabled(preference, reduced.matches);
   const update = () => {
     scheduled = false;
-    if (paused || reduced.matches) return;
-    const distance = Math.max(1, root.scrollHeight - innerHeight);
-    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, scrollY / distance))})`;
-    if (hero && innerWidth > 640 && scrollY < hero.offsetHeight + 100) {
-      hero.style.setProperty(
-        "--hero-shift",
-        `${Math.min(scrollY * 0.12, 65)}px`,
-      );
-      hero.style.setProperty(
-        "--hero-scale",
-        `${1 + Math.min(scrollY / 10000, 0.045)}`,
-      );
+    if (!running()) return;
+    const frame = scrollFrame(
+      scrollY,
+      hero?.offsetHeight || 1,
+      root.scrollHeight,
+      innerHeight,
+    );
+    progress.style.transform = `scaleX(${frame.progress})`;
+    if (hero && innerWidth > 640 && scrollY < hero.offsetHeight + 150) {
+      hero.style.setProperty("--hero-shift", `${frame.artShift}px`);
+      hero.style.setProperty("--hero-scale", frame.artScale);
+      hero.style.setProperty("--hero-rotate", `${frame.artRotate}deg`);
+      hero.style.setProperty("--copy-shift", `${frame.copyShift}px`);
+      hero.style.setProperty("--note-shift", `${frame.noteShift}px`);
     }
   };
   const syncMotion = () => {
-    const disabled = paused || reduced.matches;
+    const disabled = !running();
     root.dataset.motion = disabled ? "paused" : "running";
     motionButton.hidden = false;
-    motionButton.textContent = reduced.matches
-      ? "Reduced motion enabled"
-      : paused
-        ? "Enable motion"
-        : "Pause motion";
-    motionButton.disabled = reduced.matches;
+    motionButton.textContent = disabled ? "Enable motion" : "Pause motion";
     motionButton.setAttribute("aria-pressed", String(disabled));
     update();
   };
   motionButton.addEventListener("click", () => {
-    paused = !paused;
+    preference = running() ? "paused" : "running";
     try {
-      localStorage.setItem("talknet.motion", paused ? "paused" : "running");
+      localStorage.setItem("talknet.motion", preference);
     } catch (_) {}
     syncMotion();
   });
@@ -53,7 +52,7 @@
   addEventListener(
     "scroll",
     () => {
-      if (!scheduled && !paused && !reduced.matches) {
+      if (!scheduled && running()) {
         scheduled = true;
         requestAnimationFrame(update);
       }
@@ -68,7 +67,7 @@
       (entries) =>
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          if (!paused && !reduced.matches)
+          if (running())
             entry.target.animate(
               [
                 { opacity: 0.5, transform: "translateY(18px)" },
