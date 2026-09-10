@@ -6,7 +6,7 @@
     <div>
       <p class="eyebrow">PART OF THE CONVERSATION</p>
       <h1>{{ .Profile.Username }}<span class="accent">.</span></h1>
-      <p class="muted">Member since {{ date .Profile.CreatedAt }}</p>
+      <p class="muted">Member since <time datetime="{{timestamp .Profile.CreatedAt}}">{{ date .Profile.CreatedAt }}</time></p>
     </div>
     {{ if .User }}
       {{ if eq .User.ID .Profile.ID }}

@@ -78,7 +78,7 @@
 <a class="author" href="/profile?user={{.UserID}}">
 <span class="avatar">{{initial .Username}}</span>{{.Username}}</a>
 <span class="meta-dot">·</span>
-<time datetime="{{.CreatedAt.Format "2006-01-02"}}">{{ago .CreatedAt}}</time>
+<time datetime="{{timestamp .CreatedAt}}">{{ago .CreatedAt}}</time>
 <div class="post-tags">{{range .Categories}}<a href="/?category={{urlquery .Name}}#discussions">{{.Name}}</a>{{end}}</div>
 </div>
 <h3>

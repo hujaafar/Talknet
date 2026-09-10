@@ -61,8 +61,9 @@ func New(db *sql.DB, secure bool) *App {
 			}
 			return strings.ToUpper(string(r[0]))
 		},
-		"date":     func(t time.Time) string { return t.Format("Jan 2, 2006") },
-		"readtime": func(s string) int { return max(1, (len(strings.Fields(s))+199)/200) },
+		"date":      func(t time.Time) string { return t.Format("Jan 2, 2006") },
+		"timestamp": func(t time.Time) string { return t.UTC().Format(time.RFC3339) },
+		"readtime":  func(s string) int { return max(1, (len(strings.Fields(s))+199)/200) },
 		"ago": func(t time.Time) string {
 			d := time.Since(t)
 			if d < time.Hour {
