@@ -33,6 +33,8 @@ func csrfValue(r *http.Request) string {
 }
 
 type Page struct {
+	FormAction                                     string
+	Editing                                        bool
 	Notice                                         string
 	PageNumber                                     int
 	PreviousURL, NextURL                           string
@@ -57,7 +59,8 @@ func New(db *sql.DB, secure bool) *App {
 			}
 			return strings.ToUpper(string(r[0]))
 		},
-		"date": func(t time.Time) string { return t.Format("Jan 2, 2006") },
+		"date":     func(t time.Time) string { return t.Format("Jan 2, 2006") },
+		"readtime": func(s string) int { return max(1, (len(strings.Fields(s))+199)/200) },
 		"ago": func(t time.Time) string {
 			d := time.Since(t)
 			if d < time.Hour {
@@ -102,6 +105,10 @@ func New(db *sql.DB, secure bool) *App {
 	mux.HandleFunc("POST /register", a.register)
 	mux.HandleFunc("GET /post", a.compose)
 	mux.HandleFunc("POST /post", a.compose)
+	mux.HandleFunc("GET /post/edit", a.compose)
+	mux.HandleFunc("POST /post/edit", a.compose)
+	mux.HandleFunc("POST /bookmarks", a.bookmark)
+	mux.HandleFunc("GET /api/search", a.quickSearch)
 	mux.HandleFunc("POST /add_comment", a.comment)
 	mux.HandleFunc("POST /like_dislike", a.react)
 	mux.HandleFunc("POST /logout", a.logout)
@@ -329,11 +336,12 @@ func (a *App) profile(w http.ResponseWriter, r *http.Request) {
 	p.Tab = r.URL.Query().Get("tab")
 	// Liked discussions are personal; other members only see authored posts.
 	liked := p.Tab == "liked" && id == uid(p.User)
-	if !liked {
+	saved := p.Tab == "saved" && id == uid(p.User)
+	if !liked && !saved {
 		p.Tab = "posts"
 	}
 	p.PageNumber = pageNumber(r)
-	p.Posts, err = a.posts(postQuery{Viewer: uid(p.User), Author: id, Liked: liked, Page: p.PageNumber})
+	p.Posts, err = a.posts(postQuery{Viewer: uid(p.User), Author: id, Liked: liked, Saved: saved, Page: p.PageNumber})
 	if err != nil {
 		a.internal(w, r, err)
 		return

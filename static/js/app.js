@@ -1,5 +1,6 @@
 /* Progressive enhancement: navigation, forms, and content work without JavaScript. */
 import { motionEnabled, scrollFrame } from "./motion.mjs";
+import { initExperience } from "./experience.mjs";
 (() => {
   "use strict";
   const root = document.documentElement;
@@ -93,6 +94,7 @@ import { motionEnabled, scrollFrame } from "./motion.mjs";
       box.hidden = true;
     }, 5000);
   };
+  initExperience(toast, running);
   document.querySelectorAll("[data-reaction-id]").forEach((group) => {
     group.addEventListener("click", async (event) => {
       const button = event.target.closest("[data-vote]");
@@ -189,11 +191,17 @@ import { motionEnabled, scrollFrame } from "./motion.mjs";
     }),
   );
   document.querySelectorAll("form[method=post]").forEach((form) =>
-    form.addEventListener("submit", () => {
+    form.addEventListener("submit", (event) => {
+      if (form.dataset.submitting === "true") {
+        event.preventDefault();
+        return;
+      }
+      form.dataset.submitting = "true";
       const button = form.querySelector("button[type=submit]");
       if (button) {
-        button.disabled = true;
+        // Keep the submitter enabled so its name/value reaches the server.
         button.setAttribute("aria-busy", "true");
+        button.setAttribute("aria-disabled", "true");
       }
     }),
   );
@@ -201,7 +209,8 @@ import { motionEnabled, scrollFrame } from "./motion.mjs";
     document
       .querySelectorAll("form button[aria-busy=true]")
       .forEach((button) => {
-        button.disabled = false;
+        delete button.form.dataset.submitting;
+        button.removeAttribute("aria-disabled");
         button.removeAttribute("aria-busy");
       }),
   );

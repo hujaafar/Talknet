@@ -28,14 +28,36 @@
           {{ if eq .Tab "liked" }}aria-current="page"{{ end }}
           >Liked discussions</a
         >
+        <a
+          href="/profile?tab=saved"
+          {{ if eq .Tab "saved" }}aria-current="page"{{ end }}
+          >Saved for later</a
+        >
       {{ end }}
-    {{ end }}<span>{{ len .Posts }} discussions</span>
+    {{ end }}<span
+      >{{ len .Posts }}
+      {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }}</span
+    >
   </nav>
   <div class="profile-feed">
     {{ range .Posts }}
       {{ template "post-card" . }}
     {{ else }}
-      {{ template "empty" }}
+      {{ if eq .Tab "saved" }}
+        <div class="empty-state">
+          <span class="empty-symbol">{{ template "bookmark-icon" }}</span>
+          <h3>Keep something worth coming back to.</h3>
+          <p>
+            Save a discussion with its bookmark button. This collection is
+            visible only to you.
+          </p>
+          <a class="button" href="/#discussions"
+            >Explore discussions {{ template "arrow" }}</a
+          >
+        </div>
+      {{ else }}
+        {{ template "empty" }}
+      {{ end }}
     {{ end }}{{ template "pagination" . }}
   </div>
 </main>

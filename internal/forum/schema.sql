@@ -79,6 +79,17 @@ INSERT OR IGNORE INTO Categories (name) VALUES ('News');
 INSERT OR IGNORE INTO Categories (name) VALUES ('Others');
 
 -- Support the feed, profile, reply and session lookups without scanning every row.
+-- Additive tables keep existing community databases compatible.
+CREATE TABLE IF NOT EXISTS Bookmarks (
+    user_id INTEGER NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
+    post_id INTEGER NOT NULL REFERENCES Posts(id) ON DELETE CASCADE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, post_id)
+);
+CREATE TABLE IF NOT EXISTS Post_Revisions (
+    post_id INTEGER PRIMARY KEY REFERENCES Posts(id) ON DELETE CASCADE,
+    revision INTEGER NOT NULL DEFAULT 1
+);
 CREATE INDEX IF NOT EXISTS idx_posts_user ON Posts(user_id, id);
 CREATE INDEX IF NOT EXISTS idx_comments_post ON Comments(post_id, id);
 CREATE INDEX IF NOT EXISTS idx_post_categories_post ON Post_Categories(post_id, category_id);

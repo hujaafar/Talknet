@@ -14,6 +14,16 @@
         >{{ .Post.Username }}</a
       ><span>·</span><time>{{ date .Post.CreatedAt }}</time>
     </div>
+    <div class="reading-meta">
+      <span>{{ readtime .Post.Content }} min read</span
+      >{{ if gt .Post.Revision 1 }}
+        <span>Edited by the author</span>
+      {{ end }}{{ if .User }}
+        {{ if eq .User.ID .Post.UserID }}
+          <a href="/post/edit?post_id={{ .Post.ID }}">Edit discussion ↗</a>
+        {{ end }}
+      {{ end }}
+    </div>
     <div class="discussion-body">{{ .Post.Content }}</div>
     <div class="post-bottom">
       {{ template "reaction" .Post }}<a class="reply-link" href="#replies"
@@ -24,6 +34,21 @@
         Copy link
         {{ template "arrow" }}
       </button>
+      <form action="/bookmarks" method="post" class="bookmark-form">
+        <input type="hidden" name="csrf_token" value="{{ .CSRF }}" /><input
+          type="hidden"
+          name="post_id"
+          value="{{ .Post.ID }}"
+        /><button
+          class="detail-save text-button"
+          type="submit"
+          name="action"
+          value="{{- if .Post.Saved -}}remove{{- else -}}save{{- end -}}"
+        >
+          {{ template "bookmark-icon" }}
+          {{ if .Post.Saved }}Remove from saved{{ else }}Save for later{{ end }}
+        </button>
+      </form>
     </div>
   </article>
   <section class="replies" id="replies">

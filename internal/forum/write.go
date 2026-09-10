@@ -17,6 +17,36 @@ func (a *App) compose(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	p := a.page(r, "Start a conversation")
+	p.FormAction = r.URL.Path
+	p.Editing = r.URL.Path == "/post/edit"
+	if p.Editing {
+		id, err := strconv.Atoi(r.FormValue("post_id"))
+		if err != nil || id < 1 {
+			a.fail(w, r, 400, "Choose a valid discussion.")
+			return
+		}
+		posts, err := a.posts(postQuery{Viewer: u.ID, ID: id})
+		if err != nil {
+			a.internal(w, r, err)
+			return
+		}
+		if len(posts) == 0 {
+			a.fail(w, r, 404, "This discussion doesn’t exist.")
+			return
+		}
+		p.Post = &posts[0]
+		if p.Post.UserID != u.ID {
+			a.fail(w, r, 403, "Only the author can edit this discussion.")
+			return
+		}
+		p.Title = "Edit your discussion"
+		p.Values["title"] = p.Post.Title
+		p.Values["content"] = p.Post.Content
+		p.Values["revision"] = strconv.Itoa(p.Post.Revision)
+		for _, c := range p.Post.Categories {
+			p.Values[fmt.Sprintf("category_%d", c.ID)] = "selected"
+		}
+	}
 	var err error
 	p.Categories, err = a.categories()
 	if err != nil {
@@ -29,6 +59,8 @@ func (a *App) compose(w http.ResponseWriter, r *http.Request) {
 	}
 	title := strings.TrimSpace(r.FormValue("title"))
 	content := strings.TrimSpace(r.FormValue("content"))
+	// Submitted values replace defaults, including topics the author unchecked.
+	p.Values = map[string]string{"revision": r.FormValue("revision")}
 	p.Values["title"] = title
 	p.Values["content"] = content
 	ids := []int{}
@@ -66,12 +98,39 @@ func (a *App) compose(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer tx.Rollback()
-	result, err := tx.Exec("INSERT INTO Posts(user_id,title,content) VALUES(?,?,?)", u.ID, title, content)
-	if err != nil {
-		a.internal(w, r, err)
-		return
+	var id int64
+	if p.Editing {
+		id = int64(p.Post.ID)
+		var owner, revision int
+		err = tx.QueryRow("SELECT user_id,COALESCE((SELECT revision FROM Post_Revisions WHERE post_id=Posts.id),1) FROM Posts WHERE id=?", id).Scan(&owner, &revision)
+		if err != nil {
+			a.internal(w, r, err)
+			return
+		}
+		if owner != u.ID {
+			a.fail(w, r, 403, "Only the author can edit this discussion.")
+			return
+		}
+		expected, parseErr := strconv.Atoi(r.FormValue("revision"))
+		if parseErr != nil || expected != revision {
+			p.Error = "This discussion changed in another tab. Your text is kept below. Open the current discussion before applying your changes."
+			a.render(w, "new-post.html", p, 409)
+			return
+		}
+		_, err = tx.Exec("UPDATE Posts SET title=?,content=? WHERE id=? AND user_id=?", title, content, id, u.ID)
+		if err == nil {
+			_, err = tx.Exec("DELETE FROM Post_Categories WHERE post_id=?", id)
+		}
+		if err == nil {
+			_, err = tx.Exec("INSERT INTO Post_Revisions(post_id,revision) VALUES(?,2) ON CONFLICT(post_id) DO UPDATE SET revision=revision+1", id)
+		}
+	} else {
+		var result sql.Result
+		result, err = tx.Exec("INSERT INTO Posts(user_id,title,content) VALUES(?,?,?)", u.ID, title, content)
+		if err == nil {
+			id, err = result.LastInsertId()
+		}
 	}
-	id, err := result.LastInsertId()
 	if err != nil {
 		a.internal(w, r, err)
 		return

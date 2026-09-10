@@ -12,12 +12,16 @@
           <span class="edition-mark">OPEN MINDS / ALWAYS WELCOME</span>
         </div>
         <div class="hero-copy">
-          <h1 id="hero-title"><span>Let’s</span><em>talk.</em></h1>
+          <h1 id="hero-title">
+            <span>Where</span><span>minds</span><em>meet.</em>
+          </h1>
           <p class="hero-description">
-            For the endlessly curious.<br />And everyone with something to say.
+            Less noise. More perspective.<br />Find the conversations that stay
+            with you.
           </p>
         </div>
         <div class="hero-visual" aria-hidden="true">
+          <div class="hero-orbit"><span></span><span></span><span></span></div>
           <img
             class="hero-art"
             src="/static/images/conversation-art.webp"
@@ -59,6 +63,13 @@
             ><span class="round-arrow" aria-hidden="true">↓</span></a
           >
         </div>
+        <div class="hero-metrics">
+          <span><strong>{{ .TotalPosts }}</strong> discussions</span
+          ><span><strong>{{ .TotalMembers }}</strong> curious minds</span
+          ><span
+            ><strong>{{ len .Categories }}</strong> corners to explore</span
+          >
+        </div>
         <span class="hero-side-note" aria-hidden="true"
           >GOOD CONVERSATIONS START HERE.</span
         >
@@ -80,6 +91,53 @@
         >
       </div>
     </nav>
+  {{ end }}
+  {{ if and $showHero .Posts }}
+    <section class="spotlight-section" aria-labelledby="spotlight-title">
+      <div class="spotlight-heading">
+        <div>
+          <p class="eyebrow">FOLLOW A DIFFERENT THREAD</p>
+          <h2 id="spotlight-title">Worth your <em>attention.</em></h2>
+        </div>
+        <a class="text-link" href="#discussions"
+          >Find your next conversation {{ template "arrow" }}</a
+        >
+      </div>
+      <div class="spotlight-track">
+        {{ range $i,$post := .Posts }}
+          {{ if lt $i 3 }}
+            <a
+              class="spotlight-card"
+              href="/post-details?post_id={{ .ID }}"
+              data-reveal
+            >
+              <div class="spotlight-art" aria-hidden="true">
+                <span class="poster-id">{{ printf "%03d" .ID }}</span>
+                <div class="poster-orbit"></div>
+                <div class="poster-orbit second"></div>
+                <span class="poster-cross">+</span>
+              </div>
+              <div class="spotlight-content">
+                <div class="spotlight-meta">
+                  <span
+                    >{{ if .Categories }}
+                      {{ (index .Categories 0).Name }}
+                    {{ else }}
+                      Conversation
+                    {{ end }}</span
+                  ><span>{{ readtime .Content }} min read</span>
+                </div>
+                <h3>{{ .Title }}</h3>
+                <div class="spotlight-author">
+                  <span class="avatar small">{{ initial .Username }}</span
+                  ><span>{{ .Username }}</span>{{ template "arrow" }}
+                </div>
+              </div>
+            </a>
+          {{ end }}
+        {{ end }}
+      </div>
+    </section>
   {{ end }}
   <section class="forum-section" id="discussions" aria-labelledby="feed-title">
     <div class="section-heading">
@@ -123,12 +181,30 @@
             ><span>{{ .Name }}</span><span>{{ .Count }}</span></a
           >
         {{ end }}
+        <a class="saved-nav" href="/profile?tab=saved"
+          >{{ template "bookmark-icon" }} Saved for later</a
+        >
         <div class="sidebar-footnote">
           <span aria-hidden="true">↗</span>
           <p>Follow your curiosity.<br />See where it takes you.</p>
         </div>
       </aside>
       <div class="feed">
+        <div class="feed-topline">
+          <p class="eyebrow">THE LATEST PERSPECTIVES</p>
+          <div
+            class="feed-view-controls"
+            role="group"
+            aria-label="Discussion density"
+            hidden
+          >
+            <button type="button" data-view="comfortable" aria-pressed="true">
+              Comfortable</button
+            ><button type="button" data-view="compact" aria-pressed="false">
+              Compact
+            </button>
+          </div>
+        </div>
         <form
           class="feed-controls"
           action="/#discussions"

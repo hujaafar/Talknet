@@ -41,6 +41,8 @@ type User struct {
 	CreatedAt       time.Time
 }
 type Post struct {
+	Saved                               bool
+	Revision                            int
 	ID, UserID                          int
 	Title, Content, Username            string
 	CreatedAt                           time.Time
@@ -75,6 +77,7 @@ type postQuery struct {
 	Viewer, Author, ID, Page int
 	Category, Search, Sort   string
 	Liked                    bool
+	Saved                    bool
 }
 
 const pageSize = 20
@@ -84,9 +87,11 @@ func (a *App) posts(filter postQuery) ([]Post, error) {
  (SELECT COUNT(*) FROM Likes_Dislikes WHERE post_id=p.id AND like_dislike=1),
  (SELECT COUNT(*) FROM Likes_Dislikes WHERE post_id=p.id AND like_dislike=0),
  (SELECT COUNT(*) FROM Comments WHERE post_id=p.id),
- COALESCE((SELECT like_dislike FROM Likes_Dislikes WHERE post_id=p.id AND user_id=? LIMIT 1),-1)
+ COALESCE((SELECT like_dislike FROM Likes_Dislikes WHERE post_id=p.id AND user_id=? LIMIT 1),-1),
+ EXISTS(SELECT 1 FROM Bookmarks WHERE post_id=p.id AND user_id=?),
+ COALESCE((SELECT revision FROM Post_Revisions WHERE post_id=p.id),1)
  FROM Posts p JOIN Users u ON u.id=p.user_id WHERE 1=1`
-	args := []any{filter.Viewer}
+	args := []any{filter.Viewer, filter.Viewer}
 	if filter.ID > 0 {
 		query += " AND p.id=?"
 		args = append(args, filter.ID)
@@ -100,7 +105,9 @@ func (a *App) posts(filter postQuery) ([]Post, error) {
 		args = append(args, filter.Search, filter.Search)
 	}
 	if filter.Author > 0 {
-		if filter.Liked {
+		if filter.Saved {
+			query += " AND EXISTS(SELECT 1 FROM Bookmarks WHERE post_id=p.id AND user_id=?)"
+		} else if filter.Liked {
 			query += " AND EXISTS(SELECT 1 FROM Likes_Dislikes WHERE post_id=p.id AND user_id=? AND like_dislike=1)"
 		} else {
 			query += " AND p.user_id=?"
@@ -125,7 +132,7 @@ func (a *App) posts(filter postQuery) ([]Post, error) {
 	var out []Post
 	for rows.Next() {
 		var p Post
-		if err := rows.Scan(&p.ID, &p.UserID, &p.Title, &p.Content, &p.Username, &p.CreatedAt, &p.Likes, &p.Dislikes, &p.Comments, &p.Reaction); err != nil {
+		if err := rows.Scan(&p.ID, &p.UserID, &p.Title, &p.Content, &p.Username, &p.CreatedAt, &p.Likes, &p.Dislikes, &p.Comments, &p.Reaction, &p.Saved, &p.Revision); err != nil {
 			rows.Close()
 			return nil, err
 		}

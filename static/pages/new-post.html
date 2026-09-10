@@ -3,7 +3,13 @@
   <aside class="compose-intro">
     <a class="back-link" href="/">← All conversations</a>
     <p class="eyebrow">YOUR VOICE BELONGS HERE</p>
-    <h1>Put an idea<br /><em>out there.</em></h1>
+    <p class="compose-headline">
+      {{ if .Editing }}
+        Make your <br /><em>point clearer.</em>
+      {{ else }}
+        Put an idea <br /><em>out there.</em>
+      {{ end }}
+    </p>
     <p>
       A question you can’t shake. Something you just discovered. A different way
       of seeing things.
@@ -16,59 +22,108 @@
     </div>
   </aside>
   <section class="compose-form">
-    <h2>Start a discussion</h2>
+    <h1>
+      {{ if .Editing }}
+        Edit your discussion
+      {{ else }}
+        Start a discussion
+      {{ end }}
+    </h1>
     {{ template "form-error" . }}
-    <form action="/post" method="post">
-      <input name="csrf_token" type="hidden" value="{{ .CSRF }}" /><label
-        for="title"
-        >The headline</label
-      ><input
-        id="title"
-        name="title"
-        minlength="5"
-        maxlength="120"
-        required
-        placeholder="What would you like to talk about?"
-        value="{{ index .Values "title" }}"
-        data-counter="title-count"
-      />
-      <p class="field-hint counter" id="title-count">Up to 120 characters</p>
-      <label for="content">Your perspective</label
-      ><textarea
-        id="content"
-        name="content"
-        minlength="10"
-        maxlength="5000"
-        rows="9"
-        required
-        placeholder="Give us a little context. The best conversations start with something real."
-        data-counter="content-count"
+    <div class="editor-tools" hidden>
+      <div class="editor-modes">
+        <button type="button" class="editor-write" aria-pressed="true">
+          Write</button
+        ><button
+          type="button"
+          class="editor-preview-toggle"
+          aria-pressed="false"
+        >
+          Preview
+        </button>
+      </div>
+      <button
+        class="focus-toggle text-button"
+        type="button"
+        aria-pressed="false"
       >
+        Focus mode ↗
+      </button>
+    </div>
+    <form action="{{ .FormAction }}" method="post" class="discussion-editor">
+      {{ if .Editing }}
+        <input type="hidden" name="post_id" value="{{ .Post.ID }}" /><input
+          type="hidden"
+          name="revision"
+          value="{{ index .Values "revision" }}"
+        /><a
+          class="current-version"
+          href="/post-details?post_id={{ .Post.ID }}"
+          target="_blank"
+          rel="noopener"
+          >Open the current discussion ↗</a
+        >
+      {{ end }}
+      <div class="editor-preview" hidden>
+        <p class="eyebrow">HOW YOUR DISCUSSION WILL READ</p>
+        <div class="preview-topics"></div>
+        <h3></h3>
+        <div class="preview-content"></div>
+      </div>
+      <div class="editor-fields">
+        <input name="csrf_token" type="hidden" value="{{ .CSRF }}" /><label
+          for="title"
+          >The headline</label
+        ><input
+          id="title"
+          name="title"
+          minlength="5"
+          maxlength="120"
+          required
+          placeholder="What would you like to talk about?"
+          value="{{ index .Values "title" }}"
+          data-counter="title-count"
+        />
+        <p class="field-hint counter" id="title-count">Up to 120 characters</p>
+        <label for="content">Your perspective</label
+        ><textarea
+          id="content"
+          name="content"
+          minlength="10"
+          maxlength="5000"
+          rows="9"
+          required
+          placeholder="Give us a little context. The best conversations start with something real."
+          data-counter="content-count"
+        >
 {{ index .Values "content" }}</textarea>
-      <p class="field-hint counter" id="content-count">
-        Up to 5,000 characters
-      </p>
-      <fieldset class="topic-picker">
-        <legend>Choose your topics <span>(1–3)</span></legend>
-        <div>
-          {{ range .Categories }}
-            <label
-              ><input
-                type="checkbox"
-                name="category[]"
-                value="{{ .ID }}"
-                {{ if index $.Values (printf "category_%d" .ID) }}
-                  checked
-                {{ end }}
-              /><span>{{ .Name }}</span></label
-            >
-          {{ end }}
-        </div>
-      </fieldset>
+        <p class="field-hint counter" id="content-count">
+          Up to 5,000 characters
+        </p>
+        <fieldset class="topic-picker">
+          <legend>Choose your topics <span>(1–3)</span></legend>
+          <div>
+            {{ range .Categories }}
+              <label
+                ><input
+                  type="checkbox"
+                  name="category[]"
+                  value="{{ .ID }}"
+                  {{ if index $.Values (printf "category_%d" .ID) }}
+                    checked
+                  {{ end }}
+                /><span>{{ .Name }}</span></label
+              >
+            {{ end }}
+          </div>
+        </fieldset>
+      </div>
+      <p class="editor-stats" role="status" hidden></p>
       <div class="compose-actions">
         <a class="text-link" href="/">Cancel</a
         ><button class="button" type="submit">
-          Publish discussion {{ template "arrow" }}
+          {{ if .Editing }}Save changes{{ else }}Publish discussion{{ end }}
+          {{ template "arrow" }}
         </button>
       </div>
     </form>

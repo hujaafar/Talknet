@@ -1278,11 +1278,11 @@ textarea:focus {
   font-size: 0.75rem;
   margin-bottom: 22px;
 }
-.compose-intro h1 {
+.compose-intro .compose-headline {
   font-size: 4rem;
   line-height: 1.03;
 }
-.compose-intro h1 em {
+.compose-intro .compose-headline em {
   font-size: 1.3em;
   color: #5e7835;
 }
@@ -1313,7 +1313,7 @@ textarea:focus {
   border-radius: 8px;
   padding: 30px;
 }
-.compose-form h2 {
+.compose-form h1 {
   font-size: 1.6rem;
   margin-bottom: 30px;
 }
@@ -1765,13 +1765,13 @@ textarea:focus {
     grid-template-columns: 1fr;
     gap: 35px;
   }
-  .compose-intro h1 br {
+  .compose-intro .compose-headline br {
     display: none;
   }
-  .compose-intro h1 {
+  .compose-intro .compose-headline {
     font-size: 3rem;
   }
-  .compose-intro h1 em {
+  .compose-intro .compose-headline em {
     font-size: 1.15em;
   }
   .compose-intro > p:last-of-type {
@@ -2169,7 +2169,7 @@ textarea:focus {
   .content-shell {
     padding-bottom: 55px;
   }
-  .compose-intro h1 {
+  .compose-intro .compose-headline {
     font-size: 2.7rem;
   }
   .compose-intro .back-link {
@@ -2184,7 +2184,7 @@ textarea:focus {
   .compose-form {
     padding: 22px 18px;
   }
-  .compose-form h2 {
+  .compose-form h1 {
     font-size: 1.45rem;
     margin-bottom: 25px;
   }
