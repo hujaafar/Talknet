@@ -36,6 +36,7 @@ export function initExperience(toast, motionRunning) {
   };
   const open = () => {
     if (!dialog.open) dialog.showModal();
+    trigger.setAttribute("aria-expanded", "true");
     query.focus();
   };
   trigger.hidden = false;
@@ -43,7 +44,10 @@ export function initExperience(toast, motionRunning) {
   dialog
     .querySelector(".palette-close")
     .addEventListener("click", () => dialog.close());
-  dialog.addEventListener("close", cancelSearch);
+  dialog.addEventListener("close", () => {
+    cancelSearch();
+    trigger.setAttribute("aria-expanded", "false");
+  });
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) {
       const box = dialog.getBoundingClientRect();

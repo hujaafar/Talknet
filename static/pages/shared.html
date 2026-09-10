@@ -41,7 +41,7 @@
 <a href="/#discussions">The conversations</a>
 <a href="/#topics">Explore topics</a>
 </nav>
-<div class="nav-utilities"><button class="palette-trigger icon-button" type="button" aria-label="Search Talknet" aria-keyshortcuts="Control+k Meta+k" hidden>{{template "search"}}<kbd>Ctrl K</kbd></button><button class="theme-toggle icon-button" type="button" aria-label="Switch to light theme" hidden><span aria-hidden="true">◐</span></button></div>
+<div class="nav-utilities"><button class="palette-trigger icon-button" type="button" aria-haspopup="dialog" aria-controls="community-search" aria-expanded="false" aria-label="Search Talknet" aria-keyshortcuts="Control+k Meta+k" hidden>{{template "search"}}<kbd>Ctrl K</kbd></button><button class="theme-toggle icon-button" type="button" aria-label="Switch to light theme" hidden><span aria-hidden="true">◐</span></button></div>
 <div class="nav-actions">{{if .User}}<a class="profile-link" href="/profile" aria-label="Your profile: {{.User.Username}}">
 <span class="avatar small" aria-hidden="true">{{initial .User.Username}}</span>
 <span>{{.User.Username}}</span>
@@ -105,7 +105,7 @@
 {{define "pagination"}}{{if or .PreviousURL .NextURL}}<nav class="pagination" aria-label="Discussion pages">{{if .PreviousURL}}<a class="text-link" href="{{.PreviousURL}}">← Previous</a>{{end}}<span>Page {{.PageNumber}}</span>{{if .NextURL}}<a class="text-link" href="{{.NextURL}}">Next conversations →</a>{{end}}</nav>{{end}}{{end}}
 
 {{define "bookmark-icon"}}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 4h12v17l-6-4-6 4z"/></svg>{{end}}
-{{define "command-palette"}}<dialog class="command-palette" aria-labelledby="palette-title">
+{{define "command-palette"}}<dialog id="community-search" class="command-palette" aria-labelledby="palette-title">
 <div class="palette-heading"><h2 id="palette-title">A little curiosity goes a long way.</h2><button class="palette-close icon-button" type="button" aria-label="Close search">×</button></div>
 <form action="/" method="get" class="palette-search" role="search">{{template "search"}}<label class="sr-only" for="palette-query">Search the community</label><input id="palette-query" name="q" type="search" placeholder="Find a conversation or idea…" maxlength="200" autocomplete="off"><button class="text-button" type="submit">Search ↗</button></form>
 <div class="palette-shortcuts"><a href="/#discussions">All discussions ↗</a><a href="/post">Write a discussion ↗</a><a href="/profile?tab=saved">Saved for later ↗</a>{{if .User}}<form method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{.CSRF}}"><button type="submit" class="text-button">Sign out ↗</button></form>{{end}}</div>
