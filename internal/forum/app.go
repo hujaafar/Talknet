@@ -314,14 +314,19 @@ func (a *App) profile(w http.ResponseWriter, r *http.Request) {
 	if raw := r.URL.Query().Get("user"); raw != "" {
 		var err error
 		id, err = strconv.Atoi(raw)
-		if err != nil {
+		if err != nil || id < 1 {
 			a.fail(w, r, 400, "Choose a valid member.")
 			return
 		}
 	}
 	// Preserve old profile links, which used a post ID rather than a user ID.
-	if raw := r.URL.Query().Get("id"); raw != "" {
-		if err := a.db.QueryRow("SELECT user_id FROM Posts WHERE id=?", raw).Scan(&id); err != nil {
+	if raw := r.URL.Query().Get("id"); raw != "" && r.URL.Query().Get("user") == "" {
+		postID, err := strconv.Atoi(raw)
+		if err != nil || postID < 1 {
+			a.fail(w, r, 400, "Choose a valid discussion.")
+			return
+		}
+		if err := a.db.QueryRow("SELECT user_id FROM Posts WHERE id=?", postID).Scan(&id); err != nil {
 			a.fail(w, r, 404, "Member not found.")
 			return
 		}
