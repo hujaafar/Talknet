@@ -66,12 +66,27 @@ For a populated local demo:
 docker compose run --rm talknet -seed-demo
 ```
 
-Refresh the page. Seeding only runs when both the users and posts tables are empty. The four fictional authors are labeled `Demo`; their accounts have no shared login password. Sample records are never added to an existing community. Register your own account to try posting and reactions.
+Refresh the page. Seeding only runs when both the users and posts tables are empty. The four fictional authors are labeled `Demo`; their accounts have no shared login password. This starter command never adds sample records to an existing community. Register your own account to try posting and reactions.
+
+For a larger showcase, explicitly add **8 fictional members, 24 discussions, 48 replies, and 84 sample likes** across all 12 topics:
+
+```bash
+docker compose run --rm --no-deps talknet -seed-showcase
+```
+
+This pack can be added to an existing local community. It preserves existing accounts and content, imports only once, and refuses to reuse a colliding account name or email. The new authors have `Demo` names and `example.invalid` addresses; their random password is discarded. Running this after the starter demo gives **12 members, 30 discussions, and 54 replies**. Refresh the browser to see the content.
+
+<details>
+<summary><strong>See the populated showcase</strong></summary>
+
+![Talknet with twelve fictional members, thirty discussions, and activity across all topics](docs/screenshots/showcase.jpg)
+
+</details>
 
 On Windows, the helper can build, seed, and start everything:
 
 ```powershell
-.\scripts\start.ps1 -Demo
+.\scripts\start.ps1 -Demo -Showcase
 ```
 
 Useful commands:

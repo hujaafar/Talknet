@@ -9,7 +9,7 @@
 | `TALKNET_SECURE_COOKIES` | `false`           | Set to `true` when users connect over HTTPS.                              |
 | `TALKNET_PORT`           | `8088`            | Host port used by Docker Compose.                                         |
 
-`-seed-demo` initializes an empty community with fictional records and exits. It does nothing if users or posts already exist. `-healthcheck` calls the local health endpoint and exits with a nonzero status when it is unavailable.
+`-seed-demo` initializes an empty community with fictional records and exits. It does nothing if users or posts already exist. `-seed-showcase` explicitly adds the larger fictional pack to either an empty or populated database. Its `showcase-v1` marker in `Demo_Seeds` prevents duplicate imports. All records and the marker commit in one transaction; account-name/email collisions fail without adopting or modifying the existing account. `-healthcheck` calls the local health endpoint and exits with a nonzero status when it is unavailable.
 
 ## Existing Talknet data
 

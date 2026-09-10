@@ -30,3 +30,5 @@ Exact generation prompt:
 ## Sample content
 
 The opt-in demonstration dataset contains fictional authors with `Demo` in their usernames and `example.invalid` email addresses. Their random password is discarded; these are not shared login accounts. Posts, replies, reactions, and counts are sample data. Create your own account to try the signed-in experience.
+
+The optional showcase pack (`internal/forum/showcase.json`) adds eight more fictional voices, two discussions per topic, and two authored replies per discussion. Every story and reaction in this pack is sample content; it does not represent real members or real community engagement.

@@ -18,6 +18,7 @@ The application is tested against temporary, isolated SQLite databases. Tests do
 - CSRF rejection, cross-origin rejection, secure-cookie flags, invalid-cookie recovery, and HTML escaping.
 - Invalid and oversized topic selections, missing targets, invalid JSON reaction values, and transaction rollback.
 - Idempotent schema initialization, non-duplicating sample setup, public assets, and the health endpoint.
+- Showcase imports preserving existing accounts/posts/replies, covering all 12 topics, paginating correctly, and rolling back completely on an identity collision.
 - Exact ARIA reaction states on replies before and after a saved vote, including a page reload.
 
 `go vet ./...` checks Go source. Node syntax checks cover `app.js`, `theme.js`, and `experience.mjs`. `node --test tests/*.test.mjs` covers system motion preferences, explicit visitor choices, bounded overscroll, short documents, independent layer movement, and editor word counts/reading estimates. Docker builds and the Compose health check validate the packaged runtime. CI runs the core checks on pushes and pull requests.
@@ -44,6 +45,7 @@ Completed browser checks:
 - Native bookmark submission, private Saved for later navigation, and card removal updating the count and empty state.
 - Reopening a cancelled command search returned fresh results; modal expansion state followed opening and closing.
 - Editor change tracking switched to unsaved when a title changed and returned to clean when the original text was restored. Native leave-page dialogs and print output remain browser-dependent release checks.
+- The expanded showcase rendered 12 members and 30 discussions, with 20 posts on page one, a next-page link, and the expected two replies on a newly seeded discussion.
 - Local fonts and artwork loading without third-party asset requests. The browser reported one skipped view transition during rapid navigation; the application remained usable. No application-script error was observed.
 - System reduced motion enabled by default, explicit motion opt-in, distinct scroll transforms, and a persistent pause control.
 
