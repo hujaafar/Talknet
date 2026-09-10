@@ -16,6 +16,7 @@ import (
 	"strings"
 	"talknet/static"
 	"time"
+	"unicode/utf8"
 )
 
 type App struct {
@@ -225,7 +226,7 @@ func (a *App) home(w http.ResponseWriter, r *http.Request) {
 	if p.Sort != "popular" {
 		p.Sort = "latest"
 	}
-	if len(p.Query) > 200 {
+	if utf8.RuneCountInString(p.Query) > 200 {
 		a.fail(w, r, 400, "Keep your search under 200 characters.")
 		return
 	}

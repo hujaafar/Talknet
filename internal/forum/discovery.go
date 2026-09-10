@@ -6,12 +6,13 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 // Search exposes only the public metadata needed by the command palette.
 func (a *App) quickSearch(w http.ResponseWriter, r *http.Request) {
 	q := strings.TrimSpace(r.URL.Query().Get("q"))
-	if len(q) > 200 {
+	if utf8.RuneCountInString(q) > 200 {
 		jsonResponse(w, 400, map[string]string{"error": "Keep searches under 200 characters."})
 		return
 	}
