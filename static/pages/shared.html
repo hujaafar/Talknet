@@ -15,7 +15,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>{{.Title}} · Talknet</title>
-<meta name="description" content="A space for curious minds. Share ideas, ask better questions, and find your next great conversation on Talknet.">
+<meta name="description" content="{{if .Post}}{{excerpt .Post.Content}}{{else}}A space for curious minds. Share ideas, ask better questions, and find your next great conversation on Talknet.{{end}}">
+<meta property="og:site_name" content="Talknet">
+<meta property="og:title" content="{{.Title}} · Talknet">
+<meta property="og:type" content="{{if .Post}}article{{else}}website{{end}}">
+<meta property="og:description" content="{{if .Post}}{{excerpt .Post.Content}}{{else}}Independent minds. Shared curiosity. A place for thoughtful conversation.{{end}}">
 <meta name="csrf-token" content="{{.CSRF}}">
 <link rel="icon" href="/static/images/favicon.svg" type="image/svg+xml">
 <script src="/static/js/theme.js"></script>
