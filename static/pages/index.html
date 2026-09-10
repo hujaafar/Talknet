@@ -251,7 +251,7 @@
               >{{ len .Posts }}
               {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }}
               on this
-              page{{ if .Category }}in {{ .Category }}{{ end }}{{ if .Query }}
+              page{{ if .Category }} in {{ .Category }}{{ end }}{{ if .Query }}
                 matching “{{ .Query }}”
               {{ end }}</span
             ><a href="/#discussions">Clear filters ×</a>
@@ -260,7 +260,7 @@
         {{ range .Posts }}
           {{ template "post-card" . }}
         {{ else }}
-          {{ template "empty" }}
+          {{ template "empty" . }}
         {{ end }}{{ template "pagination" . }}
       </div>
       <aside class="community-aside">

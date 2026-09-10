@@ -120,7 +120,7 @@ func TestCommunityFlow(t *testing.T) {
 	}
 	r, b = s.request(t, "GET", "/?q=nomatch", "", "", false)
 	checkStatus(t, r, 200, b)
-	if !strings.Contains(b, "No discussions here yet") {
+	if !strings.Contains(b, `class="empty-state"`) || strings.Contains(b, `class="post-card"`) {
 		t.Fatal("missing empty state")
 	}
 	r, b = s.form(t, "/add_comment", url.Values{"post_id": {"1"}, "content": {"I learn by building small projects."}})

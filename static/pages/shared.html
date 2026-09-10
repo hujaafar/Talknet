@@ -88,8 +88,10 @@
 </article>{{end}}
 {{define "empty"}}<div class="empty-state">
 <span class="empty-symbol">{{template "bubble"}}</span>
-<h3>A conversation starts with you.</h3>
-<p>No discussions here yet. Try another topic, or share something on your mind.</p>
+{{if or .Query .Category}}<h3>No matches this time.</h3>
+<p>{{if .Query}}Nothing matched “{{.Query}}”{{if .Category}} in {{.Category}}{{end}}.{{else}}No discussions in {{.Category}} on this page.{{end}} Try a different search or clear the filters.</p>
+{{else}}<h3>A conversation starts with you.</h3>
+<p>No discussions here yet. Share something on your mind.</p>{{end}}
 <div class="button-row">
 <a class="button" href="/post">Start a discussion {{template "arrow"}}</a>
 <a class="text-link" href="/#discussions">View all discussions</a>
