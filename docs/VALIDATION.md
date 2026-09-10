@@ -9,7 +9,9 @@ The application is tested against temporary, isolated SQLite databases. Tests do
 - Registration, login, posting, replies, logout, and profile navigation through HTTP.
 - Anonymous write prevention, private liked/saved collections, idempotent bookmark writes, and removal.
 - Author-only editing, topic replacement, preserved replies and reactions, revision increments, and rejected stale edits with retained form values.
-- Command search result limits, query validation, and public-metadata-only responses.
+- Command search result limits, Unicode query boundaries, and public-metadata-only responses.
+- Saved-item ordering and repeat-save stability; positive profile targets and explicit-user precedence.
+- Authentication quotas at limiter capacity and signed-in navigation during transaction errors.
 - Topic/search filtering, sorting requests, empty states, and paginated feeds.
 - Like/dislike switching and removal, comment reactions, and concurrent toggles.
 - Session token hashing, restart persistence, expiry, and server-side invalidation.
@@ -40,9 +42,11 @@ Completed browser checks:
 - Ctrl K, live search for “technology,” arrow-key result selection, Enter to open a matching discussion, and Escape to dismiss a populated search and restore focus.
 - Synthetic account sign-in, editor word counts, preview, focus mode, native publication, author editing, and the visible edited label. Submitting a preview with a missing title returned to Write and focused that field.
 - Native bookmark submission, private Saved for later navigation, and card removal updating the count and empty state.
+- Reopening a cancelled command search returned fresh results; modal expansion state followed opening and closing.
+- Editor change tracking switched to unsaved when a title changed and returned to clean when the original text was restored. Native leave-page dialogs and print output remain browser-dependent release checks.
 - Local fonts and artwork loading without third-party asset requests. The browser reported one skipped view transition during rapid navigation; the application remained usable. No application-script error was observed.
 - System reduced motion enabled by default, explicit motion opt-in, distinct scroll transforms, and a persistent pause control.
 
-The final local Docker test stage passed Go race tests and static analysis. All six JavaScript unit tests passed. The packaged application built and reported healthy through Compose. HTTP integration tests cover security, ownership, privacy, concurrency, and validation independently of the browser walkthrough.
+The final local Docker test stage passed Go race tests and static analysis. All seven JavaScript unit tests passed, including editor change tracking. The packaged application built and reported healthy through Compose. HTTP integration tests cover security, ownership, privacy, concurrency, and validation independently of the browser walkthrough.
 
 Broader release checks still include 200% zoom, browser/screen-reader combinations, reaction network failures, and navigation with JavaScript disabled. Recorded checks do not establish accessibility conformance or full production readiness. See [application scope](ARCHITECTURE.md#scope) for features that remain outside this project.

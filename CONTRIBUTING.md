@@ -1,6 +1,6 @@
 # Contributing to Talknet
 
-Start with the [README](README.md) for local setup and the [architecture](docs/ARCHITECTURE.md) for request flow, data consistency, and current scope.
+Start with the [README](README.md) for local setup and the [architecture](docs/ARCHITECTURE.md) for request flow, data consistency, and current scope. The [HTTP interface](docs/API.md) records routes, response shapes, form fields, and error handling.
 
 ## Work locally
 
@@ -18,6 +18,8 @@ go test -race -cover ./...
 go vet ./...
 go build -trimpath ./...
 node --check static/js/app.js
+node --check static/js/theme.js
+node --check static/js/experience.mjs
 node --test tests/*.test.mjs
 ```
 

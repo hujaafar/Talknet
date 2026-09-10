@@ -17,7 +17,7 @@ flowchart LR
 
 `forum.New` builds an isolated router and template set. Security middleware applies response headers and request limits, issues a random CSRF cookie, and checks state-changing requests against a hidden form token or `X-CSRF-Token`. Go’s cross-origin protection also checks browser request metadata.
 
-The session cookie is a cryptographically random bearer token. Only its SHA-256 hash is stored in `Sessions`. Queries check expiry on every authenticated request; logging in replaces that user’s old session. Logout removes the server record. Sessions survive process restarts and expire after 24 hours.
+The session cookie is a cryptographically random bearer token. Only its SHA-256 hash is stored in `Sessions`. Identity is resolved once before dispatch and carried in the request context, including error responses. Queries check expiry on every authenticated request; logging in replaces that user’s old session. Logout removes the server record. Sessions survive process restarts and expire after 24 hours.
 
 Authentication attempts are bounded by remote IP, with a one-minute window and ten attempts. The limiter has bounded memory and is local to each process. It intentionally does not trust arbitrary forwarded IP headers.
 
@@ -29,9 +29,9 @@ A single database connection serializes writes. Transactions commit a post and i
 
 Editing rechecks the author and current revision inside the write transaction. A stale submission returns HTTP 409 and retains the submitted text and topics in the form; it never silently overwrites the newer post. Successful edits preserve the post ID, publication date, replies, votes, and saves. The revision table records a number, not a recoverable edit history.
 
-Bookmark writes use explicit `save` or `remove` actions, making retries idempotent. Both native forms and JSON requests use the same authenticated, CSRF-protected route. Saved and liked profile tabs are restricted to their owner.
+Bookmark writes use explicit `save` or `remove` actions, making retries idempotent. Both native forms and JSON requests use the same authenticated, CSRF-protected route. Saved and liked profile tabs are restricted to their owner. Saved discussions are ordered by save time with insertion order as a tie breaker; repeating a save preserves its position.
 
-`GET /api/search?q=` returns at most six matching discussions with only ID, title, author name, and first topic. Search matches titles and content. The palette debounces requests, aborts superseded requests, and ignores late responses; rendered results use `textContent`.
+`GET /api/search?q=` returns at most six matching discussions with only ID, title, author name, and first topic. Search matches titles and content. The query is limited to six rows before topic hydration. The palette restarts cancelled searches when reopened, debounces requests, aborts superseded requests, and ignores late responses; rendered results use `textContent`.
 
 The discussion feed uses a fixed page size of 20, fetching one additional record to discover a next page. Search and topic filters carry through pagination. Detail requests load the requested post directly. Discussion replies are currently rendered as one chronological list.
 
@@ -54,3 +54,5 @@ The native submit guard prevents repeat submissions without disabling the submit
 ## Scope
 
 This is a discussion application for a single Go process with SQLite storage. Moderation tooling, post deletion, email verification, password recovery, uploads, and multi-instance operation are not implemented. The `/profile?user=` parameter identifies a member; legacy `/profile?id=` links still resolve the author of that post. Liked and saved discussions are visible only to their owner. Draft autosave, Markdown rendering, and edit-history recovery are not implemented.
+
+See [the HTTP interface](API.md) for field limits, native form routes, JSON response shapes, and safe client retry behavior.

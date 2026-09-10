@@ -10,7 +10,7 @@ An immersive discussion community built with **Go + SQLite**. Chrome-and-citrus 
 
 ![Talknet running locally: Where minds meet typography, chrome and citrus artwork, and a live discussion preview](docs/screenshots/desktop.jpg)
 
-[Quick start](#run-with-docker) · [Features](#the-experience) · [Design](docs/DESIGN.md) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md)
+[Quick start](#run-with-docker) · [Features](#the-experience) · [Design](docs/DESIGN.md) · [Architecture](docs/ARCHITECTURE.md) · [HTTP interface](docs/API.md) · [Contributing](CONTRIBUTING.md)
 
 ## The experience
 
@@ -25,7 +25,7 @@ The sculpture, headline, and live conversation note move at separate depths whil
 
 ![Three actual discussions presented with original geometric artwork](docs/screenshots/spotlight.jpg)
 
-Reading, search, navigation, authentication, writing, editing, replies, and saving from a discussion page work without JavaScript. The command palette, editor preview, card save shortcuts, reactions, and motion enhance those pages. The editor handles plain text; preview does not execute HTML or Markdown, and drafts are not automatically saved.
+Reading, search, navigation, authentication, writing, editing, replies, and saving from a discussion page work without JavaScript. The command palette, editor preview, card save shortcuts, reactions, and motion enhance those pages. The editor handles plain text; preview does not execute HTML or Markdown, and drafts are not automatically saved. Unsaved editor changes activate a native leave-page guard where supported. Discussion pages also include a print layout.
 
 ![The Talknet discussion feed with topic navigation, searchable conversation cards, and a community note](docs/screenshots/feed.jpg)
 
