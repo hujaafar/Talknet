@@ -15,8 +15,12 @@ import (
 
 func main() {
 	seed := flag.Bool("seed-demo", false, "add fictional sample discussions to an empty database")
+	showcase := flag.Bool("seed-showcase", false, "add a fictional community pack once, preserving existing records")
 	health := flag.Bool("healthcheck", false, "check the running server and exit")
 	flag.Parse()
+	if *seed && *showcase {
+		log.Fatal("Choose either -seed-demo or -seed-showcase.")
+	}
 	path := os.Getenv("TALKNET_DB")
 	if path == "" {
 		path = "data/talknet.db"
@@ -51,6 +55,18 @@ func main() {
 			log.Fatal(err)
 		}
 		log.Print("Sample-data setup complete (existing communities are unchanged)")
+		return
+	}
+	if *showcase {
+		summary, err := forum.SeedShowcase(db)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if summary.AlreadyAdded {
+			log.Print("Showcase pack already present; nothing added")
+		} else {
+			log.Printf("Added %d fictional users, %d discussions, %d replies, and %d sample likes", summary.Users, summary.Posts, summary.Replies, summary.Likes)
+		}
 		return
 	}
 	app := forum.New(db, os.Getenv("TALKNET_SECURE_COOKIES") == "true")

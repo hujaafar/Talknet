@@ -98,3 +98,9 @@ CREATE INDEX IF NOT EXISTS idx_reactions_post ON Likes_Dislikes(post_id, user_id
 CREATE INDEX IF NOT EXISTS idx_reactions_comment ON Likes_Dislikes(comment_id, user_id, like_dislike);
 CREATE INDEX IF NOT EXISTS idx_sessions_user ON Sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_expiry ON Sessions(expires_at);
+
+-- Records explicit demo-pack imports so a repeated command cannot duplicate them.
+CREATE TABLE IF NOT EXISTS Demo_Seeds (
+    name TEXT PRIMARY KEY,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

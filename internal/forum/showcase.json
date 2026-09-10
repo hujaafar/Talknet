@@ -1,0 +1,254 @@
+{
+  "authors": [
+    "NoraDemo",
+    "TheoDemo",
+    "AishaDemo",
+    "JulesDemo",
+    "RamiDemo",
+    "MiraDemo",
+    "LeoDemo",
+    "ZaraDemo"
+  ],
+  "posts": [
+    {
+      "category": "Others",
+      "title": "What is the oldest object on your desk?",
+      "content": "Mine is a slightly bent ruler that has followed me through three apartments. It is not especially useful, but throwing it away would feel like ending a small tradition. What ordinary object has quietly become part of your story?",
+      "author": 0,
+      "replies": [
+        "A chipped mug from my first shared office. It is now a pen holder and somehow still the most important thing on the desk.",
+        "My grandfather’s pencil sharpener. Every time I use it I remember how carefully he looked after simple things."
+      ]
+    },
+    {
+      "category": "Comedy",
+      "title": "Describe your week as an unnecessarily dramatic movie title",
+      "content": "My submission is The Spreadsheet That Knew Too Much. There were three versions, nobody knew which one was final, and the real villain was a merged cell. Give your very ordinary week the blockbuster title it deserves.",
+      "author": 1,
+      "replies": [
+        "The Lord of the Loading Rings. Mostly me watching the same progress spinner and making increasingly ambitious cups of tea.",
+        "Everything Everywhere All Due Monday. I would like to speak to the person who approved this release schedule."
+      ]
+    },
+    {
+      "category": "Finance",
+      "title": "What would make a budget spreadsheet feel less intimidating?",
+      "content": "I am sketching a personal spending tracker and keep coming back to the wording. Categories like miscellaneous do not help me understand anything. If you designed the first screen, what would you show to make the information easier to read?",
+      "author": 2,
+      "replies": [
+        "A simple explanation of each category would help me more than another chart. I always forget where I put irregular expenses.",
+        "I would start with a plain list and make the charts optional. Sometimes I just want to check a number without a whole dashboard."
+      ]
+    },
+    {
+      "category": "History",
+      "title": "One ordinary photograph, a whole family story",
+      "content": "We found a photograph of a family picnic with no date written on the back. Everyone remembers a different detail, and the conversation has become more interesting than finding the exact year. What small piece of family history started a bigger conversation for you?",
+      "author": 3,
+      "replies": [
+        "An old train ticket tucked inside a book. Asking about it led to an afternoon of stories I had never heard before.",
+        "A recipe with notes in three different handwritings. Each person had quietly changed the same cake over the years."
+      ]
+    },
+    {
+      "category": "Gaming",
+      "title": "Co-op games taught me to ask for help",
+      "content": "I used to treat every puzzle as something I had to solve alone. Then a co-op game made it obvious that explaining what I could see was part of the solution. Which game changed the way you play with other people?",
+      "author": 4,
+      "replies": [
+        "The best moments are when we stop trying to be fast and just describe the ridiculous situation we have created.",
+        "I now ask whether someone wants a hint before explaining anything. That small habit makes playing together much more relaxed."
+      ]
+    },
+    {
+      "category": "Sport",
+      "title": "A walking club for people who are always too busy",
+      "content": "Our fictional weekend group has one rule: choose a route short enough that nobody needs to plan their whole day around it. The conversations usually last longer than the walk. What makes a casual group activity easy to keep showing up for?",
+      "author": 5,
+      "replies": [
+        "Starting from the same place each week would remove half the organizing. I like a routine that does not need a new group poll.",
+        "An optional café stop at the end. Having a natural place to sit and talk makes it feel less like another appointment."
+      ]
+    },
+    {
+      "category": "TV",
+      "title": "The scene you wish you could watch for the first time",
+      "content": "Sometimes a quiet scene stays with me longer than a big finale. I am thinking of the kind where a character finally says the thing they have been avoiding. Without spoiling the story, what makes a scene worth revisiting?",
+      "author": 6,
+      "replies": [
+        "A pause that gives you time to understand what the character cannot say. I notice those moments much more on a second watch.",
+        "When a tiny detail from an earlier episode suddenly matters. It makes the whole story feel carefully considered."
+      ]
+    },
+    {
+      "category": "News",
+      "title": "What makes a headline worth opening?",
+      "content": "I have been thinking about how I choose what to read. Clear context helps me more than urgency, and I appreciate knowing what a story can actually explain. What information would make a headline more useful to you?",
+      "author": 7,
+      "replies": [
+        "I want to know whether it is a new development or a summary. That changes how much background I need before reading.",
+        "A clear date and a link to the original source help me decide where to spend my attention."
+      ]
+    },
+    {
+      "category": "Science",
+      "title": "The experiment I would put in a tiny science museum",
+      "content": "Imagine you can build one hands-on exhibit using a table and a few everyday materials. I would choose something visitors can change and try again, rather than a button that plays an explanation. What would your exhibit invite people to notice?",
+      "author": 0,
+      "replies": [
+        "A station for making different paper structures and comparing them. The interesting part would be seeing how people change their first attempt.",
+        "Something with light and shadows. I like exhibits where a small movement creates an immediate, visible difference."
+      ]
+    },
+    {
+      "category": "Education",
+      "title": "What could you teach someone in ten minutes?",
+      "content": "Not a complete subject, just one useful or delightful thing. I could teach a friend how to make a tiny folded notebook from a sheet of paper. What would you bring to a community evening of very short lessons?",
+      "author": 1,
+      "replies": [
+        "How to tie a bookbinding knot. It is oddly satisfying to leave with a physical thing you made yourself.",
+        "A few ways to ask clearer questions when you are stuck. That has helped me in almost every new subject I have tried."
+      ]
+    },
+    {
+      "category": "Technology",
+      "title": "The feature you miss from an old device",
+      "content": "I miss controls that I could find without looking at a screen. There was something reassuring about one button doing one predictable thing. What small design choice from an older device would you happily bring back?",
+      "author": 2,
+      "replies": [
+        "A physical mute switch. Being able to check the state by touch is such a simple convenience.",
+        "A battery cover I could open without a special tool. I liked understanding how the object fitted together."
+      ]
+    },
+    {
+      "category": "Social",
+      "title": "Small rituals that make a shared space feel like home",
+      "content": "In my imaginary studio, the afternoon tea break became more useful than any team-building activity. People could join for two minutes or stay for twenty. What small ritual would you introduce to a shared space?",
+      "author": 3,
+      "replies": [
+        "A shelf where people can leave a book with one sentence about why they liked it. No formal recommendation system needed.",
+        "A question on a noticeboard that changes every Friday. Something light enough that anyone can answer."
+      ]
+    },
+    {
+      "category": "Others",
+      "title": "Your ideal Sunday needs exactly three things",
+      "content": "Mine would have a long breakfast, a book with no deadline, and a walk somewhere with trees. Nothing impressive enough for a highlight reel. What three ordinary things would make a day feel well spent to you?",
+      "author": 4,
+      "replies": [
+        "A market visit, a conversation that runs longer than expected, and enough time to cook without rushing.",
+        "Fresh sheets, an unfinished puzzle, and the decision to leave my phone in another room for a while."
+      ]
+    },
+    {
+      "category": "Comedy",
+      "title": "The most confident wrong answer you have ever given",
+      "content": "I once gave someone very detailed directions to a place I was also trying to find. We both arrived somewhere interesting, just not the intended destination. What harmless mistake became a much better story afterward?",
+      "author": 5,
+      "replies": [
+        "I spent a full minute explaining that a meeting had been cancelled while standing outside the room where it was happening.",
+        "I waved back at someone waving to the person behind me, then committed to the greeting like we were old friends."
+      ]
+    },
+    {
+      "category": "Finance",
+      "title": "Giving every expense a useful name",
+      "content": "While building a fictional spending dashboard, I realized that the labels change how easy it is to understand the page. A broad category can hide the reason an entry exists. What would make expense categories clearer without turning them into a complicated system?",
+      "author": 6,
+      "replies": [
+        "I would separate the category from a short personal note. The note often explains more than a carefully chosen label.",
+        "Being able to rename a category would help. A system feels easier to maintain when it uses words I already use."
+      ]
+    },
+    {
+      "category": "History",
+      "title": "If a familiar street could tell one story",
+      "content": "There is a building in this imagined neighborhood with three different shop signs still visible above the door. I like the idea of a place keeping small traces of its earlier lives. What would you ask about a street you pass often?",
+      "author": 7,
+      "replies": [
+        "I would ask what used to bring people there. The same building can mean completely different things to different generations.",
+        "I would want to hear from someone who opened a shop there. Ordinary working days probably hold the best stories."
+      ]
+    },
+    {
+      "category": "Gaming",
+      "title": "A game without a score can still feel like progress",
+      "content": "Lately I have enjoyed games where progress means understanding a place a little better. There is no big number to improve, just a growing sense of familiarity. What makes that kind of experience satisfying for you?",
+      "author": 0,
+      "replies": [
+        "Finding a route I did not notice before. It feels like I learned something rather than unlocked a checklist item.",
+        "Making a space feel like mine. Moving one chair can be more satisfying than completing another achievement."
+      ]
+    },
+    {
+      "category": "Sport",
+      "title": "A weekend league where showing up is the achievement",
+      "content": "I like the idea of a casual league with rotating teams and room for complete beginners. The challenge would be making newcomers feel included after the first week. What would help you join an activity where other people already know each other?",
+      "author": 1,
+      "replies": [
+        "Someone explaining the unwritten routines would help: where to leave a bag, when people take a break, that sort of thing.",
+        "A named person to meet on arrival. Walking into a group is easier when you know who is expecting you."
+      ]
+    },
+    {
+      "category": "TV",
+      "title": "Would you keep the ending or change one moment?",
+      "content": "I am more interested in the small decision before an ending than in rewriting an entire story. Sometimes one honest conversation could change how the final scene feels. Keeping this spoiler-free, what makes an ending feel earned to you?",
+      "author": 2,
+      "replies": [
+        "When the characters make a choice that reflects what they have learned, even if it is not the choice I wanted.",
+        "I like an ending that leaves room for the world to continue. Everything does not need to be neatly explained."
+      ]
+    },
+    {
+      "category": "News",
+      "title": "Looking for the follow-up after the big headline",
+      "content": "I often remember a story’s beginning and realize I never learned what happened next. I would enjoy a reading list built around careful follow-ups rather than constant new headlines. What would make that format useful?",
+      "author": 3,
+      "replies": [
+        "A short recap of what was known at the time, followed by what changed. Otherwise I have to reconstruct the original story first.",
+        "Links to earlier reporting and a clear explanation of what is still uncertain. A follow-up can be useful without having a tidy ending."
+      ]
+    },
+    {
+      "category": "Science",
+      "title": "An observation notebook for everyday surprises",
+      "content": "I have started a fictional notebook for things I notice but cannot immediately explain: a pattern in a shadow, an unfamiliar sound, a change in a plant. The rule is to write the observation before looking for an answer. What would you put on the first page?",
+      "author": 4,
+      "replies": [
+        "The way reflections change as I move around a window. I usually walk past without paying attention to the geometry.",
+        "The different shapes left by rain on a pavement. I would sketch the pattern and come back later to compare."
+      ]
+    },
+    {
+      "category": "Social",
+      "title": "What makes a digital space feel human?",
+      "content": "The places I return to make room for unfinished thoughts. A kind follow-up question can turn a short post into a conversation I remember. What is one small detail that helps you feel welcome in an online community?",
+      "author": 5,
+      "replies": [
+        "Being able to say that I am new without feeling like I am interrupting. A patient first reply changes the whole experience.",
+        "When someone responds to the specific thing I said. Even a short answer can feel thoughtful when it shows they really read it."
+      ]
+    },
+    {
+      "category": "Technology",
+      "title": "Good tools leave room for the person using them",
+      "content": "I have been sketching an interface that starts quietly and reveals more controls when they become useful. The hard part is keeping it simple without hiding what people need. Where do you draw that line in a tool you enjoy using?",
+      "author": 6,
+      "replies": [
+        "I want the common action to be obvious and the unusual action to be findable. Those are different design problems.",
+        "Letting me undo a choice makes an interface feel calmer. I am more willing to explore when a mistake is easy to recover from."
+      ]
+    },
+    {
+      "category": "Education",
+      "title": "Small ideas deserve a place to start",
+      "content": "A sketch, a question, a paragraph you have not finished: sometimes an idea only needs someone to be curious with you. I would like to make this thread a starting point for things we are learning in public. What are you exploring this week?",
+      "author": 7,
+      "replies": [
+        "I am making a small personal website and learning how much the spacing changes the feeling of a page. Happy to compare notes with another beginner.",
+        "I am trying to explain a favorite topic in plain language. The parts I struggle to describe are showing me what I still need to understand."
+      ]
+    }
+  ]
+}
