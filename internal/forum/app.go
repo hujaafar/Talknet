@@ -27,6 +27,7 @@ type App struct {
 	handler  http.Handler
 }
 type csrfKey struct{}
+type viewerKey struct{}
 
 func csrfValue(r *http.Request) string {
 	value, _ := r.Context().Value(csrfKey{}).(string)
@@ -151,6 +152,9 @@ func (a *App) security(next http.Handler) http.Handler {
 			a.cookie(w, c.Name, c.Value, 86400)
 		}
 		r = r.WithContext(context.WithValue(r.Context(), csrfKey{}, c.Value))
+		// Resolve identity before any write transaction. Error rendering must not
+		// re-query the single SQLite connection while a transaction holds it.
+		r = r.WithContext(context.WithValue(r.Context(), viewerKey{}, a.lookupUser(r)))
 		r.Body = http.MaxBytesReader(w, r.Body, 65536)
 		if r.Method != "GET" && r.Method != "HEAD" {
 			token := r.Header.Get("X-CSRF-Token")
@@ -171,12 +175,16 @@ func (a *App) security(next http.Handler) http.Handler {
 }
 
 func (a *App) user(r *http.Request) *User {
+	user, _ := r.Context().Value(viewerKey{}).(*User)
+	return user
+}
+func (a *App) lookupUser(r *http.Request) *User {
 	c, err := r.Cookie("session_id")
 	if err != nil {
 		return nil
 	}
 	var u User
-	err = a.db.QueryRow(`SELECT u.id,u.username,u.email,u.created_at FROM Users u JOIN Sessions s ON u.id=s.user_id WHERE s.session_token=? AND s.expires_at>?`, hashToken(c.Value), time.Now().UTC()).Scan(&u.ID, &u.Username, &u.Email, &u.CreatedAt)
+	err = a.db.QueryRowContext(r.Context(), `SELECT u.id,u.username,u.email,u.created_at FROM Users u JOIN Sessions s ON u.id=s.user_id WHERE s.session_token=? AND s.expires_at>?`, hashToken(c.Value), time.Now().UTC()).Scan(&u.ID, &u.Username, &u.Email, &u.CreatedAt)
 	if err != nil {
 		return nil
 	}
@@ -203,7 +211,7 @@ func (a *App) render(w http.ResponseWriter, name string, p Page, status int) {
 	_, _ = buf.WriteTo(w)
 }
 func (a *App) fail(w http.ResponseWriter, r *http.Request, status int, message string) {
-	p := Page{Title: "Something went wrong", Status: status, Error: message, CSRF: csrfValue(r)}
+	p := Page{Title: "Something went wrong", Status: status, Error: message, CSRF: csrfValue(r), User: a.user(r)}
 	a.render(w, "error.html", p, status)
 }
 func (a *App) internal(w http.ResponseWriter, r *http.Request, err error) {
