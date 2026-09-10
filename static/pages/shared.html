@@ -1,0 +1,96 @@
+{{define "arrow"}}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+<path d="M5 19 19 5M5 5h14v14"/>
+</svg>{{end}}
+{{define "search"}}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+<circle cx="10.5" cy="10.5" r="6.5"/>
+<path d="m16 16 5 5"/>
+</svg>{{end}}
+{{define "bubble"}}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+<path d="M20 11a8 8 0 0 1-8 8H5l-3 3V11a9 9 0 0 1 18 0Z"/>
+</svg>{{end}}
+{{define "head"}}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>{{.Title}} · Talknet</title>
+<meta name="description" content="A space for curious minds. Share ideas, ask better questions, and find your next great conversation on Talknet.">
+<meta name="csrf-token" content="{{.CSRF}}">
+<link rel="icon" href="/static/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/styles/app.css">
+<script src="/static/js/app.js" defer>
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="reading-progress" aria-hidden="true">
+</div>
+<header class="site-header">
+<div class="nav-shell">
+<a class="wordmark" href="/" aria-label="Talknet home">
+<span class="brand-icon">{{template "bubble"}}</span>talknet<span class="brand-dot">.</span>
+</a>
+<nav aria-label="Main navigation">
+<a href="/#discussions">The conversations</a>
+<a href="/#topics">Explore topics</a>
+</nav>
+<div class="nav-actions">{{if .User}}<a class="profile-link" href="/profile">
+<span class="avatar small">{{initial .User.Username}}</span>
+<span>{{.User.Username}}</span>
+</a>
+<form method="post" action="/logout">
+<input type="hidden" name="csrf_token" value="{{.CSRF}}">
+<button class="text-button" type="submit">Sign out</button>
+</form>{{else}}<a class="text-link" href="/login">Sign in</a>
+<a class="button small-button" href="/register">Join the conversation {{template "arrow"}}</a>{{end}}</div>
+</div>
+</header>{{end}}
+{{define "footer"}}<footer class="site-footer">
+<a class="wordmark" href="/">talknet<span class="brand-dot">.</span>
+</a>
+<p>A little curiosity. A real connection.</p>
+<button type="button" class="motion-toggle text-button" hidden aria-pressed="false">Pause motion</button>
+<a href="#main" class="back-top">Back to top ↑</a>
+</footer>
+<div class="toast" role="status" aria-live="polite" hidden>
+</div>
+</body>
+</html>{{end}}
+{{define "reaction"}}<div class="reactions" data-reaction-id="{{.ID}}" data-reaction-type="post">
+<button type="button" data-vote="like" aria-label="Like discussion" aria-pressed="{{if eq .Reaction 1}}true{{else}}false{{end}}">
+<span aria-hidden="true">↑</span>
+<span data-count="like">{{.Likes}}</span>
+</button>
+<button type="button" data-vote="dislike" aria-label="Dislike discussion" aria-pressed="{{if eq .Reaction 0}}true{{else}}false{{end}}">
+<span aria-hidden="true">↓</span>
+<span data-count="dislike">{{.Dislikes}}</span>
+</button>
+</div>{{end}}
+{{define "post-card"}}<article class="post-card" data-reveal>
+<div class="post-meta">
+<a class="author" href="/profile?user={{.UserID}}">
+<span class="avatar">{{initial .Username}}</span>{{.Username}}</a>
+<span class="meta-dot">·</span>
+<time datetime="{{.CreatedAt.Format "2006-01-02"}}">{{ago .CreatedAt}}</time>
+<div class="post-tags">{{range .Categories}}<a href="/?category={{urlquery .Name}}#discussions">{{.Name}}</a>{{end}}</div>
+</div>
+<h3>
+<a href="/post-details?post_id={{.ID}}">{{.Title}}</a>
+</h3>
+<p class="post-excerpt">{{excerpt .Content}}</p>
+<div class="post-bottom">{{template "reaction" .}}<a class="reply-link" href="/post-details?post_id={{.ID}}#replies">{{template "bubble"}} {{.Comments}} replies</a>
+<a class="read-link" href="/post-details?post_id={{.ID}}" aria-label="Read {{.Title}}">Join in {{template "arrow"}}</a>
+</div>
+</article>{{end}}
+{{define "empty"}}<div class="empty-state">
+<span class="empty-symbol">{{template "bubble"}}</span>
+<h3>A conversation starts with you.</h3>
+<p>No discussions here yet. Try another topic, or share something on your mind.</p>
+<div class="button-row">
+<a class="button" href="/post">Start a discussion {{template "arrow"}}</a>
+<a class="text-link" href="/#discussions">View all discussions</a>
+</div>
+</div>{{end}}
+{{define "form-error"}}{{if .Error}}<div class="form-error" role="alert">{{.Error}}</div>{{end}}{{end}}
+{{define "pagination"}}{{if or .PreviousURL .NextURL}}<nav class="pagination" aria-label="Discussion pages">{{if .PreviousURL}}<a class="text-link" href="{{.PreviousURL}}">← Previous</a>{{end}}<span>Page {{.PageNumber}}</span>{{if .NextURL}}<a class="text-link" href="{{.NextURL}}">Next conversations →</a>{{end}}</nav>{{end}}{{end}}

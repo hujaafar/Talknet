@@ -1,65 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="/static/styles/Login.css">
-</head>
-<body>
+{{ template "head" . }}
+<main id="main" class="auth-layout">
+  <section class="auth-art">
+    <img
+      src="/static/images/conversation-art.webp"
+      alt="Two sculptural conversation bubbles"
+      width="1536"
+      height="1024"
+    />
+    <div>
+      <p class="eyebrow">PICK UP WHERE YOU LEFT OFF</p>
+      <h1>Your people.<br /><em>Your perspective.</em></h1>
+      <p>There’s always another good conversation.</p>
+    </div>
+  </section>
+  <section class="auth-form">
+    <a class="back-link" href="/">← Back to the community</a>
+    <p class="eyebrow">GOOD TO SEE YOU AGAIN</p>
+    <h2>Welcome back.</h2>
+    <p class="muted">Sign in and join the conversation.</p>
+    {{ template "form-error" . }}
+    {{ if .Notice }}
+      <p class="form-notice" role="status">{{ .Notice }}</p>
+    {{ end }}
     <form action="/login" method="post">
-    <main class="flex-1 bg-muted flex items-center justify-center">
-        <div class="max-w-md w-full px-4 md:px-6">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title text-2xl">Login</h2>
-                    <p class="card-description">Enter Username & Password to access <span class="Talknet">Talknet.</span></p>
-                </div>
-                <div class="card-content space-y-4">
-                    <div class="space-y-2">
-                        <label for="username">Username</label>
-                        <input id="username" name="username" type="text" placeholder="Leo Messi" required>
-                    </div>
-                    <div class="space-y-2">
-                        <label for="password">Password</label>
-                        <input id="password" name="password" type="password" placeholder="••••••••" required>
-                    </div>
-                    <p id="category-error-message" class="text-red-500 mt-2 " style="color: red;">{{.ErrorMsg}}</p>
-                    <div class="checkbox-container">
-                        <input id="show-password" type="checkbox">
-                        <label for="show-password" class="cursor-pointer">Show Password</label>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <button class="w-full btn-primary" type="submit">Sign in</button>
-                    <p class="text-center mt-4">
-                        <a href="/register" class="text-black">Sign Up</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </main>
-</form>
-
-    <!-- Footer -->
-    <footer class="footer mt-8">
-        <div class="footer-container container mx-auto">
-            <p>&copy; 2024 Talknet. All rights reserved.</p>
-            <div class="footer-right footer-links">
-                <a href="#Terms">Terms of Service</a>
-                <a href="#Policy">Privacy Policy</a>
-                <a href="#ContactUs">Contact Us</a>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const passwordInput = document.getElementById('password');
-        const showPasswordCheckbox = document.getElementById('show-password');
-        
-        showPasswordCheckbox.addEventListener('change', () => {
-            passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
-        });
-    </script>
-</body>
-</html>
+      <input name="csrf_token" type="hidden" value="{{ .CSRF }}" /><label
+        for="username"
+        >Username</label
+      ><input
+        id="username"
+        name="username"
+        autocomplete="username"
+        maxlength="64"
+        required
+        value="{{ index .Values "username" }}"
+        placeholder="Your username"
+      /><label for="password">Password</label>
+      <div class="password-field">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          maxlength="72"
+          required
+          placeholder="Your password"
+        /><button
+          type="button"
+          data-password="password"
+          aria-label="Show password"
+        >
+          Show
+        </button>
+      </div>
+      <button class="button form-submit" type="submit">
+        Sign in
+        {{ template "arrow" }}
+      </button>
+    </form>
+    <p class="form-switch">
+      New around here? <a href="/register">Create an account</a>
+    </p>
+  </section>
+</main>
+{{ template "footer" . }}

@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-     <link rel="stylesheet" href="/static/styles/error.css"> 
-</head>
-<body>
-    <div class="error">
-        <img src="/static/images/error.png" alt="Error Image"> 
-        <h2>{{.ErrorMessage}}</h2>
-        <p>{{.Code}}</p>
-        <a href="/">Back to Home</a>
-    </div>
-</body>
-</html>
+{{ template "head" . }}
+<main id="main" class="error-page">
+  <p class="eyebrow">A SMALL DETOUR</p>
+  <span class="error-code">{{ .Status }}</span>
+  <h1>Let’s get you<br /><em>back in the loop.</em></h1>
+  <p>{{ .Error }}</p>
+  <a class="button" href="/">Back to the community {{ template "arrow" }}</a>
+</main>
+{{ template "footer" . }}

@@ -1,146 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Post</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="/static/styles/index.css" />
-    <style>
-        .category-button {
-            background-color: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border: 1px solid hsl(var(--border));
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-
-        .category-button.selected {
-            background-color: hsl(var(--secondary));
-            color: hsl(var(--secondary-foreground));
-        }
-
-        /* Custom styles for title and content */
-        .input-title {
-            font-size: 1.5rem; /* Increase font size */
-            font-weight: 700; /* Make text bold */
-        }
-
-        .input-content {
-            font-size: 1.125rem; /* Increase font size */
-            font-weight: 500; /* Make text bold */
-        }
-    </style>
-</head>
-<body class="antialiased">
-    <div class="flex flex-col min-h-screen">
-        <!-- Navbar -->
-        <header class="navbar">
-            <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-                <a class="flex items-center gap-2 text-lg font-semibold text-card-foreground" href="/">
-                    <div class="w-6 h-6 text-[#6366F1]"></div>
-                    <span>Talknet</span>
-                </a>
-                
-                <div class="md:hidden">
-                    <button class="variant-ghost size-icon">
-                        <div class="w-6 h-6 text-card-foreground"></div>
-                        <span class="sr-only">Toggle menu</span>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Content -->
-        <main class="content flex-grow p-6">
-            <div class="container mx-auto">
-                <h1 class="text-3xl font-bold mb-6">Create a New Post</h1>
-                <form action="/post" method="POST" class="bg-card shadow-md rounded-lg p-6" onsubmit="return validateCategorySelection()">
-                    <div class="form-group mb-4">
-                        <label for="title" class="block text-lg font-semibold text-muted-foreground">Title:</label>
-
-                        <input maxlength="50" type="text" id="title" name="title" required class="mt-1 block w-full border border-muted rounded-lg p-2 input-title" />
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="content" class="block text-lg font-semibold text-muted-foreground">Content:</label>
-
-                        <textarea maxlength="500" id="content" name="content" rows="10" required class="mt-1 block w-full border border-muted rounded-lg p-2 input-content"></textarea>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label class="block text-lg font-semibold text-muted-foreground">Categories:</label>
-                        <div class="flex flex-wrap gap-3 mt-2" id="categories-container">
-                            {{ range .AllCategories }}
-                            <button type="button" class="category-button" onclick="toggleCategory(this, '{{.ID}}')">{{ .Name }}</button>
-                            {{ end }}
-                        </div>
-                        <!-- Error message for category selection -->
-                        <p id="category-error-message" class="text-red-500 mt-2 hidden">Please select at least one category.</p>
-                    </div>
-                    
-                    
-                    <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-200">Submit Post</button>
-                </form>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-card border-t shadow-sm">
-            <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-muted-foreground">
-                <p>&copy; 2024 Talknet. All rights reserved.</p>
-                <div class="flex gap-4">
-                    <a href="#Terms" class="hover:text-card-foreground hover:underline">Terms of Service</a>
-                    <a href="#Policy" class="hover:text-card-foreground hover:underline">Privacy Policy</a>
-                    <a href="#ContactUs" class="hover:text-card-foreground hover:underline">Contact Us</a>
-                </div>
-            </div>
-        </footer>
+{{ template "head" . }}
+<main id="main" class="content-shell compose-layout">
+  <aside class="compose-intro">
+    <a class="back-link" href="/">← All conversations</a>
+    <p class="eyebrow">YOUR VOICE BELONGS HERE</p>
+    <h1>Put an idea<br /><em>out there.</em></h1>
+    <p>
+      A question you can’t shake. Something you just discovered. A different way
+      of seeing things.
+    </p>
+    <div class="writing-tips">
+      <h2 class="eyebrow">A FEW GOOD STARTING POINTS</h2>
+      <p>Give your discussion a clear title.</p>
+      <p>Add enough context to invite a reply.</p>
+      <p>Choose the topics that fit.</p>
     </div>
-
-    <script>
-        function toggleCategory(button, categoryId) {
-            button.classList.toggle('selected');
-    
-            const categoriesContainer = document.getElementById('categories-container');
-    
-            // Check if the category is already selected
-            let existingInput = document.querySelector(`input[name='category[]'][value='${categoryId}']`);
-    
-            if (existingInput) {
-                // If selected, remove it
-                existingInput.remove();
-            } else {
-                // If not selected, add a hidden input
-                const newInput = document.createElement('input');
-                newInput.type = 'hidden';
-                newInput.name = 'category[]';
-                newInput.value = categoryId;
-                categoriesContainer.appendChild(newInput);
-            }
-    
-            // Hide the error message if any category is selected
-            const categoryErrorMessage = document.getElementById('category-error-message');
-            categoryErrorMessage.classList.add('hidden');
-        }
-    
-        function validateCategorySelection() {
-            const selectedCategories = document.querySelectorAll(`input[name='category[]']`);
-            const categoryErrorMessage = document.getElementById('category-error-message');
-    
-            if (selectedCategories.length === 0) {
-                // Show the error message if no category is selected
-                categoryErrorMessage.classList.remove('hidden');
-                return false; // Prevent form submission
-            }
-    
-            return true; // Allow form submission
-        }
-    </script>
-    
-    
-    
-</body>
-</html>
+  </aside>
+  <section class="compose-form">
+    <h2>Start a discussion</h2>
+    {{ template "form-error" . }}
+    <form action="/post" method="post">
+      <input name="csrf_token" type="hidden" value="{{ .CSRF }}" /><label
+        for="title"
+        >The headline</label
+      ><input
+        id="title"
+        name="title"
+        minlength="5"
+        maxlength="120"
+        required
+        placeholder="What would you like to talk about?"
+        value="{{ index .Values "title" }}"
+        data-counter="title-count"
+      />
+      <p class="field-hint counter" id="title-count">Up to 120 characters</p>
+      <label for="content">Your perspective</label
+      ><textarea
+        id="content"
+        name="content"
+        minlength="10"
+        maxlength="5000"
+        rows="9"
+        required
+        placeholder="Give us a little context. The best conversations start with something real."
+        data-counter="content-count"
+      >
+{{ index .Values "content" }}</textarea>
+      <p class="field-hint counter" id="content-count">
+        Up to 5,000 characters
+      </p>
+      <fieldset class="topic-picker">
+        <legend>Choose your topics <span>(1–3)</span></legend>
+        <div>
+          {{ range .Categories }}
+            <label
+              ><input
+                type="checkbox"
+                name="category[]"
+                value="{{ .ID }}"
+                {{ if index $.Values (printf "category_%d" .ID) }}
+                  checked
+                {{ end }}
+              /><span>{{ .Name }}</span></label
+            >
+          {{ end }}
+        </div>
+      </fieldset>
+      <div class="compose-actions">
+        <a class="text-link" href="/">Cancel</a
+        ><button class="button" type="submit">
+          Publish discussion {{ template "arrow" }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
+{{ template "footer" . }}

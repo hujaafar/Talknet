@@ -65,16 +65,25 @@ CREATE TABLE IF NOT EXISTS Sessions (
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
 
-INSERT INTO Categories (name) VALUES ('Technology');
-INSERT INTO Categories (name) VALUES ('Sport');
-INSERT INTO Categories (name) VALUES ('Science');
-INSERT INTO Categories (name) VALUES ('Education');
-INSERT INTO Categories (name) VALUES ('Gaming');
-INSERT INTO Categories (name) VALUES ('TV');
-INSERT INTO Categories (name) VALUES ('Comedy');
-INSERT INTO Categories (name) VALUES ('History');
-INSERT INTO Categories (name) VALUES ('Social');
-INSERT INTO Categories (name) VALUES ('Finance');
-INSERT INTO Categories (name) VALUES ('News');
-INSERT INTO Categories (name) VALUES ('Others');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Technology');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Sport');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Science');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Education');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Gaming');
+INSERT OR IGNORE INTO Categories (name) VALUES ('TV');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Comedy');
+INSERT OR IGNORE INTO Categories (name) VALUES ('History');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Social');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Finance');
+INSERT OR IGNORE INTO Categories (name) VALUES ('News');
+INSERT OR IGNORE INTO Categories (name) VALUES ('Others');
 
+-- Support the feed, profile, reply and session lookups without scanning every row.
+CREATE INDEX IF NOT EXISTS idx_posts_user ON Posts(user_id, id);
+CREATE INDEX IF NOT EXISTS idx_comments_post ON Comments(post_id, id);
+CREATE INDEX IF NOT EXISTS idx_post_categories_post ON Post_Categories(post_id, category_id);
+CREATE INDEX IF NOT EXISTS idx_post_categories_category ON Post_Categories(category_id, post_id);
+CREATE INDEX IF NOT EXISTS idx_reactions_post ON Likes_Dislikes(post_id, user_id, like_dislike);
+CREATE INDEX IF NOT EXISTS idx_reactions_comment ON Likes_Dislikes(comment_id, user_id, like_dislike);
+CREATE INDEX IF NOT EXISTS idx_sessions_user ON Sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_expiry ON Sessions(expires_at);

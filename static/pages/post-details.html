@@ -1,106 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Post.Title }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <style>
-        body {
-            background-color: hsl(210, 100%, 97%);
-        }
-        .main-bg {
-            background-color: hsla(209, 100%, 95%, 0.75); /* Lighter background for the main content area */
-        }
-        .navbar, .footer-bg {
-            background-color: hsl(210, 100%, 97%);
-        }  
-        /* Prevent text overflow */
-        .post-content {
-            white-space: pre-wrap; /* Preserve line breaks */
-            word-wrap: break-word; /* Allow long words to break */
-            word-break: break-word; /* Ensure long words break properly */
-        }
-        .comment-content {
-            white-space: pre-wrap; /* Preserve line breaks in comments */
-            word-wrap: break-word; /* Allow long words to break */
-            word-break: break-word; /* Ensure long words break properly */
-        }
-    </style>
-</head>
-<body class="antialiased flex flex-col min-h-screen">
-    <div id="hiddenDiv" style="display:none;">comment</div>
-    <!-- Navbar -->
-    <header class="navbar shadow">
-        <div class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-            <a class="flex items-center gap-2 text-lg font-semibold text-gray-800" href="/">
-                <span>Talknet</span>
-            </a>
-        
+{{ template "head" . }}
+<main id="main" class="discussion-shell">
+  <a class="back-link" href="/#discussions">← Back to conversations</a>
+  <article class="discussion">
+    <div class="post-tags">
+      {{ range .Post.Categories }}
+        <a href="/?category={{ urlquery .Name }}#discussions">{{ .Name }}</a>
+      {{ end }}
+    </div>
+    <h1>{{ .Post.Title }}</h1>
+    <div class="post-meta">
+      <a class="author" href="/profile?user={{ .Post.UserID }}"
+        ><span class="avatar">{{ initial .Post.Username }}</span
+        >{{ .Post.Username }}</a
+      ><span>·</span><time>{{ date .Post.CreatedAt }}</time>
+    </div>
+    <div class="discussion-body">{{ .Post.Content }}</div>
+    <div class="post-bottom">
+      {{ template "reaction" .Post }}<a class="reply-link" href="#replies"
+        >{{ template "bubble" }} {{ len .Comments }} replies</a
+      ><button class="text-button share-button" type="button">
+        Copy link {{ template "arrow" }}
+      </button>
+    </div>
+  </article>
+  <section class="replies" id="replies">
+    <div class="section-heading">
+      <h2>The conversation <span>{{ len .Comments }}</span></h2>
+    </div>
+    {{ if .User }}
+      <form action="/add_comment" method="post" class="reply-form">
+        <input type="hidden" name="csrf_token" value="{{ .CSRF }}" /><input
+          type="hidden"
+          name="post_id"
+          value="{{ .Post.ID }}"
+        /><label for="reply">Add your perspective</label
+        ><textarea
+          id="reply"
+          name="content"
+          rows="4"
+          maxlength="2000"
+          required
+          placeholder="Keep the conversation going…"
+          data-counter="reply-count"
+        ></textarea>
+        <div class="compose-actions">
+          <p class="field-hint" id="reply-count">Up to 2,000 characters</p>
+          <button class="button small-button" type="submit">
+            Post reply {{ template "arrow" }}
+          </button>
         </div>
-    </header>
-
-    <!-- Content -->
-    <main class="container mx-auto p-6 main-bg shadow-md rounded-lg mt-8 mb-auto">
-        <h2 class="text-4xl font-bold mb-4">{{ .Post.Title }}</h2>
-        <p class="text-gray-600 mb-2">Posted by <strong>{{ .Username }}</strong> on {{ .Post.CreatedAt }}</p>
-        <p class="text-lg mb-6 post-content">{{ .Post.Content }}</p>
-
-        <!-- Comments Section -->
-        <h3 class="text-2xl font-semibold mb-4">Comments</h3>
-        <div id="comments" class="mb-4">
-            {{ if .Comments }}
-                {{ range .Comments }}
-                    <div class="comment bg-white p-4 rounded mb-2">
-                        <p><strong>{{ .Username }}:</strong> <span class="comment-content">{{ .Content }}</span></p>
-                        <p class="text-sm text-gray-500">{{ .CreatedAt }}</p>
-                        <div class="p-4 border-t card-footer"></div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <label id="like-label-{{.ID}}" class="like-button {{if eq .Reaction 1}}text-blue-500{{end}}">
-                                        <input type="radio" name="like_dislike" value="like" class="sr-only">
-                                        <i class="fas fa-thumbs-up" id="like-button-{{.ID}}"></i>
-                                        <span id="like-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .LikeCount }}</span>
-                                    </label>
-                                    
-                                    <label id="dislike-label-{{.ID}}" class="dislike-button {{if eq .Reaction 0}}text-red-500{{end}}">
-                                        <input type="radio" name="like_dislike" value="dislike" class="sr-only">
-                                        <i class="fas fa-thumbs-down" id="dislike-button-{{.ID}}"></i>
-                                        <span id="dislike-count-{{.ID}}" class="text-sm text-muted-foreground">{{ .DislikeCount }}</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {{ end }}
+      </form>
+    {{ else }}
+      <div class="signin-prompt">
+        <div>
+          <h3>Your perspective is welcome.</h3>
+          <p>Sign in to reply or react to a discussion.</p>
+        </div>
+        <a class="button" href="/login">Join in {{ template "arrow" }}</a>
+      </div>
+    {{ end }}{{ range .Comments }}
+      <article class="comment" data-reveal>
+        <div class="post-meta">
+          <a class="author" href="/profile?user={{ .UserID }}"
+            ><span class="avatar">{{ initial .Username }}</span
+            >{{ .Username }}</a
+          ><span>·</span><time>{{ ago .CreatedAt }}</time>
+        </div>
+        <p>{{ .Content }}</p>
+        <div
+          class="reactions"
+          data-reaction-id="{{ .ID }}"
+          data-reaction-type="comment"
+        >
+          <button
+            type="button"
+            data-vote="like"
+            aria-label="Like reply"
+            aria-pressed="{{ if eq .Reaction 1 }}
+              true
             {{ else }}
-                <p class="text-gray-500">No comments yet.</p>
-            {{ end }}
+              false
+            {{ end }}"
+          >
+            ↑ <span data-count="like">{{ .Likes }}</span></button
+          ><button
+            type="button"
+            data-vote="dislike"
+            aria-label="Dislike reply"
+            aria-pressed="{{ if eq .Reaction 0 }}
+              true
+            {{ else }}
+              false
+            {{ end }}"
+          >
+            ↓ <span data-count="dislike">{{ .Dislikes }}</span>
+          </button>
         </div>
-
-        <!-- Add Comment Form -->
-        <h3 class="text-2xl font-semibold mb-4">Add a Comment</h3>
-        <form action="/add_comment" method="POST" class="mb-4">
-            <textarea maxlength="150" name="content" rows="4" class="w-full bg-white border rounded p-2" required></textarea>
-            <input type="hidden" name="post_id" value="{{ .Post.ID }}">
-            <br><br>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded" >Add Comment</button>
-        </form>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer-bg border-t shadow-sm">
-        <div class="container mx-auto flex justify-between items-center p-4 md:p-6 text-gray-600">
-            <p>&copy; 2024 Talknet. All rights reserved.</p>
-            <div class="flex gap-4">
-                <a href="#Terms" class="hover:text-blue-600 hover:underline">Terms of Service</a>
-                <a href="#Policy" class="hover:text-blue-600 hover:underline">Privacy Policy</a>
-                <a href="#ContactUs" class="hover:text-blue-600 hover:underline">Contact Us</a>
-            </div>
-        </div>
-    </footer>
-    <script src="/static/js/filter.js"></script>
-    <script src="/static/js/like-dislike.js"></script>
-</body>
-</html>
+      </article>
+    {{ else }}
+      <p class="no-replies">No replies yet. You could be the first.</p>
+    {{ end }}
+  </section>
+</main>
+{{ template "footer" . }}

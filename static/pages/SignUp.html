@@ -1,70 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="/static/styles/SignUp.css">
-</head>
-<body>
+{{ template "head" . }}
+<main id="main" class="auth-layout">
+  <section class="auth-art">
+    <img
+      src="/static/images/conversation-art.webp"
+      alt="Chrome and glass speech bubbles sharing a space"
+      width="1536"
+      height="1024"
+    />
+    <div>
+      <p class="eyebrow">THERE’S ROOM FOR YOUR VOICE</p>
+      <h1>A new connection<br /><em>starts with hello.</em></h1>
+      <p>Bring your questions, ideas, and point of view.</p>
+    </div>
+  </section>
+  <section class="auth-form">
+    <a class="back-link" href="/">← Back to the community</a>
+    <p class="eyebrow">FIND YOUR PEOPLE</p>
+    <h2>Come on in.</h2>
+    <p class="muted">Create your account. Make yourself at home.</p>
+    {{ template "form-error" . }}
     <form action="/register" method="post">
-    <main class="flex-1 bg-muted flex items-center justify-center">
-        <div class="max-w-md w-full px-4 md:px-6">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title text-2xl">Register</h2>
-                    <p class="card-description">Enter Username, Email & Password to Create Account.</p>
-                </div>
-                <div class="card-content space-y-4">
-                    <div class="space-y-2">
-                        <label for="username">Username</label>
-                        <input id="username" type="text" placeholder="Leo Messi" name="username" required>
-                    </div>
-                    <div class="space-y-2">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" placeholder="Messi@Bolga.com" name="email" required>
-                    </div>
-                    <div class="space-y-2">
-                        <label for="password">Password</label>
-                        <input id="password" type="password" placeholder="••••••••" name="password" required>
-                    </div>
-                    <p id="category-error-message" class="text-red-500 mt-2 " style="color: red;">{{.ErrorMsg}}</p>
-
-                    <div class="checkbox-container">
-                        <input id="show-password" type="checkbox">
-                        <label for="show-password" class="cursor-pointer">Show Password</label>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <button class="w-full btn-primary" type="submit">Sign Up</button>
-                    <p class="text-center mt-4">
-                        <a href="/login" class="text-black">Sign in</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </main>
-</form>
-
-    <!-- Footer -->
-    <footer class="footer mt-8">
-        <div class="footer-container container mx-auto">
-            <p>&copy; 2024 Talknet. All rights reserved.</p>
-            <div class="footer-right footer-links">
-                <a href="#Terms">Terms of Service</a>
-                <a href="#Policy">Privacy Policy</a>
-                <a href="#ContactUs">Contact Us</a>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const passwordInput = document.getElementById('password');
-        const showPasswordCheckbox = document.getElementById('show-password');
-        
-        showPasswordCheckbox.addEventListener('change', () => {
-            passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
-        });
-    </script>
-</body>
-</html>
+      <input name="csrf_token" type="hidden" value="{{ .CSRF }}" /><label
+        for="username"
+        >Username</label
+      ><input
+        id="username"
+        name="username"
+        autocomplete="username"
+        pattern="[a-zA-Z0-9_]{3,24}"
+        minlength="3"
+        maxlength="24"
+        aria-describedby="username-hint"
+        required
+        placeholder="How should we call you?"
+        value="{{ index .Values "username" }}"
+      />
+      <p id="username-hint" class="field-hint">
+        3–24 letters, numbers, or underscores.
+      </p>
+      <label for="email">Email address</label
+      ><input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        maxlength="254"
+        required
+        placeholder="you@example.com"
+        value="{{ index .Values "email" }}"
+      /><label for="password">Password</label>
+      <div class="password-field">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="12"
+          maxlength="72"
+          required
+          aria-describedby="password-hint"
+          placeholder="Make it a strong one"
+        /><button
+          type="button"
+          data-password="password"
+          aria-label="Show password"
+        >
+          Show
+        </button>
+      </div>
+      <p class="field-hint" id="password-hint">
+        At least 12 characters. A memorable passphrase works well.
+      </p>
+      <button class="button form-submit" type="submit">
+        Create account {{ template "arrow" }}
+      </button>
+    </form>
+    <p class="form-switch">Already one of us? <a href="/login">Sign in</a></p>
+  </section>
+</main>
+{{ template "footer" . }}

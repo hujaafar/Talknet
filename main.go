@@ -1,99 +1,75 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"io/ioutil"
+	"context"
+	"flag"
 	"log"
+	"net"
 	"net/http"
 	"os"
-
-	"talknet/server/handlers"
-
-	_ "github.com/mattn/go-sqlite3" // SQLite driver
+	"os/signal"
+	"syscall"
+	"talknet/internal/forum"
+	"time"
 )
 
 func main() {
-	// Open a connection to the database
-	dbPath := "./talknet.db"       // Path to your SQLite database file
-	sqlFilePath := "./talknet.sql" // Path to your SQL file
-
-	var database *sql.DB
-
-	// Check if the database file exists
-	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
-
-		// Create a new database
-		db, err := sql.Open("sqlite3", dbPath)
-		if err != nil {
-			log.Fatal(err)
-		}
-		database = db
-
-		// Read the SQL file
-		sqlData, err := ioutil.ReadFile(sqlFilePath)
-		if err != nil {
-			log.Fatalf("Error reading SQL file: %v", err)
-		}
-
-		// Execute the SQL commands from the file
-		_, err = database.Exec(string(sqlData))
-		if err != nil {
-			log.Fatalf("Error executing SQL commands: %v", err)
-		}
-
-	} else if err != nil {
-		log.Fatalf("Error checking database file: %v", err)
-	} else {
-		db, err := sql.Open("sqlite3", dbPath)
-		if err != nil {
-			log.Fatal(err)
-		}
-		database = db
+	seed := flag.Bool("seed-demo", false, "add fictional sample discussions to an empty database")
+	health := flag.Bool("healthcheck", false, "check the running server and exit")
+	flag.Parse()
+	path := os.Getenv("TALKNET_DB")
+	if path == "" {
+		path = "data/talknet.db"
 	}
-
-	// Ensure database is closed when main function exits
-	defer database.Close()
-
-	// Setup static file server
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-
-	// Setup handlers and pass the database connection
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		handlers.HomeHandler(database, w, r)
-	})
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		handlers.LoginHandler(database, w, r)
-	})
-	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		handlers.RegisterHandler(database, w, r)
-	})
-	http.HandleFunc("/post", func(w http.ResponseWriter, r *http.Request) {
-		handlers.NewPostHandler(database, w, r)
-	})
-	http.HandleFunc("/like_dislike", func(w http.ResponseWriter, r *http.Request) {
-		handlers.LikeDislikeHandler(database, w, r)
-	})
-	http.HandleFunc("/post-details", func(w http.ResponseWriter, r *http.Request) {
-		handlers.PostDetailsHandler(database, w, r)
-	})
-	http.HandleFunc("/add_comment", func(w http.ResponseWriter, r *http.Request) {
-		handlers.AddCommentHandler(database, w, r)
-	})
-	http.HandleFunc("/profile", func(w http.ResponseWriter, r *http.Request) {
-		handlers.ProfileHandler(database, w, r)
-	})
-	http.HandleFunc("/error", func(w http.ResponseWriter, r *http.Request) {
-		handlers.RenderErrorPage(w, "Error Message", http.StatusInternalServerError)
-	})
-
-	// Logout handler
-	http.HandleFunc("/logout", handlers.LogoutHandler)
-
-	// Start the server
-	fmt.Println("Server running at http://localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
+	addr := os.Getenv("TALKNET_ADDR")
+	if addr == "" {
+		addr = ":8080"
+	}
+	if *health {
+		_, port, err := net.SplitHostPort(addr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		client := http.Client{Timeout: 3 * time.Second}
+		response, err := client.Get("http://127.0.0.1:" + port + "/healthz")
+		if err != nil {
+			log.Fatal(err)
+		}
+		response.Body.Close()
+		if response.StatusCode != 200 {
+			os.Exit(1)
+		}
+		return
+	}
+	db, err := forum.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
+	if *seed {
+		if err := forum.SeedDemo(db); err != nil {
+			log.Fatal(err)
+		}
+		log.Print("Sample-data setup complete (existing communities are unchanged)")
+		return
+	}
+	app := forum.New(db, os.Getenv("TALKNET_SECURE_COOKIES") == "true")
+	srv := &http.Server{Addr: addr, Handler: app, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 30 * time.Second, IdleTimeout: 60 * time.Second}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	stopped := make(chan struct{})
+	go func() {
+		defer close(stopped)
+		<-ctx.Done()
+		shutdown, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := srv.Shutdown(shutdown); err != nil {
+			log.Printf("shutdown: %v", err)
+		}
+	}()
+	log.Printf("Talknet listening on %s", addr)
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
+	<-stopped
 }
