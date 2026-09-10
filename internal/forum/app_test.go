@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"testing"
@@ -90,7 +91,7 @@ func (s *testSite) signup(t *testing.T) {
 
 func TestCommunityFlow(t *testing.T) {
 	s := newSite(t)
-	for _, path := range []string{"/", "/login", "/register", "/healthz", "/static/styles/app.css", "/static/js/app.js", "/static/images/conversation-art.webp", "/static/images/inter-latin.woff2"} {
+	for _, path := range []string{"/", "/login", "/register", "/healthz", "/static/styles/app.css", "/static/js/app.js", "/static/js/motion.mjs", "/static/images/conversation-art.webp", "/static/images/inter-latin.woff2", "/static/images/instrument-serif-italic.ttf"} {
 		r, b := s.request(t, "GET", path, "", "", false)
 		checkStatus(t, r, 200, b)
 	}
@@ -124,6 +125,13 @@ func TestCommunityFlow(t *testing.T) {
 	}
 	r, b = s.form(t, "/add_comment", url.Values{"post_id": {"1"}, "content": {"I learn by building small projects."}})
 	checkStatus(t, r, 303, b)
+	r, b = s.request(t, "GET", location, "", "", false)
+	checkStatus(t, r, 200, b)
+	for _, label := range []string{"Like reply", "Dislike reply"} {
+		if !regexp.MustCompile(`aria-label="` + label + `"\s+aria-pressed="false"`).MatchString(b) {
+			t.Fatalf("%s must render an exact false ARIA token before a reaction", label)
+		}
+	}
 	for _, reaction := range []struct {
 		action string
 		want   int
@@ -142,6 +150,11 @@ func TestCommunityFlow(t *testing.T) {
 	}
 	r, b = s.request(t, "POST", "/like_dislike", `{"postId":1,"action":"like","type":"comment"}`, "application/json", true)
 	checkStatus(t, r, 200, b)
+	r, b = s.request(t, "GET", location, "", "", false)
+	checkStatus(t, r, 200, b)
+	if !regexp.MustCompile(`aria-label="Like reply"\s+aria-pressed="true"`).MatchString(b) || !regexp.MustCompile(`aria-label="Dislike reply"\s+aria-pressed="false"`).MatchString(b) {
+		t.Fatal("reply buttons do not reflect the saved reaction after a page load")
+	}
 	r, b = s.request(t, "POST", "/like_dislike", `{"postId":1,"action":"like","type":"post"}`, "application/json", true)
 	checkStatus(t, r, 200, b)
 	r, b = s.request(t, "GET", "/profile?tab=liked", "", "", false)

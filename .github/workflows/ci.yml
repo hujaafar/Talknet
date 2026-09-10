@@ -5,6 +5,17 @@ on:
 permissions:
   contents: read
 jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check browser JavaScript
+        run: node --check static/js/app.js
+      - name: Test motion preferences and scroll behavior
+        run: node --test tests/*.test.mjs
   go:
     runs-on: ubuntu-latest
     steps:
