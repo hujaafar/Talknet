@@ -114,7 +114,11 @@ func (a *App) posts(filter postQuery) ([]Post, error) {
 		}
 		args = append(args, filter.Author)
 	}
-	if filter.Sort == "popular" {
+	if filter.Saved && filter.Author > 0 {
+		// Preserve save order even when several saves share the same second.
+		query += " ORDER BY (SELECT created_at FROM Bookmarks WHERE post_id=p.id AND user_id=?) DESC,(SELECT rowid FROM Bookmarks WHERE post_id=p.id AND user_id=?) DESC"
+		args = append(args, filter.Author, filter.Author)
+	} else if filter.Sort == "popular" {
 		query += " ORDER BY 7 DESC,9 DESC,p.id DESC"
 	} else {
 		query += " ORDER BY p.id DESC"
