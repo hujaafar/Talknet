@@ -8,6 +8,8 @@ The redesign takes visual cues from Hussain’s Neo4flix and Nexora projects: st
 
 [Inter](https://github.com/rsms/inter) by Rasmus Andersson. The variable font is served locally as `static/images/inter-latin.woff2`; no external font requests or tracking are required. The upstream filename is `InterVariable.woff2`. See [the bundled SIL Open Font License](licenses/Inter-OFL.txt).
 
+[Instrument Serif](https://github.com/google/fonts/tree/main/ofl/instrumentserif) supplies the italic editorial accent. The unmodified `InstrumentSerif-Italic.ttf` is served locally as `static/images/instrument-serif-italic.ttf`. See [its bundled SIL Open Font License](licenses/Instrument-Serif-OFL.txt).
+
 ## Conversation artwork
 
 `static/images/conversation-art.webp` is original artwork made for this redesign using the built-in image generation tool. It is a stylized illustration, not a product photograph. The generated 1536 × 1024 PNG was converted to WebP for delivery (approximately 114 KiB). The favicon is a small source SVG; interface symbols are inline SVG.

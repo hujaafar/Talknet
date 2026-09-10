@@ -33,13 +33,13 @@ The discussion feed uses a fixed page size of 20, fetching one additional record
 
 Templates use Go’s contextual escaping. Templates render to a buffer before writing a response, avoiding a partial HTML success page when rendering fails. The server exposes only the public `styles`, `js`, and `images` paths; template source is not a public asset route.
 
-The binary embeds all assets. Inter is served locally, and the original artwork is delivered as a 1536 × 1024 WebP. The browser makes no font, script, or image requests to third-party services.
+The binary embeds all assets. Inter and Instrument Serif are served locally, and the original artwork is delivered as a 1536 × 1024 WebP. The browser makes no font, script, or image requests to third-party services. Documentation screenshots are outside the embedded asset tree.
 
 ## Motion and progressive enhancement
 
-`app.js` uses a passive scroll listener and one animation frame at a time. It moves the hero artwork slightly as the page scrolls and updates reading progress. Intersection Observer reveals individual discussion rows. Essential content is never hidden while waiting for JavaScript.
+`app.js` uses a passive scroll listener and one animation frame at a time. Its `motion.mjs` import calculates bounded transforms for the artwork, title, and conversation note, plus reading progress. Intersection Observer reveals individual discussion rows. Essential content is never hidden while waiting for JavaScript. The pure motion functions have dependency-free Node tests covering overscroll, short documents, different layer depths, and user preferences.
 
-The motion control remembers a device-local preference. System reduced-motion settings take precedence. Small screens keep the artwork static, and the topic navigation becomes horizontally scrollable. JavaScript adds reaction requests, character counters, password visibility, copy-link feedback, and duplicate-submit protection.
+The fixed motion control remembers a device-local preference. The system reduced-motion setting applies by default; an explicit visitor choice can enable or pause motion. Small screens keep the artwork static, and the topic navigation becomes horizontally scrollable. JavaScript adds reaction requests, character counters, password visibility, copy-link feedback, and duplicate-submit protection.
 
 ## Scope
 

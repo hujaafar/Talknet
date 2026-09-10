@@ -1,14 +1,16 @@
 # Talknet
 
-**Good ideas. Better conversations.**
+**Independent minds. Shared curiosity. Let’s talk.**
 
-A full-stack discussion community built with **Go, SQLite, server-rendered HTML, and vanilla JavaScript**. Browse topics, share a perspective, and keep a conversation going—with a distinctive editorial interface and a small, self-contained runtime.
+A discussion community with an expressive editorial identity and a compact **Go + SQLite** foundation. An oversized opening, chrome-and-citrus sculpture, layered scroll motion, and a warm paper feed invite people to explore, ask, and reply. Complete HTML comes from the server; a small JavaScript module handles the enhancements.
 
 [![Quality](https://github.com/hujaafar/Talknet/actions/workflows/ci.yml/badge.svg)](https://github.com/hujaafar/Talknet/actions/workflows/ci.yml)
 [![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go&logoColor=white)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-d8ef6d.svg)](LICENSE)
 
-![Original chrome and citrus conversation artwork for Talknet](static/images/conversation-art.webp)
+![Talknet running locally: oversized Let’s talk typography, chrome and citrus artwork, and a live discussion preview](docs/screenshots/desktop.jpg)
+
+[Quick start](#run-with-docker) · [Features](#the-experience) · [Design](docs/DESIGN.md) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md)
 
 ## The experience
 
@@ -19,7 +21,20 @@ A full-stack discussion community built with **Go, SQLite, server-rendered HTML,
 | Sort by newest or most liked         | Like, dislike, switch, or remove a reaction | Revisit your liked discussions                |
 | Browse paginated feeds               | React to individual replies                 | Pause motion or follow your system preference |
 
-The interface pairs graphite surfaces, citrus accents, local Inter typography, and original 3D artwork. It includes scroll-linked artwork, section reveals, a reading-progress indicator, responsive layouts, visible keyboard focus, and reduced-motion support. Reading, search, navigation, authentication, posting, and replies work without JavaScript; reactions and other enhancements use a small client script.
+The visual system pairs near-black and paper surfaces, acid citrus accents, locally served Inter and Instrument Serif, and original 3D artwork. The sculpture, headline, and live conversation note move at different depths while scrolling. Section reveals and a reading-progress line connect the experience; a persistent motion control lets each visitor choose a comfortable pace. System reduced motion is respected by default.
+
+Reading, search, navigation, authentication, posting, and replies work without JavaScript. Reactions, counters, copy-link feedback, and motion use progressive enhancement.
+
+![The Talknet discussion feed with topic navigation, searchable conversation cards, and a community note](docs/screenshots/feed.jpg)
+
+<details>
+<summary><strong>See the mobile experience</strong></summary>
+<br>
+<img src="docs/screenshots/mobile.jpg" width="310" alt="Talknet’s mobile opening with stacked typography, sculpture, and a featured discussion">
+<img src="docs/screenshots/mobile-feed.jpg" width="310" alt="Mobile discussion feed with horizontal topic navigation and readable post cards">
+</details>
+
+These are browser captures of the running Go application with the optional fictional demo dataset.
 
 ## Run with Docker
 
@@ -82,6 +97,7 @@ Open **[localhost:8080](http://localhost:8080)**. Native runs use `data/talknet.
 go test -race -cover ./...
 go vet ./...
 go build -trimpath ./...
+node --test tests/*.test.mjs
 ```
 
 Or run tests entirely in Docker:
@@ -90,7 +106,7 @@ Or run tests entirely in Docker:
 docker build --target test -t talknet-tests .
 ```
 
-[GitHub Actions](https://github.com/hujaafar/Talknet/actions) checks formatting, race/integration tests, static analysis, compilation, and container startup. See [validation notes](docs/VALIDATION.md) for the scope of the recorded checks.
+The browser tests use Node.js 22+ and its built-in test runner; no npm install is needed. [GitHub Actions](https://github.com/hujaafar/Talknet/actions) checks formatting, race/integration tests, JavaScript syntax and motion behavior, static analysis, compilation, and container startup. See [validation notes](docs/VALIDATION.md) for the scope of the recorded checks.
 
 ## Inside the project
 
@@ -104,9 +120,11 @@ static/
   pages/                Shared Go templates and seven page views
   styles/app.css        Responsive visual system
   js/app.js             Motion, reactions, form feedback, and enhancements
-  images/               Original artwork, local typeface, and favicon
+  js/motion.mjs         Bounded scroll transforms and motion preferences
+  images/               Original artwork, local typefaces, and favicon
+tests/                  Dependency-free browser-logic tests
 compose.yaml            Persistent local deployment
-docs/                   Architecture, operations, validation, and credits
+docs/                   Design, screenshots, architecture, operations, and credits
 ```
 
 Read [the architecture](docs/ARCHITECTURE.md), [configuration and existing-data migration](docs/OPERATIONS.md), or [artwork and font credits](docs/CREDITS.md).
@@ -115,4 +133,4 @@ Read [the architecture](docs/ARCHITECTURE.md), [configuration and existing-data 
 
 Originally created by [Mohamed Alasfoor](https://github.com/Mohamed-Alasfoor), [Ali Hasan](https://github.com/alihjmm), [Habib Mansoor](https://github.com/7abib04), and [Hussain Jawad](https://github.com/hujaafar).
 
-The redesign retains Talknet’s Go/SQLite foundation and original contribution history, with a new visual identity and a consolidated application layer. Licensed under [MIT](LICENSE); the bundled typeface has its own [SIL Open Font License](docs/licenses/Inter-OFL.txt).
+The redesign retains Talknet’s Go/SQLite foundation and original contribution history, with a new visual identity and a consolidated application layer. Licensed under [MIT](LICENSE); bundled fonts retain their [upstream licenses](docs/licenses/). See [the application scope](docs/ARCHITECTURE.md#scope) before planning a public community.
