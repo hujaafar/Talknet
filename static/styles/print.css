@@ -1,0 +1,82 @@
+/* Keep a discussion readable when visitors print or save it as a PDF. */
+@media print {
+  @page {
+    margin: 18mm;
+  }
+  :root,
+  :root[data-theme="dark"] {
+    --bg: #fff;
+    --surface: #fff;
+    --ink: #111;
+    --muted: #333;
+    --line: #bbb;
+    color-scheme: light;
+  }
+  body {
+    background: #fff;
+    color: #111;
+    font-size: 11pt;
+  }
+  .site-header,
+  .site-footer,
+  .skip,
+  .reading-progress,
+  .toast,
+  .command-palette,
+  .back-link,
+  .post-bottom,
+  .reply-form,
+  .signin-prompt,
+  .reading-meta a,
+  .comment .reactions {
+    display: none !important;
+  }
+  .discussion-shell {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .discussion h1 {
+    font-size: 26pt;
+    line-height: 1.15;
+  }
+  .discussion,
+  .replies,
+  .comment {
+    background: #fff;
+    box-shadow: none;
+  }
+  .discussion-body,
+  .comment > p {
+    color: #111 !important;
+    white-space: pre-wrap;
+  }
+  .post-tags a {
+    background: none !important;
+    color: #333 !important;
+    border: 1px solid #bbb;
+  }
+  .comment {
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  a {
+    color: #111;
+    text-decoration: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
