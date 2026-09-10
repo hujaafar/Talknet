@@ -24,15 +24,12 @@ func (a *App) quickSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	out := []result{}
 	if len([]rune(q)) >= 2 {
-		posts, err := a.posts(postQuery{Search: q})
+		posts, err := a.posts(postQuery{Search: q, Limit: 6})
 		if err != nil {
 			jsonResponse(w, 500, map[string]string{"error": "Search is unavailable. Try again."})
 			return
 		}
-		for i, p := range posts {
-			if i == 6 {
-				break
-			}
+		for _, p := range posts {
 			topic := "Discussion"
 			if len(p.Categories) > 0 {
 				topic = p.Categories[0].Name

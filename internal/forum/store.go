@@ -74,10 +74,10 @@ func (a *App) categories() ([]Category, error) {
 }
 
 type postQuery struct {
-	Viewer, Author, ID, Page int
-	Category, Search, Sort   string
-	Liked                    bool
-	Saved                    bool
+	Viewer, Author, ID, Page, Limit int
+	Category, Search, Sort          string
+	Liked                           bool
+	Saved                           bool
 }
 
 const pageSize = 20
@@ -128,7 +128,11 @@ func (a *App) posts(filter postQuery) ([]Post, error) {
 	}
 	// Fetch one extra row to discover the next page without a second count query.
 	query += " LIMIT ? OFFSET ?"
-	args = append(args, pageSize+1, (filter.Page-1)*pageSize)
+	limit := pageSize + 1
+	if filter.Limit > 0 {
+		limit = min(filter.Limit, limit)
+	}
+	args = append(args, limit, (filter.Page-1)*pageSize)
 	rows, err := a.db.Query(query, args...)
 	if err != nil {
 		return nil, err
