@@ -10,9 +10,13 @@
     <h1>{{ .Post.Title }}</h1>
     <div class="post-meta">
       <a class="author" href="/profile?user={{ .Post.UserID }}"
-        ><span class="avatar">{{ initial .Post.Username }}</span
+        ><span class="avatar" aria-hidden="true"
+          >{{ initial .Post.Username }}</span
         >{{ .Post.Username }}</a
-      ><span>·</span><time datetime="{{timestamp .Post.CreatedAt}}">{{ date .Post.CreatedAt }}</time>
+      ><span>·</span
+      ><time datetime="{{ timestamp .Post.CreatedAt }}"
+        >{{ date .Post.CreatedAt }}</time
+      >
     </div>
     <div class="reading-meta">
       <span>{{ readtime .Post.Content }} min read</span
@@ -43,7 +47,11 @@
           class="detail-save text-button"
           type="submit"
           name="action"
-          value="{{- if .Post.Saved -}}remove{{- else -}}save{{- end -}}"
+          value="{{- if .Post.Saved -}}
+            remove
+          {{- else -}}
+            save
+          {{- end -}}"
         >
           {{ template "bookmark-icon" }}
           {{ if .Post.Saved }}Remove from saved{{ else }}Save for later{{ end }}
@@ -91,9 +99,13 @@
       <article class="comment" data-reveal>
         <div class="post-meta">
           <a class="author" href="/profile?user={{ .UserID }}"
-            ><span class="avatar">{{ initial .Username }}</span
+            ><span class="avatar" aria-hidden="true"
+              >{{ initial .Username }}</span
             >{{ .Username }}</a
-          ><span>·</span><time datetime="{{timestamp .CreatedAt}}">{{ ago .CreatedAt }}</time>
+          ><span>·</span
+          ><time datetime="{{ timestamp .CreatedAt }}"
+            >{{ ago .CreatedAt }}</time
+          >
         </div>
         <p>{{ .Content }}</p>
         <div

@@ -42,8 +42,8 @@
 <a href="/#topics">Explore topics</a>
 </nav>
 <div class="nav-utilities"><button class="palette-trigger icon-button" type="button" aria-label="Search Talknet" aria-keyshortcuts="Control+k Meta+k" hidden>{{template "search"}}<kbd>Ctrl K</kbd></button><button class="theme-toggle icon-button" type="button" aria-label="Switch to light theme" hidden><span aria-hidden="true">◐</span></button></div>
-<div class="nav-actions">{{if .User}}<a class="profile-link" href="/profile">
-<span class="avatar small">{{initial .User.Username}}</span>
+<div class="nav-actions">{{if .User}}<a class="profile-link" href="/profile" aria-label="Your profile: {{.User.Username}}">
+<span class="avatar small" aria-hidden="true">{{initial .User.Username}}</span>
 <span>{{.User.Username}}</span>
 </a>
 <form method="post" action="/logout">
@@ -76,7 +76,7 @@
 {{define "post-card"}}<article class="post-card" data-reveal>
 <div class="post-meta">
 <a class="author" href="/profile?user={{.UserID}}">
-<span class="avatar">{{initial .Username}}</span>{{.Username}}</a>
+<span class="avatar" aria-hidden="true">{{initial .Username}}</span>{{.Username}}</a>
 <span class="meta-dot">·</span>
 <time datetime="{{timestamp .CreatedAt}}">{{ago .CreatedAt}}</time>
 <div class="post-tags">{{range .Categories}}<a href="/?category={{urlquery .Name}}#discussions">{{.Name}}</a>{{end}}</div>

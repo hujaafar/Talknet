@@ -2,11 +2,18 @@
 <main id="main" class="profile-shell">
   <a class="back-link" href="/#discussions">← Back to the community</a>
   <section class="profile-heading">
-    <span class="avatar profile-avatar">{{ initial .Profile.Username }}</span>
+    <span class="avatar profile-avatar" aria-hidden="true"
+      >{{ initial .Profile.Username }}</span
+    >
     <div>
       <p class="eyebrow">PART OF THE CONVERSATION</p>
       <h1>{{ .Profile.Username }}<span class="accent">.</span></h1>
-      <p class="muted">Member since <time datetime="{{timestamp .Profile.CreatedAt}}">{{ date .Profile.CreatedAt }}</time></p>
+      <p class="muted">
+        Member since
+        <time datetime="{{ timestamp .Profile.CreatedAt }}"
+          >{{ date .Profile.CreatedAt }}</time
+        >
+      </p>
     </div>
     {{ if .User }}
       {{ if eq .User.ID .Profile.ID }}
@@ -36,7 +43,8 @@
       {{ end }}
     {{ end }}<span
       >{{ len .Posts }}
-      {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }} on this page</span
+      {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }} on this
+      page</span
     >
   </nav>
   <div class="profile-feed">
@@ -56,9 +64,26 @@
           >
         </div>
       {{ else if eq .Tab "liked" }}
-        <div class="empty-state"><span class="empty-symbol">↑</span><h3>Find a perspective that stays with you.</h3><p>Discussions you like appear here. This collection is visible only to you.</p><a class="button" href="/#discussions">Explore discussions {{template "arrow"}}</a></div>
+        <div class="empty-state">
+          <span class="empty-symbol">↑</span>
+          <h3>Find a perspective that stays with you.</h3>
+          <p>
+            Discussions you like appear here. This collection is visible only to
+            you.
+          </p>
+          <a class="button" href="/#discussions"
+            >Explore discussions {{ template "arrow" }}</a
+          >
+        </div>
       {{ else }}
-        <div class="empty-state"><span class="empty-symbol">{{template "bubble"}}</span><h3>No discussions here yet.</h3><p>{{.Profile.Username}} has no discussions on this page.</p><a class="text-link" href="/#discussions">Explore the community {{template "arrow"}}</a></div>
+        <div class="empty-state">
+          <span class="empty-symbol">{{ template "bubble" }}</span>
+          <h3>No discussions here yet.</h3>
+          <p>{{ .Profile.Username }} has no discussions on this page.</p>
+          <a class="text-link" href="/#discussions"
+            >Explore the community {{ template "arrow" }}</a
+          >
+        </div>
       {{ end }}
     {{ end }}{{ template "pagination" . }}
   </div>

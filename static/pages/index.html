@@ -39,7 +39,8 @@
                 {{ template "arrow" }}</span
               ><strong>{{ .Title }}</strong
               ><span class="note-author"
-                ><span class="avatar small">{{ initial .Username }}</span
+                ><span class="avatar small" aria-hidden="true"
+                  >{{ initial .Username }}</span
                 >{{ .Username }}
                 <span
                   >·
@@ -129,7 +130,8 @@
                 </div>
                 <h3>{{ .Title }}</h3>
                 <div class="spotlight-author">
-                  <span class="avatar small">{{ initial .Username }}</span
+                  <span class="avatar small" aria-hidden="true"
+                    >{{ initial .Username }}</span
                   ><span>{{ .Username }}</span>{{ template "arrow" }}
                 </div>
               </div>
@@ -251,7 +253,7 @@
               >{{ len .Posts }}
               {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }}
               on this
-              page{{ if .Category }} in {{ .Category }}{{ end }}{{ if .Query }}
+              page{{ if .Category }}in {{ .Category }}{{ end }}{{ if .Query }}
                 matching “{{ .Query }}”
               {{ end }}</span
             ><a href="/#discussions">Clear filters ×</a>
