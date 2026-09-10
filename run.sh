@@ -1,3 +1,4 @@
-docker build -t forum .
-docker container run -p 8080:8080  --name forumContainer forum
-docker stop conp
+#!/usr/bin/env sh
+set -eu
+docker compose up -d --build --wait
+printf 'Talknet is ready at http://localhost:%s\n' "${TALKNET_PORT:-8088}"

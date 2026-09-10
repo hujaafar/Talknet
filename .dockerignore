@@ -1,0 +1,11 @@
+.git
+.github
+data
+*.db
+*.db-shm
+*.db-wal
+*.exe
+docs
+work
+.env
+coverage.out

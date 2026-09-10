@@ -1,0 +1,34 @@
+name: Quality
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Check formatting
+        run: test -z "$(gofmt -l .)"
+      - name: Race and integration tests
+        run: go test -race -cover ./...
+      - name: Static analysis
+        run: go vet ./...
+      - name: Build release
+        run: go build -trimpath ./...
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start
+        run: docker compose up -d --build --wait
+      - name: HTTP smoke check
+        run: curl --fail http://localhost:8088/healthz
+      - name: Shutdown
+        if: always()
+        run: docker compose down
