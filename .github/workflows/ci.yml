@@ -13,8 +13,11 @@ jobs:
         with:
           node-version: 22
       - name: Check browser JavaScript
-        run: node --check static/js/app.js
-      - name: Test motion preferences and scroll behavior
+        run: |
+          node --check static/js/app.js
+          node --check static/js/theme.js
+          node --check static/js/experience.mjs
+      - name: Test motion and editor behavior
         run: node --test tests/*.test.mjs
   go:
     runs-on: ubuntu-latest

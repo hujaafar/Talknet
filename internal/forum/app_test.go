@@ -91,7 +91,7 @@ func (s *testSite) signup(t *testing.T) {
 
 func TestCommunityFlow(t *testing.T) {
 	s := newSite(t)
-	for _, path := range []string{"/", "/login", "/register", "/healthz", "/static/styles/app.css", "/static/js/app.js", "/static/js/motion.mjs", "/static/images/conversation-art.webp", "/static/images/inter-latin.woff2", "/static/images/instrument-serif-italic.ttf"} {
+	for _, path := range []string{"/", "/login", "/register", "/healthz", "/static/styles/app.css", "/static/js/app.js", "/static/js/motion.mjs", "/static/js/theme.js", "/static/js/experience.mjs", "/static/styles/experience.css", "/static/images/conversation-art.webp", "/static/images/inter-latin.woff2", "/static/images/instrument-serif-italic.ttf"} {
 		r, b := s.request(t, "GET", path, "", "", false)
 		checkStatus(t, r, 200, b)
 	}
