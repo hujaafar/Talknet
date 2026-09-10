@@ -1,0 +1,23 @@
+name: Suggest an improvement
+description: Describe a user problem and a useful outcome.
+title: "[Idea] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the situation and who would benefit.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What would a good result look like?
+      description: Give a concrete example of the experience you want.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or references
+      description: Optional ideas, sketches, or links that explain the proposal.
