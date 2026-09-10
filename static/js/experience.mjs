@@ -38,6 +38,7 @@ export function initExperience(toast, motionRunning) {
     if (!dialog.open) dialog.showModal();
     trigger.setAttribute("aria-expanded", "true");
     query.focus();
+    search();
   };
   trigger.hidden = false;
   trigger.addEventListener("click", open);
@@ -66,7 +67,7 @@ export function initExperience(toast, motionRunning) {
       open();
     }
   });
-  query.addEventListener("input", () => {
+  const search = () => {
     cancelSearch();
     results.replaceChildren();
     const term = query.value.trim();
@@ -108,7 +109,8 @@ export function initExperience(toast, motionRunning) {
             "Search is unavailable. Try again or use the search button.";
       }
     }, 180);
-  });
+  };
+  query.addEventListener("input", search);
   dialog.addEventListener("keydown", (event) => {
     // Search inputs consume Escape to clear their text in some browsers.
     if (event.key === "Escape") {
