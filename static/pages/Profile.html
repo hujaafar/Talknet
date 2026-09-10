@@ -36,7 +36,7 @@
       {{ end }}
     {{ end }}<span
       >{{ len .Posts }}
-      {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }}</span
+      {{ if eq (len .Posts) 1 }}discussion{{ else }}discussions{{ end }} on this page</span
     >
   </nav>
   <div class="profile-feed">
@@ -55,8 +55,10 @@
             >Explore discussions {{ template "arrow" }}</a
           >
         </div>
+      {{ else if eq .Tab "liked" }}
+        <div class="empty-state"><span class="empty-symbol">↑</span><h3>Find a perspective that stays with you.</h3><p>Discussions you like appear here. This collection is visible only to you.</p><a class="button" href="/#discussions">Explore discussions {{template "arrow"}}</a></div>
       {{ else }}
-        {{ template "empty" }}
+        <div class="empty-state"><span class="empty-symbol">{{template "bubble"}}</span><h3>No discussions here yet.</h3><p>{{.Profile.Username}} has no discussions on this page.</p><a class="text-link" href="/#discussions">Explore the community {{template "arrow"}}</a></div>
       {{ end }}
     {{ end }}{{ template "pagination" . }}
   </div>
